@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>InterpretAI — Tab Bar Preview</title>
+<title>InterpretAI — Final Prototype</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
@@ -24,435 +24,438 @@
     --gray-100: #EFEFEF;
     --gray-200: #D9D9D9;
     --gray-500: #8E8E93;
+    --gray-700: #555;
     --gray-900: #1A1A1A;
     --white: #FFFFFF;
-    --green-500: #34C759;
-    --green-50: #E8F8ED;
   }
 
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-    background: var(--white);
+    background: #f0f0f0;
+    color: var(--gray-900);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
   }
 
+  button { font-family: inherit; }
+
   .phone-frame {
-    width: 390px;
-    height: 844px;
-    background: var(--white);
-    border-radius: 40px;
+    width: 390px; height: 844px;
+    background: var(--white); border-radius: 40px;
     overflow: hidden;
     box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-    display: flex;
-    flex-direction: column;
+    display: flex; flex-direction: column;
     position: relative;
   }
 
-  /* Status bar */
   .status-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 28px 0;
-    height: 54px;
-    flex-shrink: 0;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 28px 0; height: 54px; flex-shrink: 0;
   }
   .status-bar .time { font-size: 16px; font-weight: 600; color: var(--gray-900); }
   .status-bar .icons { display: flex; gap: 6px; align-items: center; }
   .status-bar .icons svg { width: 18px; height: 18px; }
 
-  /* Screen content */
   .screen-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 8px 16px 0;
+    flex: 1; overflow-y: auto; padding: 8px 16px 0;
   }
 
   .screen-title {
-    font-size: 34px;
-    font-weight: 700;
-    color: var(--gray-900);
-    line-height: 41px;
-    margin-bottom: 16px;
+    font-size: 34px; font-weight: 700; color: var(--gray-900);
+    line-height: 41px; margin-bottom: 16px;
   }
 
-  /* Search bar */
   .search-bar {
-    background: var(--gray-50);
-    border-radius: 12px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    padding: 0 16px;
-    gap: 8px;
-    margin-bottom: 24px;
+    background: var(--gray-50); border-radius: 12px;
+    height: 48px; display: flex; align-items: center;
+    padding: 0 16px; gap: 8px; margin-bottom: 24px;
   }
   .search-bar svg { width: 16px; height: 16px; color: var(--gray-500); flex-shrink: 0; }
   .search-bar span { font-size: 15px; color: var(--gray-500); }
 
-  /* Section header */
   .section-header {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--gray-900);
+    font-size: 20px; font-weight: 600; color: var(--gray-900);
     margin-bottom: 12px;
   }
 
-  /* List row */
   .list-row {
-    display: flex;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--gray-100);
-    gap: 12px;
-    cursor: pointer;
+    display: flex; align-items: center; padding: 14px 0;
+    border-bottom: 1px solid var(--gray-100); gap: 14px;
+    cursor: pointer; transition: background 0.15s;
   }
   .list-row:last-child { border-bottom: none; }
+  .list-row:active { background: var(--gray-50); }
 
   .list-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--blue-100);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    font-size: 18px;
-    font-weight: 600;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--blue-100); display: flex;
+    align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 18px; font-weight: 600;
     color: var(--blue-500);
   }
 
   .list-text { flex: 1; min-width: 0; }
   .list-title { font-size: 17px; font-weight: 600; color: var(--gray-900); }
   .list-subtitle { font-size: 15px; color: var(--gray-500); margin-top: 2px; }
-  .list-meta { font-size: 13px; color: var(--gray-500); flex-shrink: 0; }
   .list-chevron { color: var(--gray-200); font-size: 14px; flex-shrink: 0; }
 
-  /* Badge */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-  }
-  .badge.success { background: var(--green-50); color: var(--green-500); }
-  .badge.info { background: var(--blue-50); color: var(--blue-500); }
-
-  /* Grid cards */
   .grid-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-bottom: 24px;
   }
   .grid-card {
-    background: var(--gray-50);
-    border-radius: 16px;
+    background: var(--gray-50); border-radius: 16px;
     padding: 20px 8px 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px; cursor: pointer;
     transition: transform 0.15s, opacity 0.15s;
+    border: none; font-family: inherit;
   }
   .grid-card:active { transform: scale(0.97); opacity: 0.8; }
   .grid-card-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--blue-100);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--blue-100); display: flex;
+    align-items: center; justify-content: center;
   }
   .grid-card-icon svg { width: 24px; height: 24px; color: var(--blue-500); }
   .grid-card-label { font-size: 13px; color: var(--gray-900); text-align: center; font-weight: 500; }
 
-  /* Tab bar */
   .tab-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 8px 0 28px;
-    background: var(--white);
-    box-shadow: 0 -1px 4px rgba(0,0,0,0.06);
-    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: space-around;
+    padding: 8px 0 28px; background: var(--white);
+    box-shadow: 0 -1px 4px rgba(0,0,0,0.06); flex-shrink: 0;
   }
-
   .tab-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    padding: 6px 16px;
-    border-radius: 20px;
-    transition: all 0.25s ease;
-    background: transparent;
-    border: none;
-    -webkit-appearance: none;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 4px; cursor: pointer; padding: 6px 16px;
+    border-radius: 20px; transition: all 0.25s ease;
+    background: transparent; border: none;
+    -webkit-appearance: none; font-family: inherit;
   }
-  .tab-item.active {
-    background: var(--gray-50);
-  }
-  .tab-item svg {
-    width: 24px;
-    height: 24px;
-    transition: color 0.25s ease;
-  }
+  .tab-item.active { background: var(--gray-50); }
+  .tab-item svg { width: 24px; height: 24px; transition: color 0.25s ease; }
   .tab-item.active svg { color: var(--blue-500); }
   .tab-item:not(.active) svg { color: var(--gray-500); }
-
-  .tab-label {
-    font-size: 13px;
-    font-weight: 500;
-    transition: color 0.25s ease;
-  }
+  .tab-label { font-size: 13px; font-weight: 500; transition: color 0.25s ease; }
   .tab-item.active .tab-label { color: var(--blue-500); }
   .tab-item:not(.active) .tab-label { color: var(--gray-500); }
 
-  /* Screen visibility */
+  /* Study */
+  .study-header-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .study-header-row .screen-title { margin-bottom: 0; }
+  .due-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--green-50); color: var(--green-500);
+    padding: 6px 12px; border-radius: 999px;
+    font-size: 13px; font-weight: 600;
+  }
+  .due-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-500); }
+
+  .progress-tracker {
+    background: var(--gray-50); border-radius: 14px;
+    padding: 14px 18px; margin-bottom: 18px;
+    display: flex; justify-content: space-around; align-items: center;
+  }
+  .pt-stat { text-align: center; }
+  .pt-num { font-size: 24px; font-weight: 800; line-height: 1.1; }
+  .pt-num.blue { color: var(--blue-500); }
+  .pt-num.green { color: var(--green-500); }
+  .pt-num.dark { color: var(--gray-900); }
+  .pt-label { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+
+  .study-flashcard {
+    width: 100%; min-height: 240px;
+    border: 1.5px solid var(--gray-200); border-radius: 18px;
+    padding: 32px 22px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; cursor: pointer; background: var(--white);
+    transition: all .2s; margin-bottom: 20px;
+  }
+  .study-flashcard:active { transform: scale(.99); }
+  .study-flashcard .flashcard-lang {
+    font-size: 13px; font-weight: 600; color: var(--gray-500);
+    letter-spacing: 1px; margin-bottom: 16px;
+  }
+  .study-flashcard .flashcard-term {
+    font-size: 32px; font-weight: 800; color: var(--gray-900);
+    margin-bottom: 18px; letter-spacing: -0.5px;
+    word-break: break-word;
+  }
+  .flashcard-action { font-size: 16px; color: var(--blue-500); font-weight: 600; }
+
+  .rating-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 0 4px 16px; gap: 8px;
+  }
+  .rating-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    background: transparent; border: none; cursor: pointer;
+    font-family: inherit; padding: 0;
+  }
+  .rating-circle {
+    width: 60px; height: 60px; border-radius: 50%;
+    border: 2.5px solid; display: flex; align-items: center; justify-content: center;
+    transition: transform .15s;
+  }
+  .rating-btn:active .rating-circle { transform: scale(.92); }
+  .rating-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .rating-circle svg { width: 28px; height: 28px; }
+  .rating-label { font-size: 13px; font-weight: 600; color: var(--gray-900); }
+  .rating-btn.again .rating-circle { border-color: var(--red-500); color: var(--red-500); }
+  .rating-btn.hard .rating-circle { border-color: var(--gold-500); color: var(--gold-500); }
+  .rating-btn.good .rating-circle { border-color: var(--green-500); color: var(--green-500); }
+  .rating-btn.easy .rating-circle { border-color: var(--gray-200); color: var(--blue-500); }
+
+  /* Profile */
+  .profile-card {
+    background: var(--gray-50); border-radius: 14px;
+    padding: 18px; display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px;
+  }
+  .profile-avatar-lg {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--blue-100); color: var(--blue-500);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 700; flex-shrink: 0;
+  }
+  .profile-name-lg { font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 2px; }
+  .profile-meta { font-size: 14px; color: var(--gray-500); }
+
+  .settings-list { display: flex; flex-direction: column; gap: 10px; }
+  .setting-row {
+    background: var(--gray-50); border-radius: 14px;
+    padding: 14px 16px; display: flex; align-items: center; gap: 14px;
+    cursor: pointer; border: none; font-family: inherit; width: 100%;
+    transition: all .2s;
+  }
+  .setting-row:active { transform: scale(.99); background: var(--gray-100); }
+  .setting-row-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--blue-100); display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .setting-row-icon svg { width: 20px; height: 20px; color: var(--blue-500); }
+  .setting-row-icon.danger { background: var(--red-100); }
+  .setting-row-icon.danger svg { color: var(--red-500); }
+  .setting-row-text { flex: 1; text-align: left; }
+  .setting-row-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+  .setting-row-title.danger { color: var(--red-500); }
+  .setting-row-sub { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+  .setting-chevron svg { width: 16px; height: 16px; color: var(--gray-500); }
+
   .screen { display: none; }
   .screen.active { display: block; }
 
-  /* Sub-screen nav (back button) */
-  .sub-nav {
-    display:flex; align-items:center; gap:8px; margin-bottom:16px;
-    padding-top:4px;
-  }
+  .sub-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; padding-top: 4px; }
   .sub-nav button {
-    background:none; border:none; cursor:pointer; padding:4px;
-    display:flex; align-items:center; color:var(--blue-500);
-    font-size:15px; font-weight:500; font-family:inherit;
+    background: none; border: none; cursor: pointer; padding: 4px;
+    display: flex; align-items: center; color: var(--blue-500);
+    font-size: 15px; font-weight: 500; font-family: inherit;
   }
-  .sub-nav button svg { width:22px; height:22px; }
+  .sub-nav button svg { width: 22px; height: 22px; }
 
-  /* Big choice blocks */
-  .choice-grid {
-    display:flex; flex-direction:column; gap:12px; margin-top:16px;
-  }
+  .choice-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
   .choice-block {
-    background:var(--gray-50); border:2px solid var(--gray-100);
-    border-radius:16px; padding:24px 20px; cursor:pointer;
-    transition:all .2s; text-align:center;
+    background: var(--gray-50); border: 2px solid var(--gray-100);
+    border-radius: 16px; padding: 24px 20px; cursor: pointer;
+    transition: all .2s; text-align: center;
+    width: 100%; font-family: inherit;
   }
-  .choice-block:hover { border-color:var(--blue-500); background:var(--blue-50); }
-  .choice-block:active { transform:scale(.98); }
+  .choice-block:hover { border-color: var(--blue-500); background: var(--blue-50); }
+  .choice-block:active { transform: scale(.98); }
   .choice-block .icon-box {
-    width:64px; height:64px; border-radius:16px;
-    background:var(--blue-500); margin:0 auto 16px;
-    display:flex; align-items:center; justify-content:center;
+    width: 64px; height: 64px; border-radius: 16px;
+    background: var(--blue-500); margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
   }
-  .choice-block .icon-box svg { width:32px; height:32px; color:var(--white); }
-  .choice-block.ai .icon-box { background:linear-gradient(135deg, var(--blue-500), var(--blue-600)); }
-  .choice-block.custom .icon-box { background:var(--green-500); }
-  .choice-block h3 {
-    font-size:18px; font-weight:600; color:var(--gray-900); margin-bottom:6px;
-  }
-  .choice-block p {
-    font-size:14px; color:var(--gray-500); line-height:20px;
-  }
+  .choice-block .icon-box svg { width: 32px; height: 32px; color: var(--white); }
+  .choice-block.ai .icon-box { background: linear-gradient(135deg, var(--blue-500), var(--blue-600)); }
+  .choice-block.custom .icon-box { background: var(--green-500); }
+  .choice-block h3 { font-size: 18px; font-weight: 600; color: var(--gray-900); margin-bottom: 6px; }
+  .choice-block p { font-size: 14px; color: var(--gray-500); line-height: 20px; }
 
-  /* Form inputs */
   .form-label {
-    font-size:13px; font-weight:600; color:var(--gray-500);
-    text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px;
-    margin-top:16px;
+    font-size: 13px; font-weight: 600; color: var(--gray-500);
+    text-transform: uppercase; letter-spacing: .5px;
+    margin-bottom: 8px; margin-top: 16px;
   }
   .form-input {
-    width:100%; height:48px; border-radius:12px;
-    background:var(--gray-50); border:1.5px solid var(--gray-100);
-    padding:0 16px; font-size:15px; font-family:inherit;
-    color:var(--gray-900); outline:none;
+    width: 100%; height: 48px; border-radius: 12px;
+    background: var(--gray-50); border: 1.5px solid var(--gray-100);
+    padding: 0 16px; font-size: 15px; font-family: inherit;
+    color: var(--gray-900); outline: none;
   }
-  .form-input:focus { border-color:var(--blue-500); }
+  .form-input:focus { border-color: var(--blue-500); }
+  .form-input.error { border-color: var(--red-500); background: #FFF5F5; }
   .form-textarea {
-    width:100%; min-height:100px; border-radius:12px;
-    background:var(--gray-50); border:1.5px solid var(--gray-100);
-    padding:12px 16px; font-size:15px; font-family:inherit;
-    color:var(--gray-900); outline:none; resize:none; line-height:20px;
+    width: 100%; min-height: 100px; border-radius: 12px;
+    background: var(--gray-50); border: 1.5px solid var(--gray-100);
+    padding: 12px 16px; font-size: 15px; font-family: inherit;
+    color: var(--gray-900); outline: none; resize: none; line-height: 20px;
   }
-  .form-textarea:focus { border-color:var(--blue-500); }
+  .form-textarea:focus { border-color: var(--blue-500); }
+  .form-textarea.error { border-color: var(--red-500); background: #FFF5F5; }
+  .form-error-text { font-size: 12px; color: var(--red-500); margin-top: 6px; min-height: 16px; }
 
-  /* Glossary picker chips */
-  .glossary-picker {
-    display:flex; flex-wrap:wrap; gap:8px;
-  }
+  .glossary-picker { display: flex; flex-wrap: wrap; gap: 8px; }
   .gloss-chip {
-    padding:10px 14px; border-radius:20px;
-    background:var(--white); border:1.5px solid var(--gray-200);
-    font-size:13px; font-weight:500; color:var(--gray-900);
-    cursor:pointer; transition:all .2s; font-family:inherit;
-    display:flex; align-items:center; gap:6px;
+    padding: 10px 14px; border-radius: 20px;
+    background: var(--white); border: 1.5px solid var(--gray-200);
+    font-size: 13px; font-weight: 500; color: var(--gray-900);
+    cursor: pointer; transition: all .2s; font-family: inherit;
+    display: flex; align-items: center; gap: 6px;
   }
-  .gloss-chip:active { transform:scale(.96); }
-  .gloss-chip.selected {
-    background:var(--blue-500); border-color:var(--blue-500); color:var(--white);
-  }
-  .gloss-chip.new {
-    border-style:dashed; color:var(--blue-500);
-  }
-  .gloss-chip.new:hover { background:var(--blue-50); }
+  .gloss-chip:active { transform: scale(.96); }
+  .gloss-chip.selected { background: var(--blue-500); border-color: var(--blue-500); color: var(--white); }
+  .gloss-chip.new { border-style: dashed; color: var(--blue-500); }
+  .gloss-chip.new:hover { background: var(--blue-50); }
 
-  /* Base glossary checkboxes */
   .base-check-row {
-    display:flex; align-items:center; gap:12px;
-    padding:12px 16px; background:var(--gray-50); border-radius:12px;
-    margin-bottom:8px; cursor:pointer; transition:all .2s;
-    border:1.5px solid var(--gray-100);
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: var(--gray-50); border-radius: 12px;
+    margin-bottom: 8px; cursor: pointer; transition: all .2s;
+    border: 1.5px solid var(--gray-100);
   }
-  .base-check-row:hover { border-color:var(--blue-500); }
-  .base-check-row.selected { background:var(--blue-50); border-color:var(--blue-500); }
+  .base-check-row:hover { border-color: var(--blue-500); }
+  .base-check-row.selected { background: var(--blue-50); border-color: var(--blue-500); }
   .base-check-box {
-    width:22px; height:22px; border-radius:6px;
-    border:2px solid var(--gray-200); flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-    transition:all .2s;
+    width: 22px; height: 22px; border-radius: 6px;
+    border: 2px solid var(--gray-200); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
   }
-  .base-check-row.selected .base-check-box {
-    background:var(--blue-500); border-color:var(--blue-500);
-  }
+  .base-check-row.selected .base-check-box { background: var(--blue-500); border-color: var(--blue-500); }
   .base-check-row.selected .base-check-box::after {
-    content:''; width:10px; height:6px;
-    border-left:2px solid white; border-bottom:2px solid white;
-    transform:rotate(-45deg); margin-top:-2px;
+    content: ''; width: 10px; height: 6px;
+    border-left: 2px solid white; border-bottom: 2px solid white;
+    transform: rotate(-45deg); margin-top: -2px;
   }
-  .base-check-text { flex:1; }
-  .base-check-title { font-size:15px; font-weight:600; color:var(--gray-900); }
-  .base-check-sub { font-size:13px; color:var(--gray-500); }
+  .base-check-text { flex: 1; }
+  .base-check-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+  .base-check-sub { font-size: 13px; color: var(--gray-500); }
 
-  /* Primary button */
   .primary-btn {
-    width:100%; height:52px; border-radius:14px;
-    background:var(--blue-500); color:var(--white);
-    font-size:16px; font-weight:600; border:none; cursor:pointer;
-    font-family:inherit; margin-top:20px; transition:all .2s;
-    display:flex; align-items:center; justify-content:center; gap:8px;
+    width: 100%; height: 52px; border-radius: 14px;
+    background: var(--blue-500); color: var(--white);
+    font-size: 16px; font-weight: 600; border: none; cursor: pointer;
+    font-family: inherit; margin-top: 20px; transition: all .2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .primary-btn:active { background:var(--blue-600); transform:scale(.98); }
-  .primary-btn svg { width:18px; height:18px; }
+  .primary-btn:active { background: var(--blue-600); transform: scale(.98); }
+  .primary-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .primary-btn svg { width: 18px; height: 18px; }
 
-  /* AI Prep screen */
-  .hero-card {
-    background: linear-gradient(135deg, var(--blue-50), var(--blue-100));
-    border-radius: 16px;
-    padding: 24px 16px;
-    text-align: center;
-    margin-bottom: 24px;
+  .ghost-btn {
+    width: 100%; height: 48px; border-radius: 14px;
+    background: var(--gray-50); color: var(--gray-900);
+    border: 1.5px solid var(--gray-100); font-size: 15px;
+    font-weight: 500; cursor: pointer; font-family: inherit;
+    margin-top: 8px; transition: all .2s;
   }
-  .hero-card-icon { font-size: 48px; margin-bottom: 12px; }
-  .hero-card-title { font-size: 20px; font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
-  .hero-card-desc { font-size: 15px; color: var(--gray-500); }
+  .ghost-btn:hover { background: var(--gray-100); }
+  .ghost-btn:active { transform: scale(.98); }
 
-  /* Study screen - flashcard */
-  .flashcard {
-    background: var(--white);
-    border: 1px solid var(--gray-100);
-    border-radius: 16px;
-    padding: 32px 16px;
-    text-align: center;
-    margin-bottom: 16px;
+  .term-row {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 14px 14px; background: var(--gray-50);
+    border-radius: 12px; margin-bottom: 8px;
+    border: 1.5px solid transparent;
+    transition: background 0.4s, border-color 0.4s;
   }
-  .flashcard-lang { font-size: 13px; color: var(--gray-500); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-  .flashcard-term { font-size: 28px; font-weight: 700; color: var(--gray-900); }
-  .flashcard-hint { font-size: 15px; color: var(--blue-500); margin-top: 16px; cursor: pointer; }
-
-  /* Action buttons row */
-  .action-row {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    margin-bottom: 24px;
-  }
-  .action-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    background: none;
-    border: none;
-  }
-  .action-btn-circle {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    border: 1.5px solid var(--gray-200);
-    background: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.15s;
-  }
-  .action-btn-circle:active { transform: scale(0.95); }
-  .action-btn-circle svg { width: 24px; height: 24px; color: var(--blue-500); }
-  .action-btn-label { font-size: 13px; color: var(--gray-900); }
-
-  /* Profile row */
-  .profile-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    padding: 16px;
-    background: var(--gray-50);
-    border-radius: 16px;
-  }
-  .profile-avatar {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: var(--blue-100);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--blue-500);
-  }
-  .profile-name { font-size: 20px; font-weight: 600; color: var(--gray-900); }
-  .profile-sub { font-size: 15px; color: var(--gray-500); }
-
-  .settings-row {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    background: var(--gray-50);
-    border-radius: 16px;
-    margin-bottom: 8px;
-    gap: 12px;
-    cursor: pointer;
-    transition: transform 0.15s, opacity 0.15s;
-  }
-  .settings-row:active { transform: scale(0.98); opacity: 0.8; }
-  .settings-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+  .term-row .term-source { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+  .term-row .term-target { font-size: 14px; color: var(--gray-500); }
+  .term-row.highlight {
     background: var(--blue-50);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-color: var(--blue-500);
+    animation: highlightPulse 2.4s ease-out;
   }
-  .settings-icon svg { width: 18px; height: 18px; color: var(--blue-500); }
-  .settings-text { flex: 1; }
-  .settings-title { font-size: 17px; font-weight: 500; color: var(--gray-900); }
-  .settings-sub { font-size: 13px; color: var(--gray-500); }
+  .term-row.highlight::before {
+    content: 'Just added';
+    display: inline-block;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    color: var(--blue-500); background: var(--white);
+    padding: 2px 8px; border-radius: 999px;
+    margin-bottom: 4px; align-self: flex-start;
+    text-transform: uppercase;
+  }
+  @keyframes highlightPulse {
+    0% { background: var(--blue-100); transform: scale(1); }
+    25% { background: var(--blue-100); transform: scale(1.015); }
+    100% { background: var(--blue-50); transform: scale(1); }
+  }
+  .gd-success-banner {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--green-50); color: var(--green-500);
+    padding: 12px 14px; border-radius: 12px;
+    margin-bottom: 14px; font-size: 14px; font-weight: 600;
+    border-left: 3px solid var(--green-500);
+    animation: bannerIn 0.35s cubic-bezier(.2,.8,.2,1);
+  }
+  .gd-success-banner svg { width: 18px; height: 18px; flex-shrink: 0; }
+  @keyframes bannerIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .empty-state {
+    padding: 40px 20px; text-align: center; color: var(--gray-500);
+    background: var(--gray-50); border-radius: 14px; margin-top: 16px;
+  }
+  .empty-state-emoji { font-size: 36px; margin-bottom: 8px; display: block; }
+  .empty-state-title { font-size: 15px; font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
+  .empty-state-desc { font-size: 13px; line-height: 1.4; }
+
+  .ai-loading {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 20px; gap: 16px;
+  }
+  .ai-spinner {
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 3px solid var(--blue-100);
+    border-top-color: var(--blue-500);
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .ai-loading-text { font-size: 15px; color: var(--gray-500); text-align: center; line-height: 1.4; }
+
+  .study-complete { text-align: center; padding: 40px 16px; }
+  .study-complete-emoji { font-size: 56px; margin-bottom: 14px; }
+  .study-complete-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .study-complete-stats {
+    background: var(--gray-50); border-radius: 14px;
+    padding: 18px; margin: 20px 0;
+    display: flex; justify-content: space-around;
+  }
+
+  /* Toast */
+  .toast-container {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    z-index: 200; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--gray-900); color: var(--white);
+    padding: 12px 18px; border-radius: 10px; font-size: 14px;
+    font-weight: 500; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    animation: toastIn 0.25s cubic-bezier(.2,.8,.2,1);
+    pointer-events: auto; max-width: 420px;
+  }
+  .toast.success { background: var(--green-500); }
+  .toast.error { background: var(--red-500); }
+  .toast.info { background: var(--blue-500); }
+  .toast.warn { background: var(--gold-500); }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .toast.fading { opacity: 0; transition: opacity 0.4s; }
 </style>
 </head>
 <body>
 
 <div class="phone-frame">
-  <!-- Status bar -->
   <div class="status-bar">
     <span class="time">9:41</span>
     <div class="icons">
@@ -462,9 +465,10 @@
     </div>
   </div>
 
-  <!-- GLOSSARY SCREEN -->
   <div class="screen-content">
-    <div id="screen-glossary" class="screen">
+
+    <!-- GLOSSARY SCREEN -->
+    <div id="screen-glossary" class="screen active">
       <div class="screen-title">Glossary</div>
       <div style="display:flex;gap:8px;margin-bottom:24px;">
         <div class="search-bar" style="flex:1;margin-bottom:0;">
@@ -477,67 +481,44 @@
       </div>
       <div class="section-header">Quick Access</div>
       <div class="grid-cards" style="grid-template-columns:repeat(2,1fr);">
-        <div class="grid-card" onclick="showSubScreen('add-term')">
+        <button class="grid-card" onclick="showSubScreen('add-term')">
           <div class="grid-card-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </div>
           <span class="grid-card-label">Add a Term</span>
-        </div>
-        <div class="grid-card" onclick="showSubScreen('create-choice')">
+        </button>
+        <button class="grid-card" onclick="showSubScreen('create-choice')">
           <div class="grid-card-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
           </div>
           <span class="grid-card-label">Create New Glossary</span>
-        </div>
+        </button>
       </div>
       <div class="section-header">My Glossaries</div>
-      <div class="list-row">
-        <div class="list-avatar" style="background:var(--red-100);color:var(--red-500);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-        </div>
-        <div class="list-text">
-          <div class="list-title">Medical — Orthopedic</div>
-          <div class="list-subtitle">42 terms · ES ↔ EN</div>
-        </div>
-        <span class="list-meta">2h ago</span>
-        <span class="list-chevron">›</span>
-      </div>
-      <div class="list-row">
-        <div class="list-avatar" style="background:var(--gold-50);color:var(--gold-500);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-        </div>
-        <div class="list-text">
-          <div class="list-title">Legal — Court Proceedings</div>
-          <div class="list-subtitle">28 terms · ES ↔ EN</div>
-        </div>
-        <span class="list-meta">Yesterday</span>
-        <span class="list-chevron">›</span>
-      </div>
-      <div class="list-row">
-        <div class="list-avatar" style="background:var(--blue-50);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-        </div>
-        <div class="list-text">
-          <div class="list-title">Education — IEP Meeting</div>
-          <div class="list-subtitle">35 terms · ES ↔ EN</div>
-        </div>
-        <span class="list-meta">3 days ago</span>
-        <span class="list-chevron">›</span>
-      </div>
-      <div class="list-row">
-        <div class="list-avatar" style="background:var(--green-50);color:var(--green-500);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
-        </div>
-        <div class="list-text">
-          <div class="list-title">Business — Negotiation</div>
-          <div class="list-subtitle">20 terms · ES ↔ EN</div>
-        </div>
-        <span class="list-meta">1 week ago</span>
-        <span class="list-chevron">›</span>
-      </div>
+      <div id="glossary-list"></div>
     </div>
 
-    <!-- SUB-SCREEN: Create Glossary Choice -->
+    <!-- GLOSSARY DETAIL -->
+    <div id="screen-glossary-detail" class="screen">
+      <div class="sub-nav">
+        <button onclick="showSubScreen('glossary')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+          Back
+        </button>
+      </div>
+      <div id="gd-success-slot"></div>
+      <div class="screen-title" id="gd-title" style="font-size:26px;line-height:32px;">—</div>
+      <div style="font-size:14px;color:var(--gray-500);margin-bottom:16px;" id="gd-meta">—</div>
+      <button class="primary-btn" id="gd-study-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        Study these cards
+      </button>
+      <button class="ghost-btn" id="gd-add-term-btn">+ Add a term to this glossary</button>
+      <div class="section-header" style="margin-top:24px;" id="gd-terms-header">Terms</div>
+      <div id="gd-terms-list"></div>
+    </div>
+
+    <!-- CREATE CHOICE -->
     <div id="screen-create-choice" class="screen">
       <div class="sub-nav">
         <button onclick="showSubScreen('glossary')">
@@ -547,24 +528,24 @@
       </div>
       <div class="screen-title" style="font-size:26px;line-height:32px;">How would you like to create your glossary?</div>
       <div class="choice-grid">
-        <div class="choice-block ai" onclick="showSubScreen('create-ai')">
+        <button class="choice-block ai" onclick="showSubScreen('create-ai')">
           <div class="icon-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
           </div>
           <h3>AI Generate Glossary</h3>
           <p>Describe your assignment and let AI build a terminology set. Optionally blend with your existing glossaries as a base.</p>
-        </div>
-        <div class="choice-block custom" onclick="showSubScreen('create-custom')">
+        </button>
+        <button class="choice-block custom" onclick="showSubScreen('create-custom')">
           <div class="icon-box">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </div>
           <h3>Create Custom Glossary</h3>
           <p>Start from scratch. Name your glossary, pick a language pair, and add terms one by one.</p>
-        </div>
+        </button>
       </div>
     </div>
 
-    <!-- SUB-SCREEN: AI Generate -->
+    <!-- CREATE AI -->
     <div id="screen-create-ai" class="screen">
       <div class="sub-nav">
         <button onclick="showSubScreen('create-choice')">
@@ -572,45 +553,35 @@
           Back
         </button>
       </div>
-      <div class="screen-title" style="font-size:26px;line-height:32px;">AI Generate ✨</div>
-      <div style="font-size:15px;color:var(--gray-500);margin-bottom:4px;">Describe your assignment and AI will generate a terminology set.</div>
+      <div id="ai-form-content">
+        <div class="screen-title" style="font-size:26px;line-height:32px;">AI Generate ✨</div>
+        <div style="font-size:15px;color:var(--gray-500);margin-bottom:4px;">Describe your assignment and AI will generate a terminology set.</div>
 
-      <div class="form-label">Glossary Name</div>
-      <input class="form-input" placeholder="e.g., Orthopedic Follow-Up">
+        <div class="form-label">Glossary Name</div>
+        <input class="form-input" id="ai-name-input" placeholder="e.g., Orthopedic Follow-Up" maxlength="80">
+        <div class="form-error-text" id="ai-name-error"></div>
 
-      <div class="form-label">Describe the assignment</div>
-      <textarea class="form-textarea" placeholder="e.g., Post-op knee replacement check-up. Will discuss recovery, physical therapy, and medications..."></textarea>
+        <div class="form-label">Describe the assignment</div>
+        <textarea class="form-textarea" id="ai-desc-input" placeholder="e.g., Post-op knee replacement check-up. Will discuss recovery, physical therapy, and medications..." maxlength="500"></textarea>
+        <div class="form-error-text" id="ai-desc-error"></div>
 
-      <div class="form-label">Base on existing glossaries (optional)</div>
-      <div class="base-check-row" onclick="this.classList.toggle('selected')">
-        <div class="base-check-box"></div>
-        <div class="base-check-text">
-          <div class="base-check-title">Medical — Orthopedic</div>
-          <div class="base-check-sub">42 terms</div>
+        <div class="form-label">Base on existing glossaries (optional)</div>
+        <div id="ai-base-list"></div>
+
+        <button class="primary-btn" id="ai-generate-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+          Generate Glossary
+        </button>
+      </div>
+      <div id="ai-loading-content" style="display:none;">
+        <div class="ai-loading">
+          <div class="ai-spinner"></div>
+          <div class="ai-loading-text" id="ai-loading-text">Analyzing your assignment...</div>
         </div>
       </div>
-      <div class="base-check-row" onclick="this.classList.toggle('selected')">
-        <div class="base-check-box"></div>
-        <div class="base-check-text">
-          <div class="base-check-title">Legal — Court Proceedings</div>
-          <div class="base-check-sub">28 terms</div>
-        </div>
-      </div>
-      <div class="base-check-row" onclick="this.classList.toggle('selected')">
-        <div class="base-check-box"></div>
-        <div class="base-check-text">
-          <div class="base-check-title">Education — IEP Meeting</div>
-          <div class="base-check-sub">35 terms</div>
-        </div>
-      </div>
-
-      <button class="primary-btn" onclick="showSubScreen('glossary')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
-        Generate Glossary
-      </button>
     </div>
 
-    <!-- SUB-SCREEN: Custom Create -->
+    <!-- CREATE CUSTOM -->
     <div id="screen-create-custom" class="screen">
       <div class="sub-nav">
         <button onclick="showSubScreen('create-choice')">
@@ -622,24 +593,25 @@
       <div style="font-size:15px;color:var(--gray-500);margin-bottom:4px;">Set up your new glossary. You can add terms after.</div>
 
       <div class="form-label">Glossary Name</div>
-      <input class="form-input" placeholder="e.g., My Medical Terms">
+      <input class="form-input" id="cu-name-input" placeholder="e.g., My Medical Terms" maxlength="80">
+      <div class="form-error-text" id="cu-name-error"></div>
 
       <div class="form-label">Category</div>
-      <input class="form-input" placeholder="e.g., Medical, Legal, Education...">
+      <input class="form-input" id="cu-category-input" placeholder="e.g., Medical, Legal, Education..." maxlength="40">
 
       <div class="form-label">Source Language</div>
-      <input class="form-input" value="English">
+      <input class="form-input" id="cu-source-input" value="English" maxlength="30">
 
       <div class="form-label">Target Language</div>
-      <input class="form-input" value="Spanish">
+      <input class="form-input" id="cu-target-input" value="Spanish" maxlength="30">
 
-      <button class="primary-btn" onclick="showSubScreen('glossary')">
+      <button class="primary-btn" id="cu-create-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Create Glossary
       </button>
     </div>
 
-    <!-- SUB-SCREEN: Add a Term -->
+    <!-- ADD TERM -->
     <div id="screen-add-term" class="screen">
       <div class="sub-nav">
         <button onclick="showSubScreen('glossary')">
@@ -650,204 +622,764 @@
       <div class="screen-title" style="font-size:26px;line-height:32px;">Add a Term</div>
       <div style="font-size:15px;color:var(--gray-500);margin-bottom:4px;">Add a new term to one of your glossaries.</div>
 
-      <div class="form-label">English</div>
-      <input class="form-input" placeholder="e.g., Knee replacement">
+      <div class="form-label" id="add-source-label">English</div>
+      <input class="form-input" id="add-source-input" placeholder="e.g., Knee replacement" maxlength="120">
+      <div class="form-error-text" id="add-source-error"></div>
 
-      <div class="form-label">Spanish (Target Language)</div>
-      <input class="form-input" placeholder="e.g., Reemplazo de rodilla">
+      <div class="form-label" id="add-target-label">Spanish (Target Language)</div>
+      <input class="form-input" id="add-target-input" placeholder="e.g., Reemplazo de rodilla" maxlength="120">
+      <div class="form-error-text" id="add-target-error"></div>
 
       <div class="form-label">Add to Glossary</div>
-      <div class="glossary-picker">
-        <button class="gloss-chip selected" onclick="selectGlossChip(this)">Medical — Orthopedic</button>
-        <button class="gloss-chip" onclick="selectGlossChip(this)">Legal — Court</button>
-        <button class="gloss-chip" onclick="selectGlossChip(this)">Education — IEP</button>
-        <button class="gloss-chip" onclick="selectGlossChip(this)">Business — Negotiation</button>
-        <button class="gloss-chip new" onclick="showSubScreen('create-custom')">+ New Glossary</button>
-      </div>
+      <div class="glossary-picker" id="add-glossary-picker"></div>
+      <div class="form-error-text" id="add-glossary-error"></div>
 
-      <button class="primary-btn" onclick="showSubScreen('glossary')">
+      <button class="primary-btn" id="add-save-btn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
         Save Term
       </button>
-      <button style="width:100%;height:48px;border-radius:14px;background:var(--gray-50);color:var(--gray-900);border:1.5px solid var(--gray-100);font-size:15px;font-weight:500;cursor:pointer;font-family:inherit;margin-top:8px;" onclick="showSubScreen('add-term')">
-        Save and Add Another
-      </button>
+      <button class="ghost-btn" id="add-save-another-btn">Save and Add Another</button>
     </div>
 
-    <!-- HOME SCREEN -->
-    <div id="screen-home" class="screen active">
-      <div style="font-size:15px;color:var(--gray-500);font-weight:500;">Good morning,</div>
-      <div style="font-size:28px;font-weight:700;color:var(--gray-900);margin-bottom:16px;">Alex 👋</div>
-
-      <div style="background:linear-gradient(135deg, var(--blue-500), var(--blue-600));border-radius:20px;padding:20px;color:white;margin-bottom:16px;box-shadow:0 8px 24px rgba(0,102,255,.2);">
-        <div style="font-size:13px;opacity:.85;font-weight:500;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;">Your Database</div>
-        <div style="font-size:42px;font-weight:700;line-height:1;margin-bottom:4px;">248</div>
-        <div style="font-size:14px;opacity:.9;">terms across 6 glossaries</div>
+    <!-- STUDY -->
+    <div id="screen-study" class="screen">
+      <div id="study-picker">
+        <div class="screen-title">Study</div>
+        <div style="font-size:15px;color:var(--gray-500);margin-bottom:20px;">Pick a glossary to study.</div>
+        <div id="study-glossary-list"></div>
       </div>
 
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px;">
-        <div style="background:var(--gray-50);border-radius:16px;padding:16px;cursor:pointer;">
-          <div style="width:40px;height:40px;border-radius:12px;background:var(--blue-50);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-          </div>
-          <div style="font-size:24px;font-weight:700;color:var(--gray-900);line-height:1;">6</div>
-          <div style="font-size:13px;color:var(--gray-500);margin-top:4px;">Glossaries</div>
+      <div id="study-deck" style="display:none;">
+        <div class="sub-nav">
+          <button id="study-exit-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+            Exit
+          </button>
         </div>
-        <div style="background:var(--gray-50);border-radius:16px;padding:16px;cursor:pointer;">
-          <div style="width:40px;height:40px;border-radius:12px;background:var(--green-50);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34C759" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          </div>
-          <div style="font-size:24px;font-weight:700;color:var(--gray-900);line-height:1;">+18</div>
-          <div style="font-size:13px;color:var(--gray-500);margin-top:4px;">Added this week</div>
+        <div class="study-header-row">
+          <div class="screen-title" id="study-deck-title" style="margin-bottom:0;font-size:24px;line-height:30px;">Studying</div>
+          <span class="due-pill"><span class="due-dot"></span><span id="study-deck-remaining">0 left</span></span>
         </div>
-        <div style="background:var(--gray-50);border-radius:16px;padding:16px;cursor:pointer;">
-          <div style="width:40px;height:40px;border-radius:12px;background:var(--gold-50);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F0AD4E" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+
+        <div class="progress-tracker">
+          <div class="pt-stat">
+            <div class="pt-num blue" id="study-stat-reviewed">0</div>
+            <div class="pt-label">Reviewed</div>
           </div>
-          <div style="font-size:24px;font-weight:700;color:var(--gray-900);line-height:1;">12</div>
-          <div style="font-size:13px;color:var(--gray-500);margin-top:4px;">Due for review</div>
+          <div class="pt-stat">
+            <div class="pt-num green" id="study-stat-correct">0</div>
+            <div class="pt-label">Correct</div>
+          </div>
+          <div class="pt-stat">
+            <div class="pt-num dark" id="study-stat-accuracy">—</div>
+            <div class="pt-label">Accuracy</div>
+          </div>
         </div>
-        <div style="background:var(--gray-50);border-radius:16px;padding:16px;cursor:pointer;">
-          <div style="width:40px;height:40px;border-radius:12px;background:var(--blue-50);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          </div>
-          <div style="font-size:24px;font-weight:700;color:var(--gray-900);line-height:1;">87%</div>
-          <div style="font-size:13px;color:var(--gray-500);margin-top:4px;">Accuracy</div>
+
+        <div class="study-flashcard" id="study-flashcard">
+          <div class="flashcard-lang" id="study-flashcard-lang">—</div>
+          <div class="flashcard-term" id="study-flashcard-term">—</div>
+          <div class="flashcard-action" id="study-flashcard-action">Tap to reveal</div>
+        </div>
+
+        <div class="rating-row" id="study-rating-row">
+          <button class="rating-btn again" data-rating="again" disabled>
+            <div class="rating-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+            </div>
+            <span class="rating-label">Again</span>
+          </button>
+          <button class="rating-btn hard" data-rating="hard" disabled>
+            <div class="rating-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+            </div>
+            <span class="rating-label">Hard</span>
+          </button>
+          <button class="rating-btn good" data-rating="good" disabled>
+            <div class="rating-circle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <span class="rating-label">Good</span>
+          </button>
+          <button class="rating-btn easy" data-rating="easy" disabled>
+            <div class="rating-circle">
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <span class="rating-label">Easy</span>
+          </button>
         </div>
       </div>
 
-      <div class="section-header">Recent Activity</div>
-      <div class="list-row">
-        <div class="list-avatar" style="background:var(--blue-50);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+      <div id="study-complete" style="display:none;">
+        <div class="study-complete">
+          <div class="study-complete-emoji">🎉</div>
+          <div class="study-complete-title">Deck Complete!</div>
+          <div style="color:var(--gray-500);font-size:14px;">Great work — you reviewed every card.</div>
+          <div class="study-complete-stats">
+            <div class="pt-stat">
+              <div class="pt-num blue" id="sc-reviewed">0</div>
+              <div class="pt-label">Reviewed</div>
+            </div>
+            <div class="pt-stat">
+              <div class="pt-num green" id="sc-correct">0</div>
+              <div class="pt-label">Correct</div>
+            </div>
+            <div class="pt-stat">
+              <div class="pt-num dark" id="sc-accuracy">—</div>
+              <div class="pt-label">Accuracy</div>
+            </div>
+          </div>
+          <button class="primary-btn" id="sc-view-glossary-btn">View this glossary</button>
+          <button class="ghost-btn" id="sc-back-btn">Back to all glossaries</button>
         </div>
-        <div class="list-text">
-          <div class="list-title">Generated Medical — Orthopedic</div>
-          <div class="list-subtitle">42 terms added via AI Prep</div>
-        </div>
-        <span class="list-meta">2h</span>
-      </div>
-      <div class="list-row">
-        <div class="list-avatar" style="background:var(--green-50);color:var(--green-500);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </div>
-        <div class="list-text">
-          <div class="list-title">Added "Sutures" to Medical</div>
-          <div class="list-subtitle">Custom entry</div>
-        </div>
-        <span class="list-meta">5h</span>
-      </div>
-      <div class="list-row">
-        <div class="list-avatar" style="background:var(--gold-50);color:var(--gold-500);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-        </div>
-        <div class="list-text">
-          <div class="list-title">Practice session: Medical</div>
-          <div class="list-subtitle">20 min · Interpretation roleplay</div>
-        </div>
-        <span class="list-meta">Yesterday</span>
       </div>
     </div>
 
-    <!-- AI PREP SCREEN - 2-section choice -->
-    <div id="screen-aiprep" class="screen">
-      <div class="screen-title" style="font-size:26px;line-height:32px;">How would you like to create your glossary?</div>
-      <div style="font-size:15px;color:var(--gray-500);margin-bottom:20px;">Pick an approach to start building terminology for your next interpretation assignment.</div>
-      <div class="choice-grid">
-        <div class="choice-block ai" onclick="showSubScreen('create-ai')">
-          <div class="icon-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
-          </div>
-          <h3>AI Generate Glossary</h3>
-          <p>Describe your assignment and let AI build a terminology set. Optionally blend with your existing glossaries as a base.</p>
+    <!-- PROFILE -->
+    <div id="screen-profile" class="screen">
+      <div class="screen-title">Profile</div>
+
+      <div class="profile-card">
+        <div class="profile-avatar-lg">A</div>
+        <div>
+          <div class="profile-name-lg">Alex</div>
+          <div class="profile-meta">ES ↔ EN · Court Interpreter</div>
         </div>
-        <div class="choice-block custom" onclick="showSubScreen('create-custom')">
-          <div class="icon-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+
+      <div class="section-header">Settings</div>
+      <div class="settings-list">
+        <button class="setting-row">
+          <div class="setting-row-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
           </div>
-          <h3>Create Custom Glossary</h3>
-          <p>Start from scratch. Name your glossary, pick a language pair, and add terms one by one.</p>
-        </div>
+          <div class="setting-row-text">
+            <div class="setting-row-title">Language Pair</div>
+            <div class="setting-row-sub">Spanish ↔ English</div>
+          </div>
+          <div class="setting-chevron">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </button>
+
+        <button class="setting-row">
+          <div class="setting-row-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="setting-row-text">
+            <div class="setting-row-title">Import / Export</div>
+            <div class="setting-row-sub">CSV, JSON, Anki decks</div>
+          </div>
+          <div class="setting-chevron">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </button>
+
+        <button class="setting-row">
+          <div class="setting-row-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="14"/></svg>
+          </div>
+          <div class="setting-row-text">
+            <div class="setting-row-title">Statistics</div>
+            <div class="setting-row-sub" id="profile-stats-sub">— terms · — reviews</div>
+          </div>
+          <div class="setting-chevron">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </button>
+
+        <button class="setting-row">
+          <div class="setting-row-icon danger">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </div>
+          <div class="setting-row-text">
+            <div class="setting-row-title danger">Sign Out</div>
+          </div>
+        </button>
       </div>
     </div>
 
   </div>
 
-  <!-- TAB BAR: 3 tabs with AI as bigger center button -->
-  <div class="tab-bar" style="padding:12px 20px 28px;position:relative;">
-    <button class="tab-item active" onclick="switchTab('home', this)">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h1v7c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-7h1a1 1 0 00.7-1.7l-9-9a1 1 0 00-1.4 0l-9 9A1 1 0 003 13zm5 7v-6h8v6H8z"/></svg>
-      <span class="tab-label">Home</span>
-    </button>
-
-    <button onclick="switchTab('aiprep', this)" id="aiBigBtn" style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--blue-500),var(--blue-600));border:4px solid white;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 20px rgba(0,102,255,.35);margin-top:-24px;padding:0;flex-shrink:0;">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
-    </button>
-
-    <button class="tab-item" onclick="switchTab('glossary', this)">
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-item active" data-tab="glossary">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H6zm0 2h7v5h5v11H6V4zm2 8v2h8v-2H8zm0 4v2h5v-2H8z"/></svg>
       <span class="tab-label">Glossary</span>
+    </button>
+    <button class="tab-item" data-tab="study">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v1h2a2 2 0 012 2v12a2 2 0 01-2 2H8a2 2 0 01-2-2v-1H4a2 2 0 01-2-2V6a2 2 0 012-2zm4 15h10V7H8v12zM6 6v10h0V6z"/></svg>
+      <span class="tab-label">Study</span>
+    </button>
+    <button class="tab-item" data-tab="profile">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z"/></svg>
+      <span class="tab-label">Profile</span>
     </button>
   </div>
 </div>
 
+<div class="toast-container" id="toast-container"></div>
+
 <script>
-function switchTab(name, el) {
-  document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = ''; });
-  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
-  if (el && el.classList.contains('tab-item')) el.classList.add('active');
+'use strict';
+
+const STORAGE_KEY = 'interpretai_prototype_v1';
+
+const ICON_LIBRARY = {
+  med: { bg: 'var(--red-100)', color: 'var(--red-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
+  legal: { bg: 'var(--gold-50)', color: 'var(--gold-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>' },
+  edu: { bg: 'var(--blue-50)', color: '#0066FF', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>' },
+  biz: { bg: 'var(--green-50)', color: 'var(--green-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>' },
+  ai:  { bg: 'var(--blue-100)', color: 'var(--blue-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>' },
+  custom: { bg: 'var(--green-50)', color: 'var(--green-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' },
+};
+
+const DEFAULT_GLOSSARIES = [
+  {
+    id: 'g_med_ortho', name: 'Medical — Orthopedic', category: 'Medical',
+    sourceLang: 'English', targetLang: 'Spanish', icon: 'med', source: 'preset',
+    terms: [
+      ['Knee replacement', 'Reemplazo de rodilla'],
+      ['Sprain', 'Esguince'],
+      ['Fracture', 'Fractura'],
+      ['Physical therapy', 'Terapia física'],
+      ['Range of motion', 'Rango de movimiento'],
+      ['Cartilage', 'Cartílago'],
+      ['Ligament', 'Ligamento'],
+      ['Crutches', 'Muletas'],
+    ],
+  },
+  {
+    id: 'g_legal_court', name: 'Legal — Court Proceedings', category: 'Legal',
+    sourceLang: 'English', targetLang: 'Spanish', icon: 'legal', source: 'preset',
+    terms: [
+      ['Plaintiff', 'Demandante'],
+      ['Defendant', 'Demandado'],
+      ['Witness', 'Testigo'],
+      ['Sworn statement', 'Declaración jurada'],
+      ['Hearing', 'Audiencia'],
+      ['Bail', 'Fianza'],
+      ['Verdict', 'Veredicto'],
+    ],
+  },
+  {
+    id: 'g_edu_iep', name: 'Education — IEP Meeting', category: 'Education',
+    sourceLang: 'English', targetLang: 'Spanish', icon: 'edu', source: 'preset',
+    terms: [
+      ['Individualized Education Program', 'Programa Educativo Individualizado'],
+      ['Learning disability', 'Discapacidad de aprendizaje'],
+      ['Accommodation', 'Adaptación'],
+      ['Goal', 'Meta'],
+      ['Evaluation', 'Evaluación'],
+      ['Special education', 'Educación especial'],
+      ['Progress report', 'Informe de progreso'],
+    ],
+  },
+  {
+    id: 'g_biz_neg', name: 'Business — Negotiation', category: 'Business',
+    sourceLang: 'English', targetLang: 'Spanish', icon: 'biz', source: 'preset',
+    terms: [
+      ['Contract', 'Contrato'],
+      ['Agreement', 'Acuerdo'],
+      ['Stakeholder', 'Parte interesada'],
+      ['Counteroffer', 'Contraoferta'],
+      ['Deadline', 'Fecha límite'],
+      ['Liability', 'Responsabilidad'],
+      ['Settlement', 'Acuerdo / Convenio'],
+    ],
+  },
+];
+
+const AI_PACKS = [
+  { name: 'Orthopedic / Post-Op', category: 'Medical',
+    keywords: ['knee', 'ortho', 'post-op', 'postop', 'surgery', 'joint', 'physical therapy', 'recovery', 'replacement', 'hip', 'shoulder', 'rehab'],
+    terms: [['Knee replacement','Reemplazo de rodilla'],['Recovery','Recuperación'],['Physical therapy','Terapia física'],['Pain medication','Medicamento para el dolor'],['Swelling','Hinchazón'],['Stitches','Puntos / Suturas'],['Range of motion','Rango de movimiento'],['Crutches','Muletas'],['Anti-inflammatory','Antiinflamatorio'],['Follow-up appointment','Cita de seguimiento'],['Brace','Férula'],['Discharge instructions','Instrucciones de alta']]},
+  { name: 'Court / Legal', category: 'Legal',
+    keywords: ['court','trial','judge','deposition','plaintiff','defendant','lawsuit','attorney','legal','hearing','bail','witness','criminal','civil'],
+    terms: [['Plaintiff','Demandante'],['Defendant','Demandado'],['Sworn testimony','Testimonio bajo juramento'],['Cross-examination','Contrainterrogatorio'],['Objection','Objeción'],['Sustained','Ha lugar'],['Overruled','No ha lugar'],['Bail','Fianza'],['Plea bargain','Acuerdo de culpabilidad'],['Subpoena','Citación judicial'],['Verdict','Veredicto'],['Sentencing','Sentencia']]},
+  { name: 'IEP / Education', category: 'Education',
+    keywords: ['iep','school','education','teacher','student','learning','disability','classroom','special ed','principal','parent-teacher'],
+    terms: [['Individualized Education Program (IEP)','Programa Educativo Individualizado (PEI)'],['Learning disability','Discapacidad de aprendizaje'],['Accommodation','Adaptación'],['Modification','Modificación'],['Annual goal','Meta anual'],['Progress report','Informe de progreso'],['Evaluation','Evaluación'],['Speech therapy','Terapia del habla'],['Occupational therapy','Terapia ocupacional'],['Least restrictive environment','Entorno menos restrictivo'],['Behavioral intervention plan','Plan de intervención conductual']]},
+  { name: 'Business Negotiation', category: 'Business',
+    keywords: ['business','negotiation','contract','deal','partnership','merger','acquisition','meeting','corporate','stakeholder'],
+    terms: [['Memorandum of understanding','Memorando de entendimiento'],['Stakeholder','Parte interesada'],['Counteroffer','Contraoferta'],['Liability','Responsabilidad'],['Confidentiality clause','Cláusula de confidencialidad'],['Breach of contract','Incumplimiento de contrato'],['Force majeure','Fuerza mayor'],['Indemnification','Indemnización'],['Term sheet','Hoja de términos'],['Due diligence','Diligencia debida']]},
+  { name: 'General Medical', category: 'Medical',
+    keywords: ['medical','doctor','patient','hospital','clinic','health','medicine','diagnosis','symptom','check-up','checkup'],
+    terms: [['Symptom','Síntoma'],['Diagnosis','Diagnóstico'],['Prescription','Receta'],['Side effects','Efectos secundarios'],['Allergy','Alergia'],['Blood pressure','Presión arterial'],['Fever','Fiebre'],['Treatment','Tratamiento'],['Medical history','Historial médico'],['Insurance','Seguro médico']]},
+  { name: 'General Interpreting', category: 'General',
+    keywords: [],
+    terms: [['Interpreter','Intérprete'],['Translation','Traducción'],['Confidentiality','Confidencialidad'],['Clarification','Aclaración'],['Source language','Idioma de origen'],['Target language','Idioma de destino'],['Consecutive interpretation','Interpretación consecutiva'],['Simultaneous interpretation','Interpretación simultánea'],['Cultural context','Contexto cultural'],['Idiom','Modismo']]},
+];
+
+const $  = (s, p = document) => p.querySelector(s);
+const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
+function uid(prefix = 'id') { return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+function esc(s) { if (s == null) return ''; return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function safe(fn, ctx = '') { try { return fn(); } catch (e) { console.error('['+ctx+']', e); showToast('Something went wrong.', 'error'); return null; } }
+
+let state = null;
+let studySession = null;
+let aiTimer = null;
+let currentDetailGlossaryId = null;
+let highlightTermId = null;
+let detailSuccessMessage = null;
+let lastStudiedGlossaryId = null;
+let pendingAddTermGlossaryId = null;
+
+function initialState() {
+  return {
+    glossaries: DEFAULT_GLOSSARIES.map(g => ({
+      ...g, createdAt: 0,
+      terms: g.terms.map(([s, t]) => ({ id: uid('t'), source: s, target: t, addedAt: 0, reviews: [] })),
+    })),
+  };
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const p = JSON.parse(raw);
+    if (!p || !Array.isArray(p.glossaries)) return null;
+    return p;
+  } catch (e) { return null; }
+}
+function persist() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { showToast('Could not save.', 'error'); } }
+
+function showToast(msg, type = 'info', ms = 2400) {
+  try {
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = msg;
+    $('#toast-container').appendChild(el);
+    setTimeout(() => el.classList.add('fading'), Math.max(ms - 400, 100));
+    setTimeout(() => el.remove(), ms);
+  } catch (e) {}
+}
+
+function switchTab(name) {
+  if (studySession && name !== 'study') exitStudy(false);
+  $$('.tab-item').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  showSubScreen(name);
 }
 
 function showSubScreen(name) {
-  document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display = ''; });
-  const target = document.getElementById('screen-' + name);
-  target.classList.add('active');
-  if (name === 'aiprep') target.style.display = 'flex';
-  document.querySelector('.screen-content').scrollTop = 0;
+  $$('.screen').forEach(s => s.classList.remove('active'));
+  const t = document.getElementById('screen-' + name);
+  if (t) t.classList.add('active');
+  const sc = $('.screen-content');
+  if (sc) sc.scrollTop = 0;
+  if (name === 'glossary') renderGlossaryList();
+  if (name === 'add-term') prepAddTermScreen();
+  if (name === 'create-ai') prepAIScreen();
+  if (name === 'create-custom') prepCustomScreen();
+  if (name === 'study') renderStudyPicker();
+  if (name === 'profile') renderProfileStats();
+  if (name === 'glossary-detail' && currentDetailGlossaryId) renderGlossaryDetail(currentDetailGlossaryId);
 }
 
-function pickAIMode(mode, el) {
-  document.querySelectorAll('.ai-mode-chip').forEach(function(c){
-    c.style.background = 'white';
-    c.style.color = 'var(--gray-900)';
-    c.style.borderColor = 'var(--gray-200)';
+function openGlossaryDetail(id, opts = {}) {
+  currentDetailGlossaryId = id;
+  if (opts.highlightTermId) highlightTermId = opts.highlightTermId;
+  if (opts.successMessage) detailSuccessMessage = opts.successMessage;
+  showSubScreen('glossary-detail');
+}
+
+function renderGlossaryList() {
+  const list = $('#glossary-list');
+  list.innerHTML = '';
+  if (!state.glossaries.length) {
+    list.innerHTML = `<div class="empty-state"><span class="empty-state-emoji">📚</span><div class="empty-state-title">No glossaries yet</div><div class="empty-state-desc">Tap "Create New Glossary" above to get started.</div></div>`;
+    return;
+  }
+  state.glossaries.forEach(g => {
+    const ic = ICON_LIBRARY[g.icon] || ICON_LIBRARY.custom;
+    const row = document.createElement('div');
+    row.className = 'list-row';
+    row.innerHTML = `
+      <div class="list-avatar" style="background:${ic.bg};color:${ic.color};">${ic.svg}</div>
+      <div class="list-text">
+        <div class="list-title">${esc(g.name)}</div>
+        <div class="list-subtitle">${g.terms.length} term${g.terms.length === 1 ? '' : 's'}</div>
+      </div>
+      <span class="list-chevron">›</span>`;
+    row.addEventListener('click', () => openGlossaryDetail(g.id));
+    list.appendChild(row);
   });
-  el.style.background = 'var(--blue-50)';
-  el.style.color = 'var(--blue-500)';
-  el.style.borderColor = 'var(--blue-500)';
-
-  var msgs = document.getElementById('aiChatMessages');
-  var userText = mode === 'glossary' ? 'Create Tailored Glossary' : 'Practice Interpretation';
-  msgs.innerHTML += '<div style="align-self:flex-end;max-width:85%;"><div style="display:flex;gap:8px;align-items:flex-end;flex-direction:row-reverse;"><div style="width:32px;height:32px;border-radius:50%;background:var(--gray-100);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;">A</div><div style="background:var(--blue-500);color:white;border-radius:16px 16px 4px 16px;padding:12px 16px;font-size:14px;line-height:20px;">' + userText + '</div></div></div>';
-
-  setTimeout(function(){
-    var reply = mode === 'glossary'
-      ? 'Great! Tell me about your upcoming assignment — what field, language pair, and any specific context? I can also blend with your existing glossaries.'
-      : "Perfect! I'll play both parties in a realistic scenario. What setting would you like to practice? (Medical, Legal, Education, etc.)";
-    msgs.innerHTML += '<div style="display:flex;gap:8px;align-items:flex-end;max-width:85%;"><div style="width:32px;height:32px;border-radius:50%;background:var(--blue-100);color:var(--blue-500);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;">AI</div><div style="background:var(--gray-50);border-radius:16px 16px 16px 4px;padding:12px 16px;font-size:14px;line-height:20px;color:var(--gray-900);">' + reply + '</div></div>';
-    msgs.scrollTop = msgs.scrollHeight;
-  }, 600);
-
-  msgs.scrollTop = msgs.scrollHeight;
 }
 
-function sendAIMessage() {
-  var input = document.getElementById('aiInputField');
-  var text = input.value.trim();
-  if (!text) return;
-  input.value = '';
-  var msgs = document.getElementById('aiChatMessages');
-  msgs.innerHTML += '<div style="align-self:flex-end;max-width:85%;"><div style="display:flex;gap:8px;align-items:flex-end;flex-direction:row-reverse;"><div style="width:32px;height:32px;border-radius:50%;background:var(--gray-100);color:var(--gray-500);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;">A</div><div style="background:var(--blue-500);color:white;border-radius:16px 16px 4px 16px;padding:12px 16px;font-size:14px;line-height:20px;">' + text + '</div></div></div>';
-  msgs.scrollTop = msgs.scrollHeight;
+function renderGlossaryDetail(id) {
+  const g = state.glossaries.find(x => x.id === id);
+  if (!g) { showSubScreen('glossary'); return; }
+
+  const slot = $('#gd-success-slot');
+  slot.innerHTML = '';
+  if (detailSuccessMessage) {
+    slot.innerHTML = `<div class="gd-success-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>${esc(detailSuccessMessage)}</span></div>`;
+    detailSuccessMessage = null;
+  }
+
+  $('#gd-title').textContent = g.name;
+  $('#gd-meta').textContent = `${g.sourceLang} ↔ ${g.targetLang} · ${g.category || '—'} · ${g.terms.length} term${g.terms.length === 1 ? '' : 's'}`;
+  $('#gd-terms-header').textContent = `Terms (${g.terms.length})`;
+
+  const list = $('#gd-terms-list');
+  list.innerHTML = '';
+  if (!g.terms.length) {
+    list.innerHTML = `<div class="empty-state"><span class="empty-state-emoji">📝</span><div class="empty-state-title">No terms yet</div><div class="empty-state-desc">Add some terms to study from this glossary.</div></div>`;
+  } else {
+    let highlightedRow = null;
+    g.terms.slice().reverse().forEach(t => {
+      const row = document.createElement('div');
+      row.className = 'term-row';
+      if (t.id === highlightTermId) { row.classList.add('highlight'); highlightedRow = row; }
+      row.innerHTML = `<div class="term-source">${esc(t.source)}</div><div class="term-target">${esc(t.target)}</div>`;
+      list.appendChild(row);
+    });
+    if (highlightTermId) {
+      highlightTermId = null;
+      if (highlightedRow) {
+        setTimeout(() => highlightedRow.classList.remove('highlight'), 2600);
+        setTimeout(() => { try { highlightedRow.scrollIntoView({behavior: 'smooth', block: 'center'}); } catch {} }, 100);
+      }
+    }
+  }
+
+  $('#gd-study-btn').onclick = () => {
+    if (!g.terms.length) { showToast('Add some terms before studying.', 'warn'); return; }
+    startStudy(g.id);
+  };
+  $('#gd-add-term-btn').onclick = () => {
+    pendingAddTermGlossaryId = g.id;
+    showSubScreen('add-term');
+  };
 }
 
-function selectGlossChip(el) {
-  el.parentElement.querySelectorAll('.gloss-chip').forEach(c => {
-    if (!c.classList.contains('new')) c.classList.remove('selected');
+function renderProfileStats() {
+  let total = 0, reviews = 0;
+  state.glossaries.forEach(g => { total += g.terms.length; g.terms.forEach(t => { reviews += (t.reviews?.length || 0); }); });
+  $('#profile-stats-sub').textContent = `${total} terms · ${reviews} review${reviews === 1 ? '' : 's'}`;
+}
+
+// AI generate
+function prepAIScreen() {
+  $('#ai-form-content').style.display = 'block';
+  $('#ai-loading-content').style.display = 'none';
+  $('#ai-name-error').textContent = '';
+  $('#ai-desc-error').textContent = '';
+  $('#ai-name-input').classList.remove('error');
+  $('#ai-desc-input').classList.remove('error');
+  const list = $('#ai-base-list');
+  list.innerHTML = '';
+  state.glossaries.forEach(g => {
+    const row = document.createElement('div');
+    row.className = 'base-check-row';
+    row.innerHTML = `<div class="base-check-box"></div><div class="base-check-text"><div class="base-check-title">${esc(g.name)}</div><div class="base-check-sub">${g.terms.length} term${g.terms.length === 1 ? '' : 's'}</div></div>`;
+    row.dataset.glossaryId = g.id;
+    row.addEventListener('click', () => row.classList.toggle('selected'));
+    list.appendChild(row);
   });
-  el.classList.add('selected');
 }
+function pickAIPack(desc) {
+  const lower = (desc || '').toLowerCase();
+  let best = AI_PACKS[AI_PACKS.length - 1], bestScore = 0;
+  for (const p of AI_PACKS) {
+    if (!p.keywords.length) continue;
+    let s = 0;
+    for (const k of p.keywords) if (lower.includes(k)) s++;
+    if (s > bestScore) { best = p; bestScore = s; }
+  }
+  return best;
+}
+function submitAIGenerate() {
+  const name = $('#ai-name-input').value.trim();
+  const desc = $('#ai-desc-input').value.trim();
+  let valid = true;
+  $('#ai-name-error').textContent = '';
+  $('#ai-desc-error').textContent = '';
+  $('#ai-name-input').classList.remove('error');
+  $('#ai-desc-input').classList.remove('error');
+  if (!name) { $('#ai-name-error').textContent = 'Please give your glossary a name.'; $('#ai-name-input').classList.add('error'); valid = false; }
+  if (!desc || desc.length < 10) { $('#ai-desc-error').textContent = 'Please describe the assignment in a sentence or two.'; $('#ai-desc-input').classList.add('error'); valid = false; }
+  if (!valid) return;
+
+  const baseSelected = $$('#ai-base-list .base-check-row.selected').map(r => r.dataset.glossaryId);
+  $('#ai-form-content').style.display = 'none';
+  $('#ai-loading-content').style.display = 'block';
+  $('#ai-loading-text').textContent = 'Analyzing your assignment...';
+  if (aiTimer) clearTimeout(aiTimer);
+  aiTimer = setTimeout(() => { $('#ai-loading-text').textContent = 'Generating terminology set...'; }, 900);
+
+  setTimeout(() => safe(() => {
+    if (aiTimer) { clearTimeout(aiTimer); aiTimer = null; }
+    const pack = pickAIPack(desc);
+    const combined = new Map();
+    pack.terms.forEach(([s, t]) => combined.set(s.toLowerCase(), [s, t]));
+    baseSelected.forEach(id => {
+      const g = state.glossaries.find(x => x.id === id);
+      if (g) g.terms.forEach(t => { if (!combined.has(t.source.toLowerCase())) combined.set(t.source.toLowerCase(), [t.source, t.target]); });
+    });
+    const newGloss = {
+      id: uid('g'), name, category: pack.category,
+      sourceLang: 'English', targetLang: 'Spanish', icon: 'ai',
+      source: 'ai', createdAt: Date.now(),
+      terms: Array.from(combined.values()).map(([s, t]) => ({ id: uid('t'), source: s, target: t, addedAt: Date.now(), reviews: [] })),
+    };
+    state.glossaries.push(newGloss);
+    persist();
+    showToast('Glossary created with ' + newGloss.terms.length + ' terms', 'success', 2400);
+    $('#ai-name-input').value = '';
+    $('#ai-desc-input').value = '';
+    $$('#ai-base-list .base-check-row.selected').forEach(r => r.classList.remove('selected'));
+    openGlossaryDetail(newGloss.id, { successMessage: `Glossary created with ${newGloss.terms.length} AI-generated terms` });
+  }, 'submitAIGenerate'), 1900);
+}
+
+// Custom create
+function prepCustomScreen() {
+  $('#cu-name-error').textContent = '';
+  $('#cu-name-input').classList.remove('error');
+}
+function submitCustomCreate() {
+  const name = $('#cu-name-input').value.trim();
+  const cat = $('#cu-category-input').value.trim();
+  const src = $('#cu-source-input').value.trim() || 'English';
+  const tgt = $('#cu-target-input').value.trim() || 'Spanish';
+  $('#cu-name-error').textContent = '';
+  $('#cu-name-input').classList.remove('error');
+  if (!name) { $('#cu-name-error').textContent = 'Please name your glossary.'; $('#cu-name-input').classList.add('error'); return; }
+  const newGloss = {
+    id: uid('g'), name, category: cat || 'General',
+    sourceLang: src, targetLang: tgt, icon: 'custom', source: 'custom',
+    createdAt: Date.now(), terms: [],
+  };
+  state.glossaries.push(newGloss);
+  persist();
+  showToast('Glossary created', 'success');
+  $('#cu-name-input').value = '';
+  $('#cu-category-input').value = '';
+  openGlossaryDetail(newGloss.id, { successMessage: 'Glossary created — add some terms to get started' });
+}
+
+// Add term
+function prepAddTermScreen() {
+  $('#add-source-error').textContent = '';
+  $('#add-target-error').textContent = '';
+  $('#add-glossary-error').textContent = '';
+  $('#add-source-input').classList.remove('error');
+  $('#add-target-input').classList.remove('error');
+  const first = state.glossaries[0];
+  $('#add-source-label').textContent = first?.sourceLang || 'English';
+  $('#add-target-label').textContent = `${first?.targetLang || 'Spanish'} (Target Language)`;
+  const picker = $('#add-glossary-picker');
+  picker.innerHTML = '';
+  state.glossaries.forEach((g, i) => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'gloss-chip';
+    chip.dataset.glossaryId = g.id;
+    chip.textContent = g.name;
+    if ((pendingAddTermGlossaryId && pendingAddTermGlossaryId === g.id) || (!pendingAddTermGlossaryId && i === 0)) chip.classList.add('selected');
+    chip.addEventListener('click', () => {
+      $$('#add-glossary-picker .gloss-chip').forEach(c => { if (!c.classList.contains('new')) c.classList.remove('selected'); });
+      chip.classList.add('selected');
+    });
+    picker.appendChild(chip);
+  });
+  const newChip = document.createElement('button');
+  newChip.type = 'button';
+  newChip.className = 'gloss-chip new';
+  newChip.textContent = '+ New Glossary';
+  newChip.addEventListener('click', () => { pendingAddTermGlossaryId = null; showSubScreen('create-custom'); });
+  picker.appendChild(newChip);
+  pendingAddTermGlossaryId = null;
+}
+function submitAddTerm(addAnother) {
+  const src = $('#add-source-input').value.trim();
+  const tgt = $('#add-target-input').value.trim();
+  const sel = $('#add-glossary-picker .gloss-chip.selected:not(.new)');
+  let valid = true;
+  $('#add-source-error').textContent = '';
+  $('#add-target-error').textContent = '';
+  $('#add-glossary-error').textContent = '';
+  $('#add-source-input').classList.remove('error');
+  $('#add-target-input').classList.remove('error');
+  if (!src) { $('#add-source-error').textContent = 'Enter the term in the source language.'; $('#add-source-input').classList.add('error'); valid = false; }
+  if (!tgt) { $('#add-target-error').textContent = 'Enter the translation.'; $('#add-target-input').classList.add('error'); valid = false; }
+  if (!sel) { $('#add-glossary-error').textContent = 'Pick a glossary to add to.'; valid = false; }
+  if (!valid) return;
+  const gid = sel.dataset.glossaryId;
+  const g = state.glossaries.find(x => x.id === gid);
+  if (!g) { showToast('Selected glossary not found.', 'error'); return; }
+  const newTerm = { id: uid('t'), source: src, target: tgt, addedAt: Date.now(), reviews: [] };
+  g.terms.push(newTerm);
+  persist();
+  showToast('Term added to "' + g.name + '"', 'success');
+  $('#add-source-input').value = '';
+  $('#add-target-input').value = '';
+  if (addAnother) {
+    prepAddTermScreen();
+    const chip = $$('#add-glossary-picker .gloss-chip').find(c => c.dataset.glossaryId === gid);
+    if (chip) {
+      $$('#add-glossary-picker .gloss-chip').forEach(c => { if (!c.classList.contains('new')) c.classList.remove('selected'); });
+      chip.classList.add('selected');
+    }
+    $('#add-source-input').focus();
+  } else {
+    openGlossaryDetail(g.id, { highlightTermId: newTerm.id, successMessage: `Term added to "${g.name}"` });
+  }
+}
+
+// Study
+function renderStudyPicker() {
+  $('#study-picker').style.display = 'block';
+  $('#study-deck').style.display = 'none';
+  $('#study-complete').style.display = 'none';
+  const list = $('#study-glossary-list');
+  list.innerHTML = '';
+  if (!state.glossaries.length) {
+    list.innerHTML = `<div class="empty-state"><span class="empty-state-emoji">📚</span><div class="empty-state-title">No glossaries to study</div><div class="empty-state-desc">Create one first.</div></div>`;
+    return;
+  }
+  state.glossaries.forEach(g => {
+    const ic = ICON_LIBRARY[g.icon] || ICON_LIBRARY.custom;
+    const row = document.createElement('div');
+    row.className = 'list-row';
+    const empty = !g.terms.length;
+    row.innerHTML = `
+      <div class="list-avatar" style="background:${ic.bg};color:${ic.color};">${ic.svg}</div>
+      <div class="list-text">
+        <div class="list-title">${esc(g.name)}</div>
+        <div class="list-subtitle">${empty ? 'No terms yet' : g.terms.length + ' card' + (g.terms.length === 1 ? '' : 's') + ' to study'}</div>
+      </div>
+      <span class="list-chevron">›</span>`;
+    if (empty) { row.style.opacity = 0.55; row.addEventListener('click', () => showToast('Add some terms before studying.', 'warn')); }
+    else row.addEventListener('click', () => startStudy(g.id));
+    list.appendChild(row);
+  });
+}
+function startStudy(glossaryId) {
+  const g = state.glossaries.find(x => x.id === glossaryId);
+  if (!g || !g.terms.length) { showToast('No terms to study.', 'warn'); return; }
+  studySession = { glossaryId, deck: g.terms.map((_, i) => i), index: 0, reviewed: 0, correct: 0, revealed: false };
+  for (let i = studySession.deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [studySession.deck[i], studySession.deck[j]] = [studySession.deck[j], studySession.deck[i]]; }
+  $$('.tab-item').forEach(t => t.classList.toggle('active', t.dataset.tab === 'study'));
+  showSubScreen('study');
+  $('#study-picker').style.display = 'none';
+  $('#study-deck').style.display = 'block';
+  $('#study-complete').style.display = 'none';
+  $('#study-deck-title').textContent = g.name;
+  renderStudyCard();
+  updateStudyStats();
+}
+function currentStudyTerm() {
+  if (!studySession) return null;
+  const g = state.glossaries.find(x => x.id === studySession.glossaryId);
+  if (!g) return null;
+  return g.terms[studySession.deck[studySession.index]];
+}
+function renderStudyCard() {
+  const g = state.glossaries.find(x => x.id === studySession.glossaryId);
+  const term = currentStudyTerm();
+  if (!term) { finishStudy(); return; }
+  studySession.revealed = false;
+  $('#study-flashcard-lang').textContent = `${g.sourceLang.toUpperCase()} → ${g.targetLang.toUpperCase()}`;
+  $('#study-flashcard-term').textContent = term.source;
+  $('#study-flashcard-action').textContent = 'Tap to reveal';
+  $('#study-flashcard-action').style.color = 'var(--blue-500)';
+  $('#study-deck-remaining').textContent = (studySession.deck.length - studySession.index) + ' left';
+  $$('#study-rating-row .rating-btn').forEach(b => b.disabled = true);
+}
+function revealStudyCard() {
+  if (!studySession) return;
+  const term = currentStudyTerm();
+  if (!term) return;
+  if (studySession.revealed) {
+    studySession.revealed = false;
+    $('#study-flashcard-term').textContent = term.source;
+    $('#study-flashcard-action').textContent = 'Tap to reveal';
+    $('#study-flashcard-action').style.color = 'var(--blue-500)';
+  } else {
+    studySession.revealed = true;
+    $('#study-flashcard-term').textContent = term.target;
+    $('#study-flashcard-action').textContent = 'Rate how you did →';
+    $('#study-flashcard-action').style.color = 'var(--gray-500)';
+    $$('#study-rating-row .rating-btn').forEach(b => b.disabled = false);
+  }
+}
+function rateStudyCard(rating) {
+  if (!studySession || !studySession.revealed) return;
+  const term = currentStudyTerm();
+  if (!term) return;
+  term.reviews.push({ ts: Date.now(), rating });
+  studySession.reviewed++;
+  if (rating === 'good' || rating === 'easy') studySession.correct++;
+  studySession.index++;
+  persist();
+  updateStudyStats();
+  if (studySession.index >= studySession.deck.length) finishStudy();
+  else renderStudyCard();
+}
+function updateStudyStats() {
+  if (!studySession) return;
+  $('#study-stat-reviewed').textContent = studySession.reviewed;
+  $('#study-stat-correct').textContent = studySession.correct;
+  const acc = studySession.reviewed > 0 ? Math.round((studySession.correct / studySession.reviewed) * 100) : null;
+  $('#study-stat-accuracy').textContent = acc === null ? '—' : (acc + '%');
+}
+function finishStudy() {
+  if (!studySession) return;
+  const glossId = studySession.glossaryId;
+  $('#sc-reviewed').textContent = studySession.reviewed;
+  $('#sc-correct').textContent = studySession.correct;
+  const acc = studySession.reviewed > 0 ? Math.round((studySession.correct / studySession.reviewed) * 100) : 0;
+  $('#sc-accuracy').textContent = acc + '%';
+  $('#study-picker').style.display = 'none';
+  $('#study-deck').style.display = 'none';
+  $('#study-complete').style.display = 'block';
+  lastStudiedGlossaryId = glossId;
+  studySession = null;
+  persist();
+}
+function exitStudy(showPicker = true) {
+  if (studySession) studySession = null;
+  if (showPicker) {
+    $('#study-picker').style.display = 'block';
+    $('#study-deck').style.display = 'none';
+    $('#study-complete').style.display = 'none';
+    renderStudyPicker();
+  }
+}
+
+// Error handlers
+window.addEventListener('error', (e) => { console.error(e); showToast('A minor error occurred.', 'error'); });
+window.addEventListener('unhandledrejection', (e) => { console.error(e); });
+
+function bindUI() {
+  $$('.tab-item').forEach(t => t.addEventListener('click', () => safe(() => switchTab(t.dataset.tab), 'switchTab')));
+  $('#ai-generate-btn').addEventListener('click', () => safe(submitAIGenerate, 'submitAIGenerate'));
+  $('#cu-create-btn').addEventListener('click', () => safe(submitCustomCreate, 'submitCustomCreate'));
+  $('#add-save-btn').addEventListener('click', () => safe(() => submitAddTerm(false), 'submitAddTerm'));
+  $('#add-save-another-btn').addEventListener('click', () => safe(() => submitAddTerm(true), 'submitAddTerm'));
+  $('#study-flashcard').addEventListener('click', () => safe(revealStudyCard, 'revealStudyCard'));
+  $$('#study-rating-row .rating-btn').forEach(b => b.addEventListener('click', () => safe(() => rateStudyCard(b.dataset.rating), 'rateStudyCard')));
+  $('#study-exit-btn').addEventListener('click', () => safe(() => { exitStudy(true); showSubScreen('study'); }, 'exitStudy'));
+  $('#sc-back-btn').addEventListener('click', () => safe(() => { showSubScreen('study'); renderStudyPicker(); }, 'sc-back'));
+  $('#sc-view-glossary-btn').addEventListener('click', () => safe(() => {
+    if (lastStudiedGlossaryId) {
+      const g = state.glossaries.find(x => x.id === lastStudiedGlossaryId);
+      openGlossaryDetail(lastStudiedGlossaryId, { successMessage: g ? `You just reviewed cards from "${g.name}"` : 'Cards reviewed' });
+    } else { showSubScreen('study'); renderStudyPicker(); }
+  }, 'sc-view-glossary'));
+}
+
+function init() {
+  state = loadState() || initialState();
+  bindUI();
+  renderGlossaryList();
+}
+
+document.addEventListener('DOMContentLoaded', () => safe(init, 'init'));
 </script>
+
 </body>
 </html>
