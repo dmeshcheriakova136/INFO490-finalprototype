@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InterpretAI — User Testing Platform</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --blue-500: #0066FF;
+    --blue-600: #0052CC;
+    --blue-100: #DEEAFF;
+    --blue-50: #EEF4FF;
+    --green-500: #34C759;
+    --green-50: #E8F8ED;
+    --gold-500: #F0AD4E;
+    --gold-50: #FFF8E7;
+    --red-500: #E53935;
+    --red-100: #FFEBEE;
+    --gray-50: #F7F7F8;
+    --gray-100: #EFEFEF;
+    --gray-200: #D9D9D9;
+    --gray-500: #8E8E93;
+    --gray-700: #555;
+    --gray-900: #1A1A1A;
+    --white: #FFFFFF;
+  }
+
+  html, body { min-height: 100vh; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    background: #ECEEF2;
+    color: var(--gray-900);
+    overflow-x: hidden;
+  }
+
+  button { font-family: inherit; }
+
+  /* ========== TEST SHELL LAYOUT ========== */
+  .test-shell {
+    min-height: 100vh;
+    padding: 20px 24px 32px;
+    display: flex; flex-direction: column;
+  }
+  .test-header {
+    max-width: 1240px; width: 100%; margin: 0 auto 20px;
+    background: var(--white); border-radius: 16px;
+    padding: 16px 22px;
+    display: flex; align-items: center; gap: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .test-header-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 700; font-size: 15px; color: var(--gray-900);
+    flex-shrink: 0;
+  }
+  .test-header-brand .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--blue-500);
+  }
+  .test-progress {
+    flex: 1; min-width: 0;
+  }
+  .test-progress-top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 13px; color: var(--gray-500); margin-bottom: 6px;
+  }
+  .test-progress-top .task-name { font-weight: 600; color: var(--gray-900); font-size: 14px; }
+  .test-progress-bar {
+    height: 6px; background: var(--gray-100); border-radius: 999px;
+    overflow: hidden;
+  }
+  .test-progress-fill {
+    height: 100%; background: var(--blue-500);
+    transition: width 0.4s cubic-bezier(.2,.7,.2,1);
+    width: 0%;
+  }
+  .test-actions {
+    display: flex; gap: 10px; flex-shrink: 0;
+  }
+  .btn-secondary, .btn-primary {
+    height: 42px; padding: 0 18px; border-radius: 10px;
+    border: none; font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: transform 0.1s, background 0.15s;
+  }
+  .btn-secondary {
+    background: var(--gray-100); color: var(--gray-900);
+  }
+  .btn-secondary:hover { background: var(--gray-200); }
+  .btn-primary {
+    background: var(--blue-500); color: var(--white);
+  }
+  .btn-primary:hover { background: var(--blue-600); }
+  .btn-primary:active, .btn-secondary:active { transform: scale(0.97); }
+  .btn-primary:disabled, .btn-secondary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .test-main {
+    max-width: 1240px; width: 100%; margin: 0 auto;
+    display: flex; gap: 22px; align-items: flex-start;
+  }
+
+  /* ========== TASK INSTRUCTION CARD (LEFT) ========== */
+  .task-card-wrap {
+    flex: 1 1 280px; max-width: 300px; min-width: 240px;
+    position: sticky; top: 20px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .task-card {
+    background: var(--white); border-radius: 18px;
+    padding: 20px 20px 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .task-card-tag {
+    display: inline-block; padding: 4px 10px;
+    background: var(--blue-50); color: var(--blue-500);
+    border-radius: 999px; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .task-card-title {
+    font-size: 19px; font-weight: 700; line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .task-card-desc {
+    font-size: 14px; color: var(--gray-700); line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .task-card-success {
+    font-size: 13px; color: var(--gray-500); line-height: 1.4;
+    padding: 12px; background: var(--gray-50); border-radius: 10px;
+    border-left: 3px solid var(--green-500);
+  }
+  .task-card-success strong { color: var(--green-500); display: block; margin-bottom: 4px; }
+  .task-mini-list {
+    background: var(--white); border-radius: 14px; padding: 14px 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .task-mini-list-title { font-size: 12px; color: var(--gray-500); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+  .task-mini-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 0; font-size: 13px;
+  }
+  .task-mini-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+    background: var(--gray-100); color: var(--gray-500);
+  }
+  .task-mini-row.active .task-mini-num { background: var(--blue-500); color: var(--white); }
+  .task-mini-row.done .task-mini-num { background: var(--green-500); color: var(--white); }
+  .task-mini-row.skipped .task-mini-num { background: var(--gold-500); color: var(--white); }
+  .task-mini-row.active .task-mini-name { font-weight: 600; }
+  .task-mini-row.done .task-mini-name { color: var(--gray-500); text-decoration: line-through; }
+
+  /* ========== PHONE FRAME (CENTER) — ORIGINAL ========== */
+  .phone-frame {
+    width: 390px; height: 844px;
+    background: var(--white); border-radius: 40px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    display: flex; flex-direction: column;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 28px 0; height: 54px; flex-shrink: 0;
+  }
+  .status-bar .time { font-size: 16px; font-weight: 600; color: var(--gray-900); }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar .icons svg { width: 18px; height: 18px; }
+
+  .screen-content {
+    flex: 1; overflow-y: auto; padding: 8px 16px 0;
+  }
+
+  .screen-title {
+    font-size: 34px; font-weight: 700; color: var(--gray-900);
+    line-height: 41px; margin-bottom: 16px;
+  }
+
+  .search-bar {
+    background: var(--gray-50); border-radius: 12px;
+    height: 48px; display: flex; align-items: center;
+    padding: 0 16px; gap: 8px; margin-bottom: 24px;
+  }
+  .search-bar svg { width: 16px; height: 16px; color: var(--gray-500); flex-shrink: 0; }
+  .search-bar span { font-size: 15px; color: var(--gray-500); }
+
+  .section-header {
+    font-size: 20px; font-weight: 600; color: var(--gray-900);
+    margin-bottom: 12px;
+  }
+
+  .list-row {
+    display: flex; align-items: center; padding: 14px 0;
+    border-bottom: 1px solid var(--gray-100); gap: 14px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .list-row:last-child { border-bottom: none; }
+  .list-row:active { background: var(--gray-50); }
+
+  .list-avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--blue-100); display: flex;
+    align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 18px; font-weight: 600;
+    color: var(--blue-500);
+  }
+
+  .list-text { flex: 1; min-width: 0; }
+  .list-title { font-size: 17px; font-weight: 600; color: var(--gray-900); }
+  .list-subtitle { font-size: 15px; color: var(--gray-500); margin-top: 2px; }
+  .list-chevron { color: var(--gray-200); font-size: 14px; flex-shrink: 0; }
+
+  .grid-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-bottom: 24px;
+  }
+  .grid-card {
+    background: var(--gray-50); border-radius: 16px;
+    padding: 20px 8px 16px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px; cursor: pointer;
+    transition: transform 0.15s, opacity 0.15s;
+    border: none; font-family: inherit;
+  }
+  .grid-card:active { transform: scale(0.97); opacity: 0.8; }
+  .grid-card-icon {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: var(--blue-100); display: flex;
+    align-items: center; justify-content: center;
+  }
+  .grid-card-icon svg { width: 24px; height: 24px; color: var(--blue-500); }
+  .grid-card-label { font-size: 13px; color: var(--gray-900); text-align: center; font-weight: 500; }
+
+  .tab-bar {
+    display: flex; align-items: center; justify-content: space-around;
+    padding: 8px 0 28px; background: var(--white);
+    box-shadow: 0 -1px 4px rgba(0,0,0,0.06); flex-shrink: 0;
+  }
+  .tab-item {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 4px; cursor: pointer; padding: 6px 16px;
+    border-radius: 20px; transition: all 0.25s ease;
+    background: transparent; border: none;
+    -webkit-appearance: none; font-family: inherit;
+  }
+  .tab-item.active { background: var(--gray-50); }
+  .tab-item svg { width: 24px; height: 24px; transition: color 0.25s ease; }
+  .tab-item.active svg { color: var(--blue-500); }
+  .tab-item:not(.active) svg { color: var(--gray-500); }
+  .tab-label { font-size: 13px; font-weight: 500; transition: color 0.25s ease; }
+  .tab-item.active .tab-label { color: var(--blue-500); }
+  .tab-item:not(.active) .tab-label { color: var(--gray-500); }
+
+  /* Study */
+  .study-header-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .study-header-row .screen-title { margin-bottom: 0; }
+  .due-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--green-50); color: var(--green-500);
+    padding: 6px 12px; border-radius: 999px;
+    font-size: 13px; font-weight: 600;
+  }
+  .due-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-500); }
+
+  .progress-tracker {
+    background: var(--gray-50); border-radius: 14px;
+    padding: 14px 18px; margin-bottom: 18px;
+    display: flex; justify-content: space-around; align-items: center;
+  }
+  .pt-stat { text-align: center; }
+  .pt-num { font-size: 24px; font-weight: 800; line-height: 1.1; }
+  .pt-num.blue { color: var(--blue-500); }
+  .pt-num.green { color: var(--green-500); }
+  .pt-num.dark { color: var(--gray-900); }
+  .pt-label { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+
+  .study-flashcard {
+    width: 100%; min-height: 240px;
+    border: 1.5px solid var(--gray-200); border-radius: 18px;
+    padding: 32px 22px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; cursor: pointer; background: var(--white);
+    transition: all .2s; margin-bottom: 20px;
+  }
+  .study-flashcard:active { transform: scale(.99); }
+  .study-flashcard .flashcard-lang {
+    font-size: 13px; font-weight: 600; color: var(--gray-500);
+    letter-spacing: 1px; margin-bottom: 16px;
+  }
+  .study-flashcard .flashcard-term {
+    font-size: 32px; font-weight: 800; color: var(--gray-900);
+    margin-bottom: 18px; letter-spacing: -0.5px;
+    word-break: break-word;
+  }
+  .flashcard-action { font-size: 16px; color: var(--blue-500); font-weight: 600; }
+
+  .rating-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 0 4px 16px; gap: 8px;
+  }
+  .rating-btn {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    background: transparent; border: none; cursor: pointer;
+    font-family: inherit; padding: 0;
+  }
+  .rating-circle {
+    width: 60px; height: 60px; border-radius: 50%;
+    border: 2.5px solid; display: flex; align-items: center; justify-content: center;
+    transition: transform .15s;
+  }
+  .rating-btn:active .rating-circle { transform: scale(.92); }
+  .rating-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .rating-circle svg { width: 28px; height: 28px; }
+  .rating-label { font-size: 13px; font-weight: 600; color: var(--gray-900); }
+  .rating-btn.again .rating-circle { border-color: var(--red-500); color: var(--red-500); }
+  .rating-btn.hard .rating-circle { border-color: var(--gold-500); color: var(--gold-500); }
+  .rating-btn.good .rating-circle { border-color: var(--green-500); color: var(--green-500); }
+  .rating-btn.easy .rating-circle { border-color: var(--gray-200); color: var(--blue-500); }
+
+  /* Profile */
+  .profile-card {
+    background: var(--gray-50); border-radius: 14px;
+    padding: 18px; display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px;
+  }
+  .profile-avatar-lg {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: var(--blue-100); color: var(--blue-500);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; font-weight: 700; flex-shrink: 0;
+  }
+  .profile-name-lg { font-size: 22px; font-weight: 700; color: var(--gray-900); margin-bottom: 2px; }
+  .profile-meta { font-size: 14px; color: var(--gray-500); }
+
+  .settings-list { display: flex; flex-direction: column; gap: 10px; }
+  .setting-row {
+    background: var(--gray-50); border-radius: 14px;
+    padding: 14px 16px; display: flex; align-items: center; gap: 14px;
+    cursor: pointer; border: none; font-family: inherit; width: 100%;
+    transition: all .2s;
+  }
+  .setting-row:active { transform: scale(.99); background: var(--gray-100); }
+  .setting-row-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--blue-100); display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .setting-row-icon svg { width: 20px; height: 20px; color: var(--blue-500); }
+  .setting-row-icon.danger { background: var(--red-100); }
+  .setting-row-icon.danger svg { color: var(--red-500); }
+  .setting-row-text { flex: 1; text-align: left; }
+  .setting-row-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+  .setting-row-title.danger { color: var(--red-500); }
+  .setting-row-sub { font-size: 13px; color: var(--gray-500); margin-top: 2px; }
+  .setting-chevron svg { width: 16px; height: 16px; color: var(--gray-500); }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  .sub-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; padding-top: 4px; }
+  .sub-nav button {
+    background: none; border: none; cursor: pointer; padding: 4px;
+    display: flex; align-items: center; color: var(--blue-500);
+    font-size: 15px; font-weight: 500; font-family: inherit;
+  }
+  .sub-nav button svg { width: 22px; height: 22px; }
+
+  .choice-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .choice-block {
+    background: var(--gray-50); border: 2px solid var(--gray-100);
+    border-radius: 16px; padding: 24px 20px; cursor: pointer;
+    transition: all .2s; text-align: center;
+    width: 100%; font-family: inherit;
+  }
+  .choice-block:hover { border-color: var(--blue-500); background: var(--blue-50); }
+  .choice-block:active { transform: scale(.98); }
+  .choice-block .icon-box {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: var(--blue-500); margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .choice-block .icon-box svg { width: 32px; height: 32px; color: var(--white); }
+  .choice-block.ai .icon-box { background: linear-gradient(135deg, var(--blue-500), var(--blue-600)); }
+  .choice-block.custom .icon-box { background: var(--green-500); }
+  .choice-block h3 { font-size: 18px; font-weight: 600; color: var(--gray-900); margin-bottom: 6px; }
+  .choice-block p { font-size: 14px; color: var(--gray-500); line-height: 20px; }
+
+  .form-label {
+    font-size: 13px; font-weight: 600; color: var(--gray-500);
+    text-transform: uppercase; letter-spacing: .5px;
+    margin-bottom: 8px; margin-top: 16px;
+  }
+  .form-input {
+    width: 100%; height: 48px; border-radius: 12px;
+    background: var(--gray-50); border: 1.5px solid var(--gray-100);
+    padding: 0 16px; font-size: 15px; font-family: inherit;
+    color: var(--gray-900); outline: none;
+  }
+  .form-input:focus { border-color: var(--blue-500); }
+  .form-input.error { border-color: var(--red-500); background: #FFF5F5; }
+  .form-textarea {
+    width: 100%; min-height: 100px; border-radius: 12px;
+    background: var(--gray-50); border: 1.5px solid var(--gray-100);
+    padding: 12px 16px; font-size: 15px; font-family: inherit;
+    color: var(--gray-900); outline: none; resize: none; line-height: 20px;
+  }
+  .form-textarea:focus { border-color: var(--blue-500); }
+  .form-textarea.error { border-color: var(--red-500); background: #FFF5F5; }
+  .form-error-text { font-size: 12px; color: var(--red-500); margin-top: 6px; min-height: 16px; }
+
+  .glossary-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+  .gloss-chip {
+    padding: 10px 14px; border-radius: 20px;
+    background: var(--white); border: 1.5px solid var(--gray-200);
+    font-size: 13px; font-weight: 500; color: var(--gray-900);
+    cursor: pointer; transition: all .2s; font-family: inherit;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .gloss-chip:active { transform: scale(.96); }
+  .gloss-chip.selected { background: var(--blue-500); border-color: var(--blue-500); color: var(--white); }
+  .gloss-chip.new { border-style: dashed; color: var(--blue-500); }
+  .gloss-chip.new:hover { background: var(--blue-50); }
+
+  .base-check-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; background: var(--gray-50); border-radius: 12px;
+    margin-bottom: 8px; cursor: pointer; transition: all .2s;
+    border: 1.5px solid var(--gray-100);
+  }
+  .base-check-row:hover { border-color: var(--blue-500); }
+  .base-check-row.selected { background: var(--blue-50); border-color: var(--blue-500); }
+  .base-check-box {
+    width: 22px; height: 22px; border-radius: 6px;
+    border: 2px solid var(--gray-200); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+  }
+  .base-check-row.selected .base-check-box { background: var(--blue-500); border-color: var(--blue-500); }
+  .base-check-row.selected .base-check-box::after {
+    content: ''; width: 10px; height: 6px;
+    border-left: 2px solid white; border-bottom: 2px solid white;
+    transform: rotate(-45deg); margin-top: -2px;
+  }
+  .base-check-text { flex: 1; }
+  .base-check-title { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+  .base-check-sub { font-size: 13px; color: var(--gray-500); }
+
+  .primary-btn {
+    width: 100%; height: 52px; border-radius: 14px;
+    background: var(--blue-500); color: var(--white);
+    font-size: 16px; font-weight: 600; border: none; cursor: pointer;
+    font-family: inherit; margin-top: 20px; transition: all .2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .primary-btn:active { background: var(--blue-600); transform: scale(.98); }
+  .primary-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .primary-btn svg { width: 18px; height: 18px; }
+
+  .ghost-btn {
+    width: 100%; height: 48px; border-radius: 14px;
+    background: var(--gray-50); color: var(--gray-900);
+    border: 1.5px solid var(--gray-100); font-size: 15px;
+    font-weight: 500; cursor: pointer; font-family: inherit;
+    margin-top: 8px; transition: all .2s;
+  }
+  .ghost-btn:hover { background: var(--gray-100); }
+  .ghost-btn:active { transform: scale(.98); }
+
+  .term-row {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 14px 14px; background: var(--gray-50);
+    border-radius: 12px; margin-bottom: 8px;
+    border: 1.5px solid transparent;
+    transition: background 0.4s, border-color 0.4s;
+  }
+  .term-row .term-source { font-size: 15px; font-weight: 600; color: var(--gray-900); }
+  .term-row .term-target { font-size: 14px; color: var(--gray-500); }
+  .term-row .term-meta { font-size: 11px; color: var(--gray-200); margin-top: 4px; }
+  .term-row.highlight {
+    background: var(--blue-50);
+    border-color: var(--blue-500);
+    animation: highlightPulse 2.4s ease-out;
+  }
+  .term-row.highlight::before {
+    content: 'Just added';
+    display: inline-block;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    color: var(--blue-500); background: var(--white);
+    padding: 2px 8px; border-radius: 999px;
+    margin-bottom: 4px; align-self: flex-start;
+    text-transform: uppercase;
+  }
+  @keyframes highlightPulse {
+    0% { background: var(--blue-100); transform: scale(1); }
+    25% { background: var(--blue-100); transform: scale(1.015); }
+    100% { background: var(--blue-50); transform: scale(1); }
+  }
+  .gd-success-banner {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--green-50); color: var(--green-500);
+    padding: 12px 14px; border-radius: 12px;
+    margin-bottom: 14px; font-size: 14px; font-weight: 600;
+    border-left: 3px solid var(--green-500);
+    animation: bannerIn 0.35s cubic-bezier(.2,.8,.2,1);
+  }
+  .gd-success-banner svg { width: 18px; height: 18px; flex-shrink: 0; }
+  @keyframes bannerIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .empty-state {
+    padding: 40px 20px; text-align: center; color: var(--gray-500);
+    background: var(--gray-50); border-radius: 14px; margin-top: 16px;
+  }
+  .empty-state-emoji { font-size: 36px; margin-bottom: 8px; display: block; }
+  .empty-state-title { font-size: 15px; font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
+  .empty-state-desc { font-size: 13px; line-height: 1.4; }
+
+  /* AI generation loading */
+  .ai-loading {
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 20px; gap: 16px;
+  }
+  .ai-spinner {
+    width: 48px; height: 48px; border-radius: 50%;
+    border: 3px solid var(--blue-100);
+    border-top-color: var(--blue-500);
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .ai-loading-text { font-size: 15px; color: var(--gray-500); text-align: center; line-height: 1.4; }
+
+  /* Study completion mini-screen */
+  .study-complete {
+    text-align: center; padding: 40px 16px;
+  }
+  .study-complete-emoji { font-size: 56px; margin-bottom: 14px; }
+  .study-complete-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .study-complete-stats {
+    background: var(--gray-50); border-radius: 14px;
+    padding: 18px; margin: 20px 0;
+    display: flex; justify-content: space-around;
+  }
+
+  /* Banner inside phone for warnings/info */
+  .inline-alert {
+    background: var(--gold-50); color: var(--gold-500);
+    padding: 10px 12px; border-radius: 10px; font-size: 13px;
+    margin-bottom: 12px; border-left: 3px solid var(--gold-500);
+  }
+
+  /* ========== NOTES PANEL (RIGHT) ========== */
+  .notes-panel {
+    flex: 1 1 280px; max-width: 320px; min-width: 240px;
+    position: sticky; top: 20px;
+    background: var(--white); border-radius: 18px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    display: flex; flex-direction: column;
+    height: 844px;
+  }
+  .notes-header {
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .notes-header h3 {
+    font-size: 16px; font-weight: 700; color: var(--gray-900);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .notes-header h3 svg { width: 16px; height: 16px; color: var(--blue-500); }
+  .notes-status {
+    font-size: 11px; color: var(--gray-500); font-weight: 500;
+  }
+  .notes-status.saving { color: var(--gold-500); }
+  .notes-status.saved { color: var(--green-500); }
+  .notes-textarea {
+    flex: 1; width: 100%; resize: none;
+    border: none; outline: none; padding: 14px 18px;
+    font-family: inherit; font-size: 14px; line-height: 1.5;
+    color: var(--gray-900); background: transparent;
+  }
+  .notes-textarea::placeholder { color: var(--gray-200); }
+  .notes-footer {
+    padding: 10px 18px; border-top: 1px solid var(--gray-100);
+    font-size: 11px; color: var(--gray-500);
+    display: flex; justify-content: space-between;
+  }
+
+  /* ========== WELCOME / COMPLETION OVERLAYS ========== */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(20, 28, 40, 0.92);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 100; padding: 20px;
+    backdrop-filter: blur(6px);
+  }
+  .overlay.hidden { display: none; }
+  .overlay-card {
+    background: var(--white); border-radius: 20px;
+    padding: 36px 32px; max-width: 480px; width: 100%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-height: 90vh; overflow-y: auto;
+  }
+  .overlay-card h1 {
+    font-size: 28px; font-weight: 800; margin-bottom: 8px; line-height: 1.2;
+  }
+  .overlay-card .subtitle {
+    font-size: 15px; color: var(--gray-500); line-height: 1.5; margin-bottom: 24px;
+  }
+  .overlay-card label {
+    display: block; font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--gray-500); margin-bottom: 8px; margin-top: 16px;
+  }
+  .overlay-card input[type=text] {
+    width: 100%; height: 48px; border-radius: 12px;
+    background: var(--gray-50); border: 1.5px solid var(--gray-100);
+    padding: 0 16px; font-size: 15px; font-family: inherit; outline: none;
+  }
+  .overlay-card input[type=text]:focus { border-color: var(--blue-500); }
+  .overlay-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+  .overlay-buttons button {
+    height: 50px; border-radius: 12px; border: none; font-size: 15px;
+    font-weight: 600; cursor: pointer; font-family: inherit;
+    transition: transform 0.1s, background 0.15s;
+  }
+  .overlay-buttons button:active { transform: scale(0.98); }
+  .btn-overlay-primary { background: var(--blue-500); color: var(--white); }
+  .btn-overlay-primary:hover { background: var(--blue-600); }
+  .btn-overlay-secondary { background: var(--gray-100); color: var(--gray-900); }
+  .btn-overlay-secondary:hover { background: var(--gray-200); }
+  .btn-overlay-danger { background: transparent; color: var(--red-500); }
+  .btn-overlay-danger:hover { background: var(--red-100); }
+
+  .task-walkthrough {
+    background: var(--gray-50); border-radius: 12px; padding: 16px;
+    margin-top: 20px;
+  }
+  .task-walkthrough-row {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 8px 0;
+  }
+  .task-walkthrough-num {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+    background: var(--blue-500); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+  .task-walkthrough-text { flex: 1; font-size: 14px; line-height: 1.4; }
+  .task-walkthrough-text strong { display: block; color: var(--gray-900); margin-bottom: 2px; }
+  .task-walkthrough-text span { color: var(--gray-500); font-size: 13px; }
+
+  /* Completion stats */
+  .completion-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+    margin: 20px 0;
+  }
+  .completion-stat {
+    background: var(--gray-50); border-radius: 12px; padding: 14px;
+    text-align: center;
+  }
+  .completion-stat-num { font-size: 22px; font-weight: 800; color: var(--blue-500); }
+  .completion-stat-label { font-size: 11px; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  /* ========== TOAST ========== */
+  .toast-container {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    z-index: 200; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+  }
+  .toast {
+    background: var(--gray-900); color: var(--white);
+    padding: 12px 18px; border-radius: 10px; font-size: 14px;
+    font-weight: 500; box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    animation: toastIn 0.25s cubic-bezier(.2,.8,.2,1);
+    pointer-events: auto; max-width: 420px;
+  }
+  .toast.success { background: var(--green-500); }
+  .toast.error { background: var(--red-500); }
+  .toast.info { background: var(--blue-500); }
+  .toast.warn { background: var(--gold-500); }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .toast.fading { opacity: 0; transition: opacity 0.4s; }
+
+  /* Responsive: stack on narrow screens */
+  @media (max-width: 1100px) {
+    .test-main { flex-direction: column; align-items: center; }
+    .task-card-wrap, .notes-panel { max-width: 390px; width: 100%; position: static; }
+    .notes-panel { height: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ WELCOME OVERLAY ============ -->
+<div class="overlay" id="welcome-screen">
+  <div class="overlay-card">
+    <h1>InterpretAI — User Testing</h1>
+    <p class="subtitle">Thanks for participating! You'll complete 3 short tasks using a prototype interpreter app. We'll log how you interact with the prototype to help us improve the design.</p>
+
+    <div class="task-walkthrough">
+      <div class="task-walkthrough-row">
+        <div class="task-walkthrough-num">1</div>
+        <div class="task-walkthrough-text">
+          <strong>Create an AI-generated glossary</strong>
+          <span>Use AI to build a terminology set for an upcoming assignment.</span>
+        </div>
+      </div>
+      <div class="task-walkthrough-row">
+        <div class="task-walkthrough-num">2</div>
+        <div class="task-walkthrough-text">
+          <strong>Add a term</strong>
+          <span>Save a new term to one of your glossaries.</span>
+        </div>
+      </div>
+      <div class="task-walkthrough-row">
+        <div class="task-walkthrough-num">3</div>
+        <div class="task-walkthrough-text">
+          <strong>Study some flashcards</strong>
+          <span>Review at least 3 cards from a glossary.</span>
+        </div>
+      </div>
+    </div>
+
+    <label for="participant-id-input">Participant ID</label>
+    <input type="text" id="participant-id-input" placeholder="e.g., P1, P2, P3..." maxlength="32">
+
+    <div class="overlay-buttons">
+      <button class="btn-overlay-primary" id="begin-test-btn">Begin Test</button>
+      <button class="btn-overlay-secondary" id="resume-test-btn" style="display:none">Resume Previous Session</button>
+      <button class="btn-overlay-danger" id="clear-data-btn" style="display:none">Discard saved data &amp; start fresh</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ COMPLETION OVERLAY ============ -->
+<div class="overlay hidden" id="completion-screen">
+  <div class="overlay-card">
+    <h1>All Done! 🎉</h1>
+    <p class="subtitle">Thanks for completing the test. Your session has been recorded. You can download a copy of the data below.</p>
+
+    <div class="completion-stats" id="completion-stats">
+      <!-- filled in by JS -->
+    </div>
+
+    <div class="overlay-buttons">
+      <button class="btn-overlay-primary" id="download-json-btn">Download Session (JSON)</button>
+      <button class="btn-overlay-secondary" id="download-csv-btn">Download Events (CSV)</button>
+      <button class="btn-overlay-danger" id="restart-test-btn">Start a New Session</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TEST SHELL ============ -->
+<div class="test-shell" id="test-shell" style="display:none;">
+
+  <!-- Header -->
+  <header class="test-header">
+    <div class="test-header-brand">
+      <span class="dot"></span>
+      <span>InterpretAI Test</span>
+    </div>
+    <div class="test-progress">
+      <div class="test-progress-top">
+        <span class="task-name" id="header-task-name">Task 1 of 3</span>
+        <span id="header-task-time">0:00</span>
+      </div>
+      <div class="test-progress-bar"><div class="test-progress-fill" id="header-progress-fill"></div></div>
+    </div>
+    <div class="test-actions">
+      <button class="btn-secondary" id="btn-stuck">I'm Stuck</button>
+      <button class="btn-primary" id="btn-done">I'm Done with This Task</button>
+    </div>
+  </header>
+
+  <main class="test-main">
+
+    <!-- LEFT: Task Instruction Card -->
+    <div class="task-card-wrap">
+      <div class="task-card">
+        <div class="task-card-tag" id="task-tag">Task 1 of 3</div>
+        <div class="task-card-title" id="task-title">—</div>
+        <div class="task-card-desc" id="task-desc">—</div>
+        <div class="task-card-success" id="task-success">
+          <strong>You're done when:</strong>
+          <span id="task-success-text">—</span>
+        </div>
+      </div>
+
+      <div class="task-mini-list">
+        <div class="task-mini-list-title">Progress</div>
+        <div id="task-mini-rows"></div>
+      </div>
+    </div>
+
+    <!-- CENTER: Phone -->
+    <div class="phone-frame">
+      <div class="status-bar">
+        <span class="time">9:41</span>
+        <div class="icons">
+          <svg viewBox="0 0 20 20" fill="currentColor"><rect x="1" y="10" width="3" height="8" rx="1"/><rect x="6" y="7" width="3" height="11" rx="1"/><rect x="11" y="4" width="3" height="14" rx="1"/><rect x="16" y="1" width="3" height="17" rx="1"/></svg>
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 4C6.5 4 3.4 5.6 1.2 8.2a1 1 0 001.5 1.3C4.5 7.2 7.1 6 10 6s5.5 1.2 7.3 3.5a1 1 0 001.5-1.3C16.6 5.6 13.5 4 10 4zm0 5c-2 0-3.9.8-5.3 2.2a1 1 0 001.4 1.4C7.2 11.5 8.5 11 10 11s2.8.5 3.9 1.6a1 1 0 001.4-1.4C13.9 9.8 12 9 10 9zm0 5a2 2 0 100 4 2 2 0 000-4z"/></svg>
+          <svg viewBox="0 0 28 14" fill="currentColor"><rect x="0" y="1" width="22" height="12" rx="2.5" stroke="currentColor" fill="none" stroke-width="1"/><rect x="23" y="4.5" width="2.5" height="5" rx="1"/><rect x="2" y="3" width="17" height="8" rx="1.5"/></svg>
+        </div>
+      </div>
+
+      <div class="screen-content">
+
+        <!-- GLOSSARY SCREEN -->
+        <div id="screen-glossary" class="screen active">
+          <div class="screen-title">Glossary</div>
+          <div style="display:flex;gap:8px;margin-bottom:24px;">
+            <div class="search-bar" style="flex:1;margin-bottom:0;">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
+              <span>Search glossaries...</span>
+            </div>
+            <button style="width:48px;height:48px;border-radius:12px;background:var(--gray-50);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;" data-log="filter-button">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2" stroke-linecap="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+            </button>
+          </div>
+          <div class="section-header">Quick Access</div>
+          <div class="grid-cards" style="grid-template-columns:repeat(2,1fr);">
+            <button class="grid-card" data-log="quick-add-term" onclick="showSubScreen('add-term')">
+              <div class="grid-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </div>
+              <span class="grid-card-label">Add a Term</span>
+            </button>
+            <button class="grid-card" data-log="quick-create-glossary" onclick="showSubScreen('create-choice')">
+              <div class="grid-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </div>
+              <span class="grid-card-label">Create New Glossary</span>
+            </button>
+          </div>
+          <div class="section-header">My Glossaries</div>
+          <div id="glossary-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- SUB-SCREEN: Glossary Detail -->
+        <div id="screen-glossary-detail" class="screen">
+          <div class="sub-nav">
+            <button onclick="showSubScreen('glossary')" data-log="back-from-detail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+          </div>
+          <div id="gd-success-slot"></div>
+          <div class="screen-title" id="gd-title" style="font-size:26px;line-height:32px;">—</div>
+          <div style="font-size:14px;color:var(--gray-500);margin-bottom:16px;" id="gd-meta">—</div>
+          <button class="primary-btn" id="gd-study-btn" data-log="study-from-detail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            Study these cards
+          </button>
+          <button class="ghost-btn" id="gd-add-term-btn" data-log="add-term-from-detail">+ Add a term to this glossary</button>
+          <div class="section-header" style="margin-top:24px;" id="gd-terms-header">Terms</div>
+          <div id="gd-terms-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- SUB-SCREEN: Create Glossary Choice -->
+        <div id="screen-create-choice" class="screen">
+          <div class="sub-nav">
+            <button onclick="showSubScreen('glossary')" data-log="back-from-create-choice">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+          </div>
+          <div class="screen-title" style="font-size:26px;line-height:32px;">How would you like to create your glossary?</div>
+          <div class="choice-grid">
+            <button class="choice-block ai" data-log="choose-ai" onclick="showSubScreen('create-ai')">
+              <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+              </div>
+              <h3>AI Generate Glossary</h3>
+              <p>Describe your assignment and let AI build a terminology set. Optionally blend with your existing glossaries as a base.</p>
+            </button>
+            <button class="choice-block custom" data-log="choose-custom" onclick="showSubScreen('create-custom')">
+              <div class="icon-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </div>
+              <h3>Create Custom Glossary</h3>
+              <p>Start from scratch. Name your glossary, pick a language pair, and add terms one by one.</p>
+            </button>
+          </div>
+        </div>
+
+        <!-- SUB-SCREEN: AI Generate -->
+        <div id="screen-create-ai" class="screen">
+          <div class="sub-nav">
+            <button onclick="showSubScreen('create-choice')" data-log="back-from-ai-form">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+          </div>
+          <div id="ai-form-content">
+            <div class="screen-title" style="font-size:26px;line-height:32px;">AI Generate ✨</div>
+            <div style="font-size:15px;color:var(--gray-500);margin-bottom:4px;">Describe your assignment and AI will generate a terminology set.</div>
+
+            <div class="form-label">Glossary Name</div>
+            <input class="form-input" id="ai-name-input" placeholder="e.g., Orthopedic Follow-Up" maxlength="80">
+            <div class="form-error-text" id="ai-name-error"></div>
+
+            <div class="form-label">Describe the assignment</div>
+            <textarea class="form-textarea" id="ai-desc-input" placeholder="e.g., Post-op knee replacement check-up. Will discuss recovery, physical therapy, and medications..." maxlength="500"></textarea>
+            <div class="form-error-text" id="ai-desc-error"></div>
+
+            <div class="form-label">Base on existing glossaries (optional)</div>
+            <div id="ai-base-list">
+              <!-- rendered by JS -->
+            </div>
+
+            <button class="primary-btn" id="ai-generate-btn" data-log="generate-glossary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+              Generate Glossary
+            </button>
+          </div>
+          <div id="ai-loading-content" style="display:none;">
+            <div class="ai-loading">
+              <div class="ai-spinner"></div>
+              <div class="ai-loading-text" id="ai-loading-text">Analyzing your assignment...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUB-SCREEN: Custom Create -->
+        <div id="screen-create-custom" class="screen">
+          <div class="sub-nav">
+            <button onclick="showSubScreen('create-choice')" data-log="back-from-custom-form">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+          </div>
+          <div class="screen-title" style="font-size:26px;line-height:32px;">Create Custom Glossary</div>
+          <div style="font-size:15px;color:var(--gray-500);margin-bottom:4px;">Set up your new glossary. You can add terms after.</div>
+
+          <div class="form-label">Glossary Name</div>
+          <input class="form-input" id="cu-name-input" placeholder="e.g., My Medical Terms" maxlength="80">
+          <div class="form-error-text" id="cu-name-error"></div>
+
+          <div class="form-label">Category</div>
+          <input class="form-input" id="cu-category-input" placeholder="e.g., Medical, Legal, Education..." maxlength="40">
+
+          <div class="form-label">Source Language</div>
+          <input class="form-input" id="cu-source-input" value="English" maxlength="30">
+
+          <div class="form-label">Target Language</div>
+          <input class="form-input" id="cu-target-input" value="Spanish" maxlength="30">
+
+          <button class="primary-btn" id="cu-create-btn" data-log="create-custom-glossary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Create Glossary
+          </button>
+        </div>
+
+        <!-- SUB-SCREEN: Add a Term -->
+        <div id="screen-add-term" class="screen">
+          <div class="sub-nav">
+            <button onclick="showSubScreen('glossary')" data-log="back-from-add-term">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+              Back
+            </button>
+          </div>
+          <div class="screen-title" style="font-size:26px;line-height:32px;">Add a Term</div>
+          <div style="font-size:15px;color:var(--gray-500);margin-bottom:4px;">Add a new term to one of your glossaries.</div>
+
+          <div class="form-label" id="add-source-label">English</div>
+          <input class="form-input" id="add-source-input" placeholder="e.g., Knee replacement" maxlength="120">
+          <div class="form-error-text" id="add-source-error"></div>
+
+          <div class="form-label" id="add-target-label">Spanish (Target Language)</div>
+          <input class="form-input" id="add-target-input" placeholder="e.g., Reemplazo de rodilla" maxlength="120">
+          <div class="form-error-text" id="add-target-error"></div>
+
+          <div class="form-label">Add to Glossary</div>
+          <div class="glossary-picker" id="add-glossary-picker">
+            <!-- rendered by JS -->
+          </div>
+          <div class="form-error-text" id="add-glossary-error"></div>
+
+          <button class="primary-btn" id="add-save-btn" data-log="save-term">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Save Term
+          </button>
+          <button class="ghost-btn" id="add-save-another-btn" data-log="save-and-add-another">
+            Save and Add Another
+          </button>
+        </div>
+
+        <!-- STUDY SCREEN -->
+        <div id="screen-study" class="screen">
+          <!-- Picker mode -->
+          <div id="study-picker">
+            <div class="screen-title">Study</div>
+            <div style="font-size:15px;color:var(--gray-500);margin-bottom:20px;">Pick a glossary to study.</div>
+            <div id="study-glossary-list">
+              <!-- rendered by JS -->
+            </div>
+          </div>
+
+          <!-- Deck mode -->
+          <div id="study-deck" style="display:none;">
+            <div class="sub-nav">
+              <button id="study-exit-btn" data-log="exit-study">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+                Exit
+              </button>
+            </div>
+            <div class="study-header-row">
+              <div class="screen-title" id="study-deck-title" style="margin-bottom:0;font-size:24px;line-height:30px;">Studying</div>
+              <span class="due-pill"><span class="due-dot"></span><span id="study-deck-remaining">0 left</span></span>
+            </div>
+
+            <div class="progress-tracker">
+              <div class="pt-stat">
+                <div class="pt-num blue" id="study-stat-reviewed">0</div>
+                <div class="pt-label">Reviewed</div>
+              </div>
+              <div class="pt-stat">
+                <div class="pt-num green" id="study-stat-correct">0</div>
+                <div class="pt-label">Correct</div>
+              </div>
+              <div class="pt-stat">
+                <div class="pt-num dark" id="study-stat-accuracy">—</div>
+                <div class="pt-label">Accuracy</div>
+              </div>
+            </div>
+
+            <div class="study-flashcard" id="study-flashcard" data-log="flashcard-tap">
+              <div class="flashcard-lang" id="study-flashcard-lang">—</div>
+              <div class="flashcard-term" id="study-flashcard-term">—</div>
+              <div class="flashcard-action" id="study-flashcard-action">Tap to reveal</div>
+            </div>
+
+            <div class="rating-row" id="study-rating-row">
+              <button class="rating-btn again" data-rating="again" disabled>
+                <div class="rating-circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+                </div>
+                <span class="rating-label">Again</span>
+              </button>
+              <button class="rating-btn hard" data-rating="hard" disabled>
+                <div class="rating-circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+                </div>
+                <span class="rating-label">Hard</span>
+              </button>
+              <button class="rating-btn good" data-rating="good" disabled>
+                <div class="rating-circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <span class="rating-label">Good</span>
+              </button>
+              <button class="rating-btn easy" data-rating="easy" disabled>
+                <div class="rating-circle">
+                  <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0.5" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <span class="rating-label">Easy</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Deck complete -->
+          <div id="study-complete" style="display:none;">
+            <div class="study-complete">
+              <div class="study-complete-emoji">🎉</div>
+              <div class="study-complete-title">Deck Complete!</div>
+              <div style="color:var(--gray-500);font-size:14px;">Great work — you reviewed every card.</div>
+              <div class="study-complete-stats">
+                <div class="pt-stat">
+                  <div class="pt-num blue" id="sc-reviewed">0</div>
+                  <div class="pt-label">Reviewed</div>
+                </div>
+                <div class="pt-stat">
+                  <div class="pt-num green" id="sc-correct">0</div>
+                  <div class="pt-label">Correct</div>
+                </div>
+                <div class="pt-stat">
+                  <div class="pt-num dark" id="sc-accuracy">—</div>
+                  <div class="pt-label">Accuracy</div>
+                </div>
+              </div>
+              <button class="primary-btn" id="sc-view-glossary-btn" data-log="study-complete-view-glossary">View this glossary</button>
+              <button class="ghost-btn" id="sc-back-btn" data-log="study-complete-back">Back to all glossaries</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROFILE SCREEN -->
+        <div id="screen-profile" class="screen">
+          <div class="screen-title">Profile</div>
+
+          <div class="profile-card">
+            <div class="profile-avatar-lg" id="profile-avatar-letter">A</div>
+            <div>
+              <div class="profile-name-lg" id="profile-name-text">Alex</div>
+              <div class="profile-meta">ES ↔ EN · Court Interpreter</div>
+            </div>
+          </div>
+
+          <div class="section-header">Settings</div>
+          <div class="settings-list">
+            <button class="setting-row" data-log="settings-language">
+              <div class="setting-row-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+              </div>
+              <div class="setting-row-text">
+                <div class="setting-row-title">Language Pair</div>
+                <div class="setting-row-sub">Spanish ↔ English</div>
+              </div>
+              <div class="setting-chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </button>
+
+            <button class="setting-row" data-log="settings-import-export">
+              <div class="setting-row-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              </div>
+              <div class="setting-row-text">
+                <div class="setting-row-title">Import / Export</div>
+                <div class="setting-row-sub">CSV, JSON, Anki decks</div>
+              </div>
+              <div class="setting-chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </button>
+
+            <button class="setting-row" data-log="settings-statistics">
+              <div class="setting-row-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="14"/></svg>
+              </div>
+              <div class="setting-row-text">
+                <div class="setting-row-title">Statistics</div>
+                <div class="setting-row-sub" id="profile-stats-sub">— terms · — reviews</div>
+              </div>
+              <div class="setting-chevron">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </button>
+
+            <button class="setting-row" data-log="settings-signout">
+              <div class="setting-row-icon danger">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              </div>
+              <div class="setting-row-text">
+                <div class="setting-row-title danger">Sign Out</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /screen-content -->
+
+      <!-- TAB BAR -->
+      <div class="tab-bar">
+        <button class="tab-item active" data-tab="glossary" data-log="tab-glossary">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H6zm0 2h7v5h5v11H6V4zm2 8v2h8v-2H8zm0 4v2h5v-2H8z"/></svg>
+          <span class="tab-label">Glossary</span>
+        </button>
+        <button class="tab-item" data-tab="study" data-log="tab-study">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v1h2a2 2 0 012 2v12a2 2 0 01-2 2H8a2 2 0 01-2-2v-1H4a2 2 0 01-2-2V6a2 2 0 012-2zm4 15h10V7H8v12zM6 6v10h0V6z"/></svg>
+          <span class="tab-label">Study</span>
+        </button>
+        <button class="tab-item" data-tab="profile" data-log="tab-profile">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z"/></svg>
+          <span class="tab-label">Profile</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Notes Panel -->
+    <aside class="notes-panel">
+      <div class="notes-header">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Your Notes
+        </h3>
+        <span class="notes-status" id="notes-status">Saved</span>
+      </div>
+      <textarea class="notes-textarea" id="notes-textarea" placeholder="Jot down anything you notice — what's confusing, what works well, ideas, questions..."></textarea>
+      <div class="notes-footer">
+        <span>Auto-saves as you type</span>
+        <span id="notes-count">0 chars</span>
+      </div>
+    </aside>
+
+  </main>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+'use strict';
+
+// ============================================================
+// CONSTANTS
+// ============================================================
+const STORAGE_KEY = 'interpretai_test_v2';
+const APP_VERSION = '1.0.0';
+
+const TASKS = [
+  {
+    id: 1,
+    name: 'Create an AI-generated glossary',
+    description: 'Imagine you have an interpretation assignment coming up. Use the app to create a new glossary using AI. Describe a scenario in your own words (e.g., a medical follow-up, a court hearing, an IEP meeting).',
+    successText: "You're done when your new glossary appears in the My Glossaries list.",
+    completionFlag: 'task1_ai_glossary_created',
+  },
+  {
+    id: 2,
+    name: 'Add a term',
+    description: 'You just heard a new term during a session and want to remember it. Add a new term to one of your existing glossaries.',
+    successText: "You're done when the term is saved and you're back at the glossary list or detail page.",
+    completionFlag: 'task2_term_added',
+  },
+  {
+    id: 3,
+    name: 'Study at least 3 cards',
+    description: 'Practice the terms you\'ve collected. Open a glossary, study the flashcards, and rate at least 3 cards using Again / Hard / Good / Easy.',
+    successText: "You're done when you've rated 3 or more cards.",
+    completionFlag: 'task3_studied_3_cards',
+  },
+];
+
+const ICON_LIBRARY = {
+  med: { bg: 'var(--red-100)', color: 'var(--red-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
+  legal: { bg: 'var(--gold-50)', color: 'var(--gold-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>' },
+  edu: { bg: 'var(--blue-50)', color: '#0066FF', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>' },
+  biz: { bg: 'var(--green-50)', color: 'var(--green-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>' },
+  ai:  { bg: 'var(--blue-100)', color: 'var(--blue-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>' },
+  custom: { bg: 'var(--green-50)', color: 'var(--green-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' },
+};
+
+const DEFAULT_GLOSSARIES = [
+  {
+    id: 'g_med_ortho', name: 'Medical — Orthopedic', category: 'Medical',
+    sourceLang: 'English', targetLang: 'Spanish', icon: 'med',
+    source: 'preset', createdAt: 0,
+    terms: [
+      ['Knee replacement', 'Reemplazo de rodilla'],
+      ['Sprain', 'Esguince'],
+      ['Fracture', 'Fractura'],
+      ['Physical therapy', 'Terapia física'],
+      ['Range of motion', 'Rango de movimiento'],
+      ['Cartilage', 'Cartílago'],
+      ['Ligament', 'Ligamento'],
+      ['Crutches', 'Muletas'],
+    ],
+  },
+  {
+    id: 'g_legal_court', name: 'Legal — Court Proceedings', category: 'Legal',
+    sourceLang: 'English', targetLang: 'Spanish', icon: 'legal',
+    source: 'preset', createdAt: 0,
+    terms: [
+      ['Plaintiff', 'Demandante'],
+      ['Defendant', 'Demandado'],
+      ['Witness', 'Testigo'],
+      ['Sworn statement', 'Declaración jurada'],
+      ['Hearing', 'Audiencia'],
+      ['Bail', 'Fianza'],
+      ['Verdict', 'Veredicto'],
+    ],
+  },
+  {
+    id: 'g_edu_iep', name: 'Education — IEP Meeting', category: 'Education',
+    sourceLang: 'English', targetLang: 'Spanish', icon: 'edu',
+    source: 'preset', createdAt: 0,
+    terms: [
+      ['Individualized Education Program', 'Programa Educativo Individualizado'],
+      ['Learning disability', 'Discapacidad de aprendizaje'],
+      ['Accommodation', 'Adaptación'],
+      ['Goal', 'Meta'],
+      ['Evaluation', 'Evaluación'],
+      ['Special education', 'Educación especial'],
+      ['Progress report', 'Informe de progreso'],
+    ],
+  },
+  {
+    id: 'g_biz_neg', name: 'Business — Negotiation', category: 'Business',
+    sourceLang: 'English', targetLang: 'Spanish', icon: 'biz',
+    source: 'preset', createdAt: 0,
+    terms: [
+      ['Contract', 'Contrato'],
+      ['Agreement', 'Acuerdo'],
+      ['Stakeholder', 'Parte interesada'],
+      ['Counteroffer', 'Contraoferta'],
+      ['Deadline', 'Fecha límite'],
+      ['Liability', 'Responsabilidad'],
+      ['Settlement', 'Acuerdo / Convenio'],
+    ],
+  },
+];
+
+// AI generation packs — keyword-matched
+const AI_PACKS = [
+  {
+    name: 'Orthopedic / Post-Op',
+    category: 'Medical',
+    icon: 'ai',
+    keywords: ['knee', 'ortho', 'post-op', 'postop', 'surgery', 'joint', 'physical therapy', 'recovery', 'replacement', 'hip', 'shoulder', 'rehab'],
+    terms: [
+      ['Knee replacement', 'Reemplazo de rodilla'],
+      ['Recovery', 'Recuperación'],
+      ['Physical therapy', 'Terapia física'],
+      ['Pain medication', 'Medicamento para el dolor'],
+      ['Swelling', 'Hinchazón'],
+      ['Stitches', 'Puntos / Suturas'],
+      ['Range of motion', 'Rango de movimiento'],
+      ['Crutches', 'Muletas'],
+      ['Anti-inflammatory', 'Antiinflamatorio'],
+      ['Follow-up appointment', 'Cita de seguimiento'],
+      ['Brace', 'Férula'],
+      ['Discharge instructions', 'Instrucciones de alta'],
+    ],
+  },
+  {
+    name: 'Court / Legal',
+    category: 'Legal',
+    icon: 'ai',
+    keywords: ['court', 'trial', 'judge', 'deposition', 'plaintiff', 'defendant', 'lawsuit', 'attorney', 'legal', 'hearing', 'bail', 'witness', 'criminal', 'civil'],
+    terms: [
+      ['Plaintiff', 'Demandante'],
+      ['Defendant', 'Demandado'],
+      ['Sworn testimony', 'Testimonio bajo juramento'],
+      ['Cross-examination', 'Contrainterrogatorio'],
+      ['Objection', 'Objeción'],
+      ['Sustained', 'Ha lugar'],
+      ['Overruled', 'No ha lugar'],
+      ['Bail', 'Fianza'],
+      ['Plea bargain', 'Acuerdo de culpabilidad'],
+      ['Subpoena', 'Citación judicial'],
+      ['Verdict', 'Veredicto'],
+      ['Sentencing', 'Sentencia'],
+    ],
+  },
+  {
+    name: 'IEP / Education',
+    category: 'Education',
+    icon: 'ai',
+    keywords: ['iep', 'school', 'education', 'teacher', 'student', 'learning', 'disability', 'classroom', 'special ed', 'principal', 'parent-teacher'],
+    terms: [
+      ['Individualized Education Program (IEP)', 'Programa Educativo Individualizado (PEI)'],
+      ['Learning disability', 'Discapacidad de aprendizaje'],
+      ['Accommodation', 'Adaptación'],
+      ['Modification', 'Modificación'],
+      ['Annual goal', 'Meta anual'],
+      ['Progress report', 'Informe de progreso'],
+      ['Evaluation', 'Evaluación'],
+      ['Speech therapy', 'Terapia del habla'],
+      ['Occupational therapy', 'Terapia ocupacional'],
+      ['Least restrictive environment', 'Entorno menos restrictivo'],
+      ['Behavioral intervention plan', 'Plan de intervención conductual'],
+    ],
+  },
+  {
+    name: 'Business Negotiation',
+    category: 'Business',
+    icon: 'ai',
+    keywords: ['business', 'negotiation', 'contract', 'deal', 'partnership', 'merger', 'acquisition', 'meeting', 'corporate', 'stakeholder'],
+    terms: [
+      ['Memorandum of understanding', 'Memorando de entendimiento'],
+      ['Stakeholder', 'Parte interesada'],
+      ['Counteroffer', 'Contraoferta'],
+      ['Liability', 'Responsabilidad'],
+      ['Confidentiality clause', 'Cláusula de confidencialidad'],
+      ['Breach of contract', 'Incumplimiento de contrato'],
+      ['Force majeure', 'Fuerza mayor'],
+      ['Indemnification', 'Indemnización'],
+      ['Term sheet', 'Hoja de términos'],
+      ['Due diligence', 'Diligencia debida'],
+    ],
+  },
+  {
+    name: 'General Medical',
+    category: 'Medical',
+    icon: 'ai',
+    keywords: ['medical', 'doctor', 'patient', 'hospital', 'clinic', 'health', 'medicine', 'diagnosis', 'symptom', 'check-up', 'checkup'],
+    terms: [
+      ['Symptom', 'Síntoma'],
+      ['Diagnosis', 'Diagnóstico'],
+      ['Prescription', 'Receta'],
+      ['Side effects', 'Efectos secundarios'],
+      ['Allergy', 'Alergia'],
+      ['Blood pressure', 'Presión arterial'],
+      ['Fever', 'Fiebre'],
+      ['Treatment', 'Tratamiento'],
+      ['Medical history', 'Historial médico'],
+      ['Insurance', 'Seguro médico'],
+    ],
+  },
+  // fallback (no specific keyword match)
+  {
+    name: 'General Interpreting',
+    category: 'General',
+    icon: 'ai',
+    keywords: [],
+    terms: [
+      ['Interpreter', 'Intérprete'],
+      ['Translation', 'Traducción'],
+      ['Confidentiality', 'Confidencialidad'],
+      ['Clarification', 'Aclaración'],
+      ['Source language', 'Idioma de origen'],
+      ['Target language', 'Idioma de destino'],
+      ['Consecutive interpretation', 'Interpretación consecutiva'],
+      ['Simultaneous interpretation', 'Interpretación simultánea'],
+      ['Cultural context', 'Contexto cultural'],
+      ['Idiom', 'Modismo'],
+    ],
+  },
+];
+
+// ============================================================
+// UTILITIES
+// ============================================================
+const $  = (s, p = document) => p.querySelector(s);
+const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
+
+function uid(prefix = 'id') {
+  return prefix + '_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+function esc(s) {
+  if (s === null || s === undefined) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function nowISO() { return new Date().toISOString(); }
+
+function fmtClock(ms) {
+  if (!ms || ms < 0) return '0:00';
+  const total = Math.floor(ms / 1000);
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+function debounce(fn, ms) {
+  let t = null;
+  return function (...args) {
+    clearTimeout(t);
+    t = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
+
+function safe(fn, ctx = 'unknown') {
+  try { return fn(); }
+  catch (e) {
+    console.error('[' + ctx + ']', e);
+    logEvent('error', { context: ctx, message: String(e && e.message || e) });
+    showToast('Something went wrong. The test will continue.', 'error');
+    return null;
+  }
+}
+
+// ============================================================
+// STATE
+// ============================================================
+let state = null;
+let studySession = null;       // ephemeral, not persisted
+let aiGenerationTimer = null;
+let timerInterval = null;
+let notesSaveTimer = null;
+
+function initialState() {
+  return {
+    version: APP_VERSION,
+    createdAt: Date.now(),
+    session: null, // {participantId, startedAt, currentTaskIdx, completedTaskFlags{}, status, taskTimes[]}
+    glossaries: DEFAULT_GLOSSARIES.map(g => ({
+      ...g,
+      terms: g.terms.map(([s, t]) => ({ id: uid('t'), source: s, target: t, addedAt: 0, reviews: [] })),
+    })),
+    events: [],
+    notes: '',
+  };
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || !Array.isArray(parsed.glossaries)) return null;
+    return parsed;
+  } catch (e) {
+    console.warn('Failed to load state', e);
+    return null;
+  }
+}
+
+const persist = debounce(() => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (e) {
+    console.error('Persist failed', e);
+    showToast('Could not save data: ' + (e.message || 'storage full'), 'error', 4000);
+  }
+}, 150);
+
+function persistNow() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  catch (e) {
+    console.error('Persist failed', e);
+    showToast('Could not save data: ' + (e.message || 'storage full'), 'error', 4000);
+  }
+}
+
+// ============================================================
+// LOGGING
+// ============================================================
+function logEvent(type, data = {}) {
+  if (!state) return;
+  try {
+    const ev = {
+      ts: Date.now(),
+      iso: nowISO(),
+      type,
+      taskId: state.session?.currentTaskIdx != null ? (state.session.currentTaskIdx + 1) : null,
+      data,
+    };
+    state.events.push(ev);
+    // Keep events bounded — extremely unlikely to hit, but defense:
+    if (state.events.length > 5000) {
+      state.events.splice(0, state.events.length - 5000);
+    }
+    persist();
+  } catch (e) {
+    console.error('logEvent failed', e);
+  }
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, type = 'info', ms = 2400) {
+  try {
+    const el = document.createElement('div');
+    el.className = 'toast ' + type;
+    el.textContent = msg;
+    $('#toast-container').appendChild(el);
+    setTimeout(() => { el.classList.add('fading'); }, Math.max(ms - 400, 100));
+    setTimeout(() => { el.remove(); }, ms);
+  } catch (e) { console.error(e); }
+}
+
+// ============================================================
+// WELCOME / SESSION FLOW
+// ============================================================
+function showWelcome() {
+  const existing = state?.session;
+  const hasInProgress = existing && existing.status === 'active';
+  $('#resume-test-btn').style.display = hasInProgress ? 'block' : 'none';
+  $('#clear-data-btn').style.display = hasInProgress ? 'block' : 'none';
+  if (hasInProgress) {
+    $('#participant-id-input').value = existing.participantId || '';
+  }
+  $('#welcome-screen').classList.remove('hidden');
+  $('#test-shell').style.display = 'none';
+  $('#completion-screen').classList.add('hidden');
+}
+
+function showShell() {
+  $('#welcome-screen').classList.add('hidden');
+  $('#completion-screen').classList.add('hidden');
+  $('#test-shell').style.display = 'flex';
+}
+
+function showCompletion() {
+  $('#welcome-screen').classList.add('hidden');
+  $('#test-shell').style.display = 'none';
+  renderCompletionStats();
+  $('#completion-screen').classList.remove('hidden');
+}
+
+function beginTest() {
+  const idEl = $('#participant-id-input');
+  const id = (idEl.value || '').trim();
+  if (!id) {
+    idEl.focus();
+    idEl.style.borderColor = 'var(--red-500)';
+    showToast('Please enter a Participant ID', 'warn');
+    setTimeout(() => { idEl.style.borderColor = ''; }, 1500);
+    return;
+  }
+  state = initialState();
+  state.session = {
+    participantId: id,
+    startedAt: Date.now(),
+    currentTaskIdx: 0,
+    completedTaskFlags: {},
+    taskTimes: TASKS.map(t => ({ id: t.id, startedAt: null, endedAt: null, status: 'pending' })),
+    status: 'active',
+  };
+  state.session.taskTimes[0].startedAt = Date.now();
+  state.session.taskTimes[0].status = 'in_progress';
+  logEvent('session_start', { participantId: id, ua: navigator.userAgent });
+  logEvent('task_start', { taskId: 1, taskName: TASKS[0].name });
+  persistNow();
+  showShell();
+  renderAll();
+  startTimer();
+  showSubScreen('glossary');
+  switchTab('glossary');
+}
+
+function resumeTest() {
+  if (!state || !state.session) return;
+  showShell();
+  renderAll();
+  startTimer();
+  showSubScreen('glossary');
+  switchTab('glossary');
+  showToast('Session resumed', 'info');
+  logEvent('session_resume', {});
+}
+
+function clearData() {
+  if (!confirm('Discard the saved session and all in-progress data? This cannot be undone.')) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  state = initialState();
+  showWelcome();
+  $('#participant-id-input').value = '';
+  showToast('Saved data cleared', 'info');
+}
+
+function currentTask() {
+  return TASKS[state.session.currentTaskIdx];
+}
+
+function isLastTask() { return state.session.currentTaskIdx >= TASKS.length - 1; }
+
+function markTaskDone(reason = 'self_reported') {
+  const idx = state.session.currentTaskIdx;
+  const tt = state.session.taskTimes[idx];
+  if (!tt.endedAt) {
+    tt.endedAt = Date.now();
+    tt.status = reason === 'skipped' ? 'skipped' : 'done';
+    tt.endReason = reason;
+  }
+  logEvent('task_end', { taskId: idx + 1, taskName: TASKS[idx].name, reason, durationMs: tt.endedAt - tt.startedAt });
+
+  if (isLastTask()) {
+    state.session.status = 'complete';
+    state.session.endedAt = Date.now();
+    logEvent('session_end', { totalDurationMs: state.session.endedAt - state.session.startedAt });
+    persistNow();
+    stopTimer();
+    showCompletion();
+    return;
+  }
+  // Advance
+  state.session.currentTaskIdx += 1;
+  const next = state.session.taskTimes[state.session.currentTaskIdx];
+  next.startedAt = Date.now();
+  next.status = 'in_progress';
+  logEvent('task_start', { taskId: state.session.currentTaskIdx + 1, taskName: TASKS[state.session.currentTaskIdx].name });
+  persistNow();
+  renderTaskCard();
+  renderTaskMini();
+  renderHeaderProgress();
+  showSubScreen('glossary');
+  switchTab('glossary');
+  showToast('Task ' + (state.session.currentTaskIdx + 1) + ' started', 'info');
+}
+
+function onDoneClick() {
+  if (!state.session) return;
+  const t = currentTask();
+  const flagged = !!state.session.completedTaskFlags[t.completionFlag];
+  let confirmMsg;
+  if (!flagged) {
+    confirmMsg = "We didn't detect that you completed this task yet. Mark it done anyway?";
+    if (!confirm(confirmMsg)) {
+      logEvent('task_done_cancelled', { taskId: t.id });
+      return;
+    }
+    logEvent('task_done_without_flag', { taskId: t.id });
+  } else {
+    logEvent('task_done_clicked', { taskId: t.id });
+  }
+  markTaskDone(flagged ? 'self_reported_with_flag' : 'self_reported_without_flag');
+}
+
+function onStuckClick() {
+  if (!state.session) return;
+  logEvent('task_stuck', { taskId: currentTask().id });
+  if (confirm('Need help? You can skip this task and move on. Skip this task?')) {
+    logEvent('task_skipped', { taskId: currentTask().id });
+    markTaskDone('skipped');
+  }
+}
+
+function startTimer() {
+  stopTimer();
+  timerInterval = setInterval(() => {
+    if (!state.session || state.session.status !== 'active') return;
+    const tt = state.session.taskTimes[state.session.currentTaskIdx];
+    if (tt && tt.startedAt) {
+      $('#header-task-time').textContent = fmtClock(Date.now() - tt.startedAt);
+    }
+  }, 500);
+}
+function stopTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+// ============================================================
+// SCREEN NAVIGATION (within phone)
+// ============================================================
+function switchTab(name) {
+  // Cancel study session if leaving Study tab
+  if (studySession && name !== 'study') {
+    exitStudy(false);
+  }
+  $$('.tab-item').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  showSubScreen(name);
+  logEvent('tab_change', { tab: name });
+}
+
+function showSubScreen(name) {
+  $$('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('screen-' + name);
+  if (target) target.classList.add('active');
+  const sc = $('.screen-content');
+  if (sc) sc.scrollTop = 0;
+  logEvent('nav', { screen: name });
+
+  // Per-screen prep
+  if (name === 'glossary') renderGlossaryList();
+  if (name === 'add-term') prepAddTermScreen();
+  if (name === 'create-ai') prepAIScreen();
+  if (name === 'create-custom') prepCustomScreen();
+  if (name === 'study') renderStudyPicker();
+  if (name === 'profile') renderProfileStats();
+  if (name === 'glossary-detail' && currentDetailGlossaryId) renderGlossaryDetail(currentDetailGlossaryId);
+}
+
+let currentDetailGlossaryId = null;
+let highlightTermId = null;          // term to flash on next detail render
+let detailSuccessMessage = null;     // banner text to show on next detail render
+let lastStudiedGlossaryId = null;    // for "View this glossary" after study
+
+function openGlossaryDetail(id, opts = {}) {
+  currentDetailGlossaryId = id;
+  if (opts.highlightTermId) highlightTermId = opts.highlightTermId;
+  if (opts.successMessage) detailSuccessMessage = opts.successMessage;
+  showSubScreen('glossary-detail');
+}
+
+// ============================================================
+// RENDERING
+// ============================================================
+function renderAll() {
+  renderTaskCard();
+  renderTaskMini();
+  renderHeaderProgress();
+  renderGlossaryList();
+  renderProfileStats();
+  $('#notes-textarea').value = state.notes || '';
+  updateNotesCount();
+  $('#profile-name-text').textContent = state.session?.participantId || 'You';
+  $('#profile-avatar-letter').textContent = (state.session?.participantId || 'A').charAt(0).toUpperCase();
+}
+
+function renderHeaderProgress() {
+  const idx = state.session.currentTaskIdx;
+  const total = TASKS.length;
+  const t = TASKS[idx];
+  const pct = state.session.status === 'complete' ? 100 : ((idx) / total) * 100;
+  $('#header-progress-fill').style.width = pct + '%';
+  $('#header-task-name').textContent = `Task ${idx + 1} of ${total} — ${t.name}`;
+}
+
+function renderTaskCard() {
+  const idx = state.session.currentTaskIdx;
+  const t = TASKS[idx];
+  $('#task-tag').textContent = `Task ${idx + 1} of ${TASKS.length}`;
+  $('#task-title').textContent = t.name;
+  $('#task-desc').textContent = t.description;
+  $('#task-success-text').textContent = t.successText;
+}
+
+function renderTaskMini() {
+  const wrap = $('#task-mini-rows');
+  wrap.innerHTML = '';
+  TASKS.forEach((t, i) => {
+    const tt = state.session.taskTimes[i];
+    const isCurrent = i === state.session.currentTaskIdx && state.session.status === 'active';
+    let cls = '';
+    if (tt.status === 'done') cls = 'done';
+    else if (tt.status === 'skipped') cls = 'skipped';
+    else if (isCurrent) cls = 'active';
+    const num = tt.status === 'done' ? '✓' : (tt.status === 'skipped' ? '–' : (i + 1));
+    const row = document.createElement('div');
+    row.className = 'task-mini-row ' + cls;
+    row.innerHTML = `<div class="task-mini-num">${esc(num)}</div><div class="task-mini-name">${esc(t.name)}</div>`;
+    wrap.appendChild(row);
+  });
+}
+
+function renderGlossaryList() {
+  const list = $('#glossary-list');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!state.glossaries.length) {
+    list.innerHTML = `<div class="empty-state"><span class="empty-state-emoji">📚</span><div class="empty-state-title">No glossaries yet</div><div class="empty-state-desc">Tap "Create New Glossary" above to get started.</div></div>`;
+    return;
+  }
+  state.glossaries.forEach(g => {
+    const ic = ICON_LIBRARY[g.icon] || ICON_LIBRARY.custom;
+    const row = document.createElement('div');
+    row.className = 'list-row';
+    row.dataset.glossaryId = g.id;
+    row.dataset.log = 'glossary-row:' + g.name;
+    row.innerHTML = `
+      <div class="list-avatar" style="background:${ic.bg};color:${ic.color};">${ic.svg}</div>
+      <div class="list-text">
+        <div class="list-title">${esc(g.name)}</div>
+        <div class="list-subtitle">${g.terms.length} term${g.terms.length === 1 ? '' : 's'}</div>
+      </div>
+      <span class="list-chevron">›</span>
+    `;
+    row.addEventListener('click', () => openGlossaryDetail(g.id));
+    list.appendChild(row);
+  });
+}
+
+function renderGlossaryDetail(id) {
+  const g = state.glossaries.find(x => x.id === id);
+  if (!g) {
+    showSubScreen('glossary');
+    return;
+  }
+
+  // Success banner (rendered once per navigation)
+  const slot = $('#gd-success-slot');
+  slot.innerHTML = '';
+  if (detailSuccessMessage) {
+    slot.innerHTML = `
+      <div class="gd-success-banner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>${esc(detailSuccessMessage)}</span>
+      </div>`;
+    detailSuccessMessage = null;
+  }
+
+  $('#gd-title').textContent = g.name;
+  $('#gd-meta').textContent = `${g.sourceLang} ↔ ${g.targetLang} · ${g.category || '—'} · ${g.terms.length} term${g.terms.length === 1 ? '' : 's'}`;
+  $('#gd-terms-header').textContent = `Terms (${g.terms.length})`;
+
+  const list = $('#gd-terms-list');
+  list.innerHTML = '';
+  if (!g.terms.length) {
+    list.innerHTML = `<div class="empty-state"><span class="empty-state-emoji">📝</span><div class="empty-state-title">No terms yet</div><div class="empty-state-desc">Add some terms to study from this glossary.</div></div>`;
+  } else {
+    let highlightedRow = null;
+    g.terms.slice().reverse().forEach(t => {
+      const row = document.createElement('div');
+      row.className = 'term-row';
+      if (t.id === highlightTermId) {
+        row.classList.add('highlight');
+        highlightedRow = row;
+      }
+      row.innerHTML = `<div class="term-source">${esc(t.source)}</div><div class="term-target">${esc(t.target)}</div>`;
+      list.appendChild(row);
+    });
+    // Clear highlight after one render and let animation finish
+    if (highlightTermId) {
+      const clearedId = highlightTermId;
+      highlightTermId = null;
+      setTimeout(() => {
+        if (highlightedRow) highlightedRow.classList.remove('highlight');
+      }, 2600);
+      // Scroll into view if needed
+      if (highlightedRow) {
+        setTimeout(() => {
+          try { highlightedRow.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch {}
+        }, 100);
+      }
+    }
+  }
+
+  $('#gd-study-btn').onclick = () => {
+    if (!g.terms.length) {
+      showToast('Add some terms before studying.', 'warn');
+      return;
+    }
+    startStudy(g.id);
+  };
+  $('#gd-add-term-btn').onclick = () => {
+    pendingAddTermGlossaryId = g.id;
+    showSubScreen('add-term');
+  };
+}
+
+function renderProfileStats() {
+  let total = 0, reviews = 0;
+  state.glossaries.forEach(g => {
+    total += g.terms.length;
+    g.terms.forEach(t => { reviews += (t.reviews?.length || 0); });
+  });
+  $('#profile-stats-sub').textContent = `${total} terms · ${reviews} review${reviews === 1 ? '' : 's'}`;
+}
+
+// ============================================================
+// AI GENERATE FORM
+// ============================================================
+function prepAIScreen() {
+  $('#ai-form-content').style.display = 'block';
+  $('#ai-loading-content').style.display = 'none';
+  $('#ai-name-error').textContent = '';
+  $('#ai-desc-error').textContent = '';
+  $('#ai-name-input').classList.remove('error');
+  $('#ai-desc-input').classList.remove('error');
+  // Render base list
+  const list = $('#ai-base-list');
+  list.innerHTML = '';
+  state.glossaries.filter(g => g.source === 'preset' || g.source === 'custom' || g.source === 'ai').forEach(g => {
+    const row = document.createElement('div');
+    row.className = 'base-check-row';
+    row.dataset.glossaryId = g.id;
+    row.innerHTML = `
+      <div class="base-check-box"></div>
+      <div class="base-check-text">
+        <div class="base-check-title">${esc(g.name)}</div>
+        <div class="base-check-sub">${g.terms.length} term${g.terms.length === 1 ? '' : 's'}</div>
+      </div>
+    `;
+    row.addEventListener('click', () => {
+      row.classList.toggle('selected');
+      logEvent('ai_base_toggle', { glossaryId: g.id, selected: row.classList.contains('selected') });
+    });
+    list.appendChild(row);
+  });
+}
+
+function pickAIPack(description) {
+  const lower = (description || '').toLowerCase();
+  let best = AI_PACKS[AI_PACKS.length - 1]; // fallback
+  let bestScore = 0;
+  for (const pack of AI_PACKS) {
+    if (!pack.keywords.length) continue;
+    let score = 0;
+    for (const k of pack.keywords) {
+      if (lower.includes(k)) score++;
+    }
+    if (score > bestScore) { best = pack; bestScore = score; }
+  }
+  return { pack: best, matchedScore: bestScore };
+}
+
+function submitAIGenerate() {
+  const name = $('#ai-name-input').value.trim();
+  const desc = $('#ai-desc-input').value.trim();
+  let valid = true;
+  $('#ai-name-error').textContent = '';
+  $('#ai-desc-error').textContent = '';
+  $('#ai-name-input').classList.remove('error');
+  $('#ai-desc-input').classList.remove('error');
+  if (!name) {
+    $('#ai-name-error').textContent = 'Please give your glossary a name.';
+    $('#ai-name-input').classList.add('error');
+    valid = false;
+  }
+  if (!desc || desc.length < 10) {
+    $('#ai-desc-error').textContent = 'Please describe the assignment in a sentence or two.';
+    $('#ai-desc-input').classList.add('error');
+    valid = false;
+  }
+  if (!valid) {
+    logEvent('ai_generate_validation_failed', { name, descLen: desc.length });
+    return;
+  }
+
+  const baseSelected = $$('#ai-base-list .base-check-row.selected').map(r => r.dataset.glossaryId);
+  logEvent('ai_generate_submit', { name, descLen: desc.length, baseCount: baseSelected.length });
+
+  // Show loading
+  $('#ai-form-content').style.display = 'none';
+  $('#ai-loading-content').style.display = 'block';
+  $('#ai-loading-text').textContent = 'Analyzing your assignment...';
+
+  if (aiGenerationTimer) clearTimeout(aiGenerationTimer);
+  aiGenerationTimer = setTimeout(() => {
+    $('#ai-loading-text').textContent = 'Generating terminology set...';
+  }, 900);
+
+  setTimeout(() => safe(() => {
+    if (aiGenerationTimer) { clearTimeout(aiGenerationTimer); aiGenerationTimer = null; }
+    const { pack, matchedScore } = pickAIPack(desc);
+    // Combine pack terms with any base glossary terms (deduped by source)
+    const combined = new Map();
+    pack.terms.forEach(([s, t]) => combined.set(s.toLowerCase(), [s, t]));
+    baseSelected.forEach(id => {
+      const g = state.glossaries.find(x => x.id === id);
+      if (g) g.terms.forEach(t => {
+        if (!combined.has(t.source.toLowerCase())) combined.set(t.source.toLowerCase(), [t.source, t.target]);
+      });
+    });
+    const newGloss = {
+      id: uid('g'),
+      name: name,
+      category: pack.category,
+      sourceLang: 'English',
+      targetLang: 'Spanish',
+      icon: 'ai',
+      source: 'ai',
+      createdAt: Date.now(),
+      meta: { description: desc, matchedPack: pack.name, matchedScore, baseGlossaries: baseSelected },
+      terms: Array.from(combined.values()).map(([s, t]) => ({
+        id: uid('t'), source: s, target: t, addedAt: Date.now(), reviews: [],
+      })),
+    };
+    state.glossaries.push(newGloss);
+    state.session.completedTaskFlags['task1_ai_glossary_created'] = true;
+    logEvent('glossary_created', { id: newGloss.id, name: newGloss.name, source: 'ai', termCount: newGloss.terms.length, matchedPack: pack.name });
+    persistNow();
+    showToast('Glossary created with ' + newGloss.terms.length + ' terms', 'success', 2400);
+    // Clear form
+    $('#ai-name-input').value = '';
+    $('#ai-desc-input').value = '';
+    $$('#ai-base-list .base-check-row.selected').forEach(r => r.classList.remove('selected'));
+    // Land on the new glossary's detail page with a success banner
+    openGlossaryDetail(newGloss.id, {
+      successMessage: `Glossary created with ${newGloss.terms.length} AI-generated terms`,
+    });
+  }, 'submitAIGenerate'), 1900);
+}
+
+// ============================================================
+// CUSTOM CREATE FORM
+// ============================================================
+function prepCustomScreen() {
+  $('#cu-name-error').textContent = '';
+  $('#cu-name-input').classList.remove('error');
+}
+
+function submitCustomCreate() {
+  const name = $('#cu-name-input').value.trim();
+  const cat = $('#cu-category-input').value.trim();
+  const src = $('#cu-source-input').value.trim() || 'English';
+  const tgt = $('#cu-target-input').value.trim() || 'Spanish';
+  $('#cu-name-error').textContent = '';
+  $('#cu-name-input').classList.remove('error');
+  if (!name) {
+    $('#cu-name-error').textContent = 'Please name your glossary.';
+    $('#cu-name-input').classList.add('error');
+    return;
+  }
+  const newGloss = {
+    id: uid('g'),
+    name,
+    category: cat || 'General',
+    sourceLang: src, targetLang: tgt,
+    icon: 'custom', source: 'custom',
+    createdAt: Date.now(),
+    terms: [],
+  };
+  state.glossaries.push(newGloss);
+  logEvent('glossary_created', { id: newGloss.id, name: newGloss.name, source: 'custom' });
+  persistNow();
+  showToast('Glossary created', 'success');
+  $('#cu-name-input').value = '';
+  $('#cu-category-input').value = '';
+  openGlossaryDetail(newGloss.id, {
+    successMessage: 'Glossary created — add some terms to get started',
+  });
+}
+
+// ============================================================
+// ADD TERM FORM
+// ============================================================
+let pendingAddTermGlossaryId = null; // pre-select if coming from glossary detail
+
+function prepAddTermScreen() {
+  $('#add-source-error').textContent = '';
+  $('#add-target-error').textContent = '';
+  $('#add-glossary-error').textContent = '';
+  $('#add-source-input').classList.remove('error');
+  $('#add-target-input').classList.remove('error');
+
+  // Default language labels (use first glossary's pair if available)
+  const firstGloss = state.glossaries[0];
+  const src = firstGloss?.sourceLang || 'English';
+  const tgt = firstGloss?.targetLang || 'Spanish';
+  $('#add-source-label').textContent = src;
+  $('#add-target-label').textContent = `${tgt} (Target Language)`;
+
+  // Render glossary picker chips
+  const picker = $('#add-glossary-picker');
+  picker.innerHTML = '';
+  state.glossaries.forEach((g, i) => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'gloss-chip';
+    chip.dataset.glossaryId = g.id;
+    chip.textContent = g.name;
+    if ((pendingAddTermGlossaryId && pendingAddTermGlossaryId === g.id) ||
+        (!pendingAddTermGlossaryId && i === 0)) {
+      chip.classList.add('selected');
+    }
+    chip.addEventListener('click', () => {
+      $$('#add-glossary-picker .gloss-chip').forEach(c => {
+        if (!c.classList.contains('new')) c.classList.remove('selected');
+      });
+      chip.classList.add('selected');
+      logEvent('add_term_glossary_selected', { glossaryId: g.id });
+    });
+    picker.appendChild(chip);
+  });
+  // "+ New Glossary" chip
+  const newChip = document.createElement('button');
+  newChip.type = 'button';
+  newChip.className = 'gloss-chip new';
+  newChip.textContent = '+ New Glossary';
+  newChip.addEventListener('click', () => {
+    pendingAddTermGlossaryId = null;
+    showSubScreen('create-custom');
+  });
+  picker.appendChild(newChip);
+  pendingAddTermGlossaryId = null; // consume
+}
+
+function submitAddTerm(addAnother) {
+  const src = $('#add-source-input').value.trim();
+  const tgt = $('#add-target-input').value.trim();
+  const sel = $('#add-glossary-picker .gloss-chip.selected:not(.new)');
+  let valid = true;
+  $('#add-source-error').textContent = '';
+  $('#add-target-error').textContent = '';
+  $('#add-glossary-error').textContent = '';
+  $('#add-source-input').classList.remove('error');
+  $('#add-target-input').classList.remove('error');
+  if (!src) { $('#add-source-error').textContent = 'Enter the term in the source language.'; $('#add-source-input').classList.add('error'); valid = false; }
+  if (!tgt) { $('#add-target-error').textContent = 'Enter the translation.'; $('#add-target-input').classList.add('error'); valid = false; }
+  if (!sel) { $('#add-glossary-error').textContent = 'Pick a glossary to add to.'; valid = false; }
+  if (!valid) {
+    logEvent('add_term_validation_failed', { hasSrc: !!src, hasTgt: !!tgt, hasGloss: !!sel });
+    return;
+  }
+  const gid = sel.dataset.glossaryId;
+  const g = state.glossaries.find(x => x.id === gid);
+  if (!g) {
+    showToast('Selected glossary not found.', 'error');
+    return;
+  }
+  const newTerm = { id: uid('t'), source: src, target: tgt, addedAt: Date.now(), reviews: [] };
+  g.terms.push(newTerm);
+  state.session.completedTaskFlags['task2_term_added'] = true;
+  logEvent('term_added', { glossaryId: g.id, glossaryName: g.name, termId: newTerm.id, source: src, target: tgt });
+  persistNow();
+  showToast('Term added to "' + g.name + '"', 'success');
+  // Clear inputs
+  $('#add-source-input').value = '';
+  $('#add-target-input').value = '';
+  if (addAnother) {
+    // stay on this screen, refresh chip selection state
+    prepAddTermScreen();
+    // re-select the same glossary
+    const chip = $$('#add-glossary-picker .gloss-chip').find(c => c.dataset.glossaryId === gid);
+    if (chip) {
+      $$('#add-glossary-picker .gloss-chip').forEach(c => { if (!c.classList.contains('new')) c.classList.remove('selected'); });
+      chip.classList.add('selected');
+    }
+    $('#add-source-input').focus();
+  } else {
+    // Land on the glossary's detail page so the user sees their term in context
+    openGlossaryDetail(g.id, {
+      highlightTermId: newTerm.id,
+      successMessage: `Term added to "${g.name}"`,
+    });
+  }
+}
+
+// ============================================================
+// STUDY MODE
+// ============================================================
+function renderStudyPicker() {
+  $('#study-picker').style.display = 'block';
+  $('#study-deck').style.display = 'none';
+  $('#study-complete').style.display = 'none';
+  const list = $('#study-glossary-list');
+  list.innerHTML = '';
+  if (!state.glossaries.length) {
+    list.innerHTML = `<div class="empty-state"><span class="empty-state-emoji">📚</span><div class="empty-state-title">No glossaries to study</div><div class="empty-state-desc">Create one first.</div></div>`;
+    return;
+  }
+  state.glossaries.forEach(g => {
+    const ic = ICON_LIBRARY[g.icon] || ICON_LIBRARY.custom;
+    const row = document.createElement('div');
+    row.className = 'list-row';
+    row.dataset.log = 'study-pick:' + g.name;
+    const empty = !g.terms.length;
+    row.innerHTML = `
+      <div class="list-avatar" style="background:${ic.bg};color:${ic.color};">${ic.svg}</div>
+      <div class="list-text">
+        <div class="list-title">${esc(g.name)}</div>
+        <div class="list-subtitle">${empty ? 'No terms yet' : g.terms.length + ' card' + (g.terms.length === 1 ? '' : 's') + ' to study'}</div>
+      </div>
+      <span class="list-chevron">›</span>
+    `;
+    if (empty) {
+      row.style.opacity = 0.55;
+      row.addEventListener('click', () => showToast('Add some terms before studying this glossary.', 'warn'));
+    } else {
+      row.addEventListener('click', () => startStudy(g.id));
+    }
+    list.appendChild(row);
+  });
+}
+
+function startStudy(glossaryId) {
+  const g = state.glossaries.find(x => x.id === glossaryId);
+  if (!g || !g.terms.length) {
+    showToast('No terms to study.', 'warn');
+    return;
+  }
+  studySession = {
+    glossaryId,
+    deck: g.terms.map((_, i) => i), // indices into g.terms
+    index: 0,
+    reviewed: 0,
+    correct: 0,
+    revealed: false,
+    started: Date.now(),
+  };
+  // Shuffle deck
+  for (let i = studySession.deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [studySession.deck[i], studySession.deck[j]] = [studySession.deck[j], studySession.deck[i]];
+  }
+  logEvent('study_start', { glossaryId, glossaryName: g.name, deckSize: studySession.deck.length });
+  // Switch tab visually if not on study
+  $$('.tab-item').forEach(t => t.classList.toggle('active', t.dataset.tab === 'study'));
+  showSubScreen('study');
+  $('#study-picker').style.display = 'none';
+  $('#study-deck').style.display = 'block';
+  $('#study-complete').style.display = 'none';
+  $('#study-deck-title').textContent = g.name;
+  renderStudyCard();
+  updateStudyStats();
+}
+
+function currentStudyTerm() {
+  if (!studySession) return null;
+  const g = state.glossaries.find(x => x.id === studySession.glossaryId);
+  if (!g) return null;
+  const termIdx = studySession.deck[studySession.index];
+  return g.terms[termIdx];
+}
+
+function renderStudyCard() {
+  const g = state.glossaries.find(x => x.id === studySession.glossaryId);
+  const term = currentStudyTerm();
+  if (!term) {
+    finishStudy();
+    return;
+  }
+  studySession.revealed = false;
+  $('#study-flashcard-lang').textContent = `${g.sourceLang.toUpperCase()} → ${g.targetLang.toUpperCase()}`;
+  $('#study-flashcard-term').textContent = term.source;
+  $('#study-flashcard-action').textContent = 'Tap to reveal';
+  $('#study-flashcard-action').style.color = 'var(--blue-500)';
+  $('#study-deck-remaining').textContent = (studySession.deck.length - studySession.index) + ' left';
+  $$('#study-rating-row .rating-btn').forEach(b => b.disabled = true);
+}
+
+function revealStudyCard() {
+  if (!studySession) return;
+  const term = currentStudyTerm();
+  if (!term) return;
+  if (studySession.revealed) {
+    // Flip back
+    studySession.revealed = false;
+    $('#study-flashcard-term').textContent = term.source;
+    $('#study-flashcard-action').textContent = 'Tap to reveal';
+    $('#study-flashcard-action').style.color = 'var(--blue-500)';
+  } else {
+    studySession.revealed = true;
+    $('#study-flashcard-term').textContent = term.target;
+    $('#study-flashcard-action').textContent = 'Rate how you did →';
+    $('#study-flashcard-action').style.color = 'var(--gray-500)';
+    $$('#study-rating-row .rating-btn').forEach(b => b.disabled = false);
+    logEvent('flashcard_reveal', { termId: term.id });
+  }
+}
+
+function rateStudyCard(rating) {
+  if (!studySession || !studySession.revealed) return;
+  const term = currentStudyTerm();
+  if (!term) return;
+  term.reviews.push({ ts: Date.now(), rating });
+  studySession.reviewed += 1;
+  if (rating === 'good' || rating === 'easy') studySession.correct += 1;
+  studySession.index += 1;
+  logEvent('card_reviewed', { glossaryId: studySession.glossaryId, termId: term.id, rating, totalReviewed: studySession.reviewed });
+
+  // Task 3 success: 3 cards rated this session
+  if (studySession.reviewed >= 3 && !state.session.completedTaskFlags['task3_studied_3_cards']) {
+    state.session.completedTaskFlags['task3_studied_3_cards'] = true;
+    logEvent('task3_threshold_reached', { reviewed: studySession.reviewed });
+    showToast("Nice — you've rated 3 cards. You can mark this task done.", 'success', 3000);
+  }
+
+  persistNow();
+  updateStudyStats();
+  if (studySession.index >= studySession.deck.length) {
+    finishStudy();
+  } else {
+    renderStudyCard();
+  }
+}
+
+function updateStudyStats() {
+  if (!studySession) return;
+  $('#study-stat-reviewed').textContent = studySession.reviewed;
+  $('#study-stat-correct').textContent = studySession.correct;
+  const acc = studySession.reviewed > 0 ? Math.round((studySession.correct / studySession.reviewed) * 100) : null;
+  $('#study-stat-accuracy').textContent = acc === null ? '—' : (acc + '%');
+}
+
+function finishStudy() {
+  if (!studySession) return;
+  const glossId = studySession.glossaryId;
+  logEvent('study_complete', { glossaryId: glossId, reviewed: studySession.reviewed, correct: studySession.correct, durationMs: Date.now() - studySession.started });
+  $('#sc-reviewed').textContent = studySession.reviewed;
+  $('#sc-correct').textContent = studySession.correct;
+  const acc = studySession.reviewed > 0 ? Math.round((studySession.correct / studySession.reviewed) * 100) : 0;
+  $('#sc-accuracy').textContent = acc + '%';
+  $('#study-picker').style.display = 'none';
+  $('#study-deck').style.display = 'none';
+  $('#study-complete').style.display = 'block';
+  lastStudiedGlossaryId = glossId;
+  studySession = null;
+  persistNow();
+}
+
+function exitStudy(showPicker = true) {
+  if (studySession) {
+    logEvent('study_exit_early', { glossaryId: studySession.glossaryId, reviewed: studySession.reviewed });
+    studySession = null;
+  }
+  if (showPicker) {
+    $('#study-picker').style.display = 'block';
+    $('#study-deck').style.display = 'none';
+    $('#study-complete').style.display = 'none';
+    renderStudyPicker();
+  }
+}
+
+// ============================================================
+// NOTES
+// ============================================================
+function onNotesInput() {
+  $('#notes-status').textContent = 'Saving...';
+  $('#notes-status').className = 'notes-status saving';
+  updateNotesCount();
+  if (notesSaveTimer) clearTimeout(notesSaveTimer);
+  notesSaveTimer = setTimeout(() => safe(() => {
+    state.notes = $('#notes-textarea').value;
+    persistNow();
+    logEvent('note_update', { length: state.notes.length });
+    $('#notes-status').textContent = 'Saved';
+    $('#notes-status').className = 'notes-status saved';
+    setTimeout(() => {
+      if ($('#notes-status').textContent === 'Saved') {
+        $('#notes-status').className = 'notes-status';
+      }
+    }, 1500);
+  }, 'onNotesInput'), 500);
+}
+function updateNotesCount() {
+  const v = $('#notes-textarea').value || '';
+  $('#notes-count').textContent = v.length + ' chars';
+}
+
+// ============================================================
+// COMPLETION + EXPORT
+// ============================================================
+function renderCompletionStats() {
+  const stats = $('#completion-stats');
+  const totalMs = (state.session.endedAt || Date.now()) - state.session.startedAt;
+  const totalEvents = state.events.length;
+  const completedTasks = state.session.taskTimes.filter(t => t.status === 'done').length;
+  stats.innerHTML = `
+    <div class="completion-stat"><div class="completion-stat-num">${fmtClock(totalMs)}</div><div class="completion-stat-label">Total time</div></div>
+    <div class="completion-stat"><div class="completion-stat-num">${completedTasks}/${TASKS.length}</div><div class="completion-stat-label">Completed</div></div>
+    <div class="completion-stat"><div class="completion-stat-num">${totalEvents}</div><div class="completion-stat-label">Events</div></div>
+  `;
+}
+
+function downloadBlob(blob, filename) {
+  try {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  } catch (e) {
+    showToast('Download failed: ' + e.message, 'error');
+  }
+}
+
+function exportJSON() {
+  const payload = {
+    exportedAt: nowISO(),
+    appVersion: APP_VERSION,
+    session: state.session,
+    glossaries: state.glossaries.map(g => ({
+      id: g.id, name: g.name, category: g.category, source: g.source,
+      sourceLang: g.sourceLang, targetLang: g.targetLang,
+      createdAt: g.createdAt, meta: g.meta || null,
+      terms: g.terms,
+    })),
+    events: state.events,
+    notes: state.notes,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const fname = `interpretai_session_${state.session.participantId || 'anon'}_${Date.now()}.json`;
+  downloadBlob(blob, fname);
+  logEvent('export_json', { filename: fname });
+}
+
+function exportCSV() {
+  const rows = [['ts_iso', 'ts_ms', 'participant_id', 'task_id', 'type', 'data_json']];
+  state.events.forEach(ev => {
+    rows.push([
+      ev.iso,
+      String(ev.ts),
+      state.session.participantId || '',
+      ev.taskId == null ? '' : String(ev.taskId),
+      ev.type,
+      JSON.stringify(ev.data || {}),
+    ]);
+  });
+  const csv = rows.map(r => r.map(cell => {
+    const s = String(cell == null ? '' : cell);
+    if (s.includes('"') || s.includes(',') || s.includes('\n')) {
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    return s;
+  }).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const fname = `interpretai_events_${state.session.participantId || 'anon'}_${Date.now()}.csv`;
+  downloadBlob(blob, fname);
+  logEvent('export_csv', { filename: fname });
+}
+
+function restartTest() {
+  if (!confirm('Start a brand-new session? The current data will be cleared from this browser. (Make sure you downloaded it first.)')) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  state = initialState();
+  studySession = null;
+  $('#participant-id-input').value = '';
+  showWelcome();
+}
+
+// ============================================================
+// GLOBAL CLICK LOGGING
+// ============================================================
+function attachClickLogging() {
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-log], button, .grid-card, .list-row, .gloss-chip, .study-flashcard, .rating-btn, .tab-item, .choice-block');
+    if (!el) return;
+    if (el.closest('.welcome-screen, .completion-screen, .toast-container, .notes-panel, .test-header, .task-card')) {
+      // these have their own dedicated handlers + we don't want to over-log
+      return;
+    }
+    const screenEl = el.closest('.screen');
+    const screen = screenEl ? screenEl.id : 'shell';
+    const label = el.dataset.log || (el.textContent || '').trim().slice(0, 80) || el.tagName;
+    logEvent('click', { screen, label });
+  }, true);
+}
+
+// ============================================================
+// ERROR HANDLERS
+// ============================================================
+window.addEventListener('error', (e) => {
+  try {
+    logEvent('error', { message: e.message, source: e.filename, line: e.lineno, col: e.colno });
+  } catch {}
+  console.error('window error', e);
+  showToast('A minor error occurred — the test will continue.', 'error');
+});
+
+window.addEventListener('unhandledrejection', (e) => {
+  try {
+    logEvent('error', { message: 'unhandled rejection: ' + (e.reason?.message || String(e.reason)) });
+  } catch {}
+  console.error('unhandled rejection', e);
+});
+
+// ============================================================
+// INIT / BOOT
+// ============================================================
+function bindUI() {
+  // Welcome
+  $('#begin-test-btn').addEventListener('click', () => safe(beginTest, 'beginTest'));
+  $('#resume-test-btn').addEventListener('click', () => safe(resumeTest, 'resumeTest'));
+  $('#clear-data-btn').addEventListener('click', () => safe(clearData, 'clearData'));
+  $('#participant-id-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') $('#begin-test-btn').click();
+  });
+
+  // Header
+  $('#btn-stuck').addEventListener('click', () => safe(onStuckClick, 'onStuckClick'));
+  $('#btn-done').addEventListener('click', () => safe(onDoneClick, 'onDoneClick'));
+
+  // Tab bar
+  $$('.tab-item').forEach(t => {
+    t.addEventListener('click', () => safe(() => switchTab(t.dataset.tab), 'switchTab'));
+  });
+
+  // Forms
+  $('#ai-generate-btn').addEventListener('click', () => safe(submitAIGenerate, 'submitAIGenerate'));
+  $('#cu-create-btn').addEventListener('click', () => safe(submitCustomCreate, 'submitCustomCreate'));
+  $('#add-save-btn').addEventListener('click', () => safe(() => submitAddTerm(false), 'submitAddTerm'));
+  $('#add-save-another-btn').addEventListener('click', () => safe(() => submitAddTerm(true), 'submitAddTerm'));
+
+  // Study
+  $('#study-flashcard').addEventListener('click', () => safe(revealStudyCard, 'revealStudyCard'));
+  $$('#study-rating-row .rating-btn').forEach(b => {
+    b.addEventListener('click', () => safe(() => rateStudyCard(b.dataset.rating), 'rateStudyCard'));
+  });
+  $('#study-exit-btn').addEventListener('click', () => safe(() => { exitStudy(true); showSubScreen('study'); }, 'exitStudy'));
+  $('#sc-back-btn').addEventListener('click', () => safe(() => { showSubScreen('study'); renderStudyPicker(); }, 'sc-back'));
+  $('#sc-view-glossary-btn').addEventListener('click', () => safe(() => {
+    if (lastStudiedGlossaryId) {
+      const g = state.glossaries.find(x => x.id === lastStudiedGlossaryId);
+      const reviewedNote = g ? `You just reviewed cards from "${g.name}"` : 'Cards reviewed';
+      openGlossaryDetail(lastStudiedGlossaryId, { successMessage: reviewedNote });
+    } else {
+      showSubScreen('study');
+      renderStudyPicker();
+    }
+  }, 'sc-view-glossary'));
+
+  // Notes
+  $('#notes-textarea').addEventListener('input', onNotesInput);
+
+  // Completion
+  $('#download-json-btn').addEventListener('click', () => safe(exportJSON, 'exportJSON'));
+  $('#download-csv-btn').addEventListener('click', () => safe(exportCSV, 'exportCSV'));
+  $('#restart-test-btn').addEventListener('click', () => safe(restartTest, 'restartTest'));
+
+  attachClickLogging();
+}
+
+function init() {
+  bindUI();
+  const loaded = loadState();
+  if (loaded && loaded.session) {
+    state = loaded;
+    if (state.session.status === 'complete') {
+      // Show completion screen with previous session's data
+      showCompletion();
+      return;
+    }
+    showWelcome();
+  } else {
+    state = initialState();
+    showWelcome();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => safe(init, 'init'));
+</script>
+
+</body>
+</html>
