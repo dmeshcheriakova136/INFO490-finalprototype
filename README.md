@@ -122,8 +122,8 @@ Two think-aloud sessions conducted with professional medical interpreters:
 
 | Participant | Experience | Languages | Device |
 |---|---|---|---|
-| Alona | 13+ years (on-site → remote) | English / Russian / Ukrainian | Windows PC, Edge |
-| Astghik | 3 years (medical OPI/VRI) | Russian / Spanish | Laptop (browser) |
+| Participant 1 | 13+ years (on-site → remote) | English / Russian / Ukrainian | Windows PC, Edge |
+| Participant 2 | 3 years (medical OPI/VRI) | Russian / Spanish | Laptop (browser) |
 
 **Key findings → changes made:**
 
