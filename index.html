@@ -49,6 +49,7 @@
     display: flex; flex-direction: column;
     position: relative;
   }
+  .phone-frame .modal-overlay { border-radius: 40px; }
 
   .status-bar {
     display: flex; justify-content: space-between; align-items: center;
@@ -451,6 +452,133 @@
     to { opacity: 1; transform: translateY(0); }
   }
   .toast.fading { opacity: 0; transition: opacity 0.4s; }
+
+  /* Language selects */
+  .lang-select {
+    width: 100%; height: 48px; border-radius: 12px;
+    background: var(--gray-50); border: 1.5px solid var(--gray-100);
+    padding: 0 12px; font-size: 15px; font-family: inherit;
+    color: var(--gray-900); outline: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238E8E93' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
+  }
+  .lang-select:focus { border-color: var(--blue-500); }
+  .settings-section-title {
+    font-size: 13px; font-weight: 700; color: var(--gray-500);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin: 20px 0 8px;
+  }
+
+  /* TTS / Record buttons */
+  .tts-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--blue-50); border: 1.5px solid var(--blue-100);
+    border-radius: 8px; padding: 6px 10px; cursor: pointer;
+    font-size: 12px; font-weight: 600; color: var(--blue-500);
+    font-family: inherit; transition: all .15s;
+  }
+  .tts-btn:active { background: var(--blue-100); }
+  .tts-btn svg { width: 13px; height: 13px; }
+  .record-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--gray-50); border: 1.5px solid var(--gray-200);
+    border-radius: 8px; padding: 8px 12px; cursor: pointer;
+    font-size: 13px; font-weight: 600; color: var(--gray-700);
+    font-family: inherit; transition: all .15s;
+  }
+  .record-btn.recording { background: var(--red-100); border-color: var(--red-500); color: var(--red-500); }
+  .record-btn svg { width: 14px; height: 14px; }
+  .tts-row { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+
+  /* Image upload */
+  .img-upload-area {
+    border: 2px dashed var(--gray-200); border-radius: 12px;
+    padding: 20px 16px; text-align: center; cursor: pointer;
+    margin-top: 4px; transition: border-color .15s;
+  }
+  .img-upload-area:hover { border-color: var(--blue-500); }
+  .img-upload-area p { font-size: 13px; color: var(--gray-500); margin-top: 6px; }
+  .img-upload-area svg { width: 28px; height: 28px; color: var(--gray-500); margin: 0 auto; display: block; }
+  .img-preview {
+    width: 100%; max-height: 160px; object-fit: cover;
+    border-radius: 10px; margin-top: 8px; display: block;
+  }
+  .img-remove-btn {
+    background: var(--red-100); color: var(--red-500); border: none;
+    border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; margin-top: 6px; font-family: inherit;
+  }
+
+  /* Flashcard image */
+  .flashcard-img { width: 100%; max-height: 120px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; }
+
+  /* Resources screen */
+  .resource-link-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; background: var(--gray-50);
+    border-radius: 14px; margin-bottom: 10px; text-decoration: none;
+    border: 1.5px solid var(--gray-100); transition: all .15s;
+  }
+  .resource-link-row:active { background: var(--blue-50); border-color: var(--blue-200); }
+  .resource-link-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--blue-100); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .resource-link-icon svg { width: 20px; height: 20px; color: var(--blue-500); }
+  .resource-link-text { flex: 1; }
+  .resource-link-title { font-size: 15px; font-weight: 700; color: var(--gray-900); }
+  .resource-link-desc { font-size: 13px; color: var(--gray-500); margin-top: 1px; }
+
+  /* Prefix/suffix screen */
+  .affix-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .affix-tab {
+    flex: 1; height: 38px; border-radius: 10px; border: 1.5px solid var(--gray-200);
+    background: var(--gray-50); font-size: 14px; font-weight: 600;
+    color: var(--gray-500); cursor: pointer; font-family: inherit; transition: all .15s;
+  }
+  .affix-tab.active { background: var(--blue-500); border-color: var(--blue-500); color: var(--white); }
+  .affix-entry {
+    background: var(--gray-50); border-radius: 12px;
+    padding: 12px 14px; margin-bottom: 8px; border: 1.5px solid var(--gray-100);
+  }
+  .affix-form { font-size: 16px; font-weight: 700; color: var(--blue-500); }
+  .affix-meaning { font-size: 14px; font-weight: 600; color: var(--gray-900); margin-top: 2px; }
+  .affix-examples { font-size: 12px; color: var(--gray-500); margin-top: 3px; line-height: 1.4; }
+
+  /* Import modal */
+  .modal-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.5);
+    display: none; align-items: flex-end; justify-content: center;
+    z-index: 100;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-sheet {
+    background: var(--white); border-radius: 24px 24px 0 0;
+    padding: 24px 20px 40px; width: 100%;
+  }
+  .modal-title { font-size: 20px; font-weight: 700; margin-bottom: 6px; color: var(--gray-900); }
+  .modal-sub { font-size: 14px; color: var(--gray-500); margin-bottom: 20px; line-height: 1.4; }
+  .import-btn-row { display: flex; flex-direction: column; gap: 10px; }
+  .import-file-btn {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--gray-50); border: 1.5px solid var(--gray-200);
+    border-radius: 14px; padding: 14px 16px; cursor: pointer;
+    font-family: inherit; width: 100%; transition: all .15s;
+  }
+  .import-file-btn:active { background: var(--blue-50); border-color: var(--blue-500); }
+  .import-file-btn .ifb-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--blue-100); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .import-file-btn .ifb-icon svg { width: 20px; height: 20px; color: var(--blue-500); }
+  .import-file-btn .ifb-text { text-align: left; }
+  .import-file-btn .ifb-title { font-size: 15px; font-weight: 700; color: var(--gray-900); }
+  .import-file-btn .ifb-sub { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+  .modal-cancel {
+    width: 100%; height: 48px; border-radius: 14px;
+    background: none; border: none; font-size: 15px; font-weight: 600;
+    color: var(--gray-500); cursor: pointer; font-family: inherit; margin-top: 10px;
+  }
 </style>
 </head>
 <body>
@@ -554,7 +682,7 @@
         </button>
       </div>
       <div id="ai-form-content">
-        <div class="screen-title" style="font-size:26px;line-height:32px;">AI Generate ✨</div>
+        <div class="screen-title" style="font-size:26px;line-height:32px;">AI Generate</div>
         <div style="font-size:15px;color:var(--gray-500);margin-bottom:4px;">Describe your assignment and AI will generate a terminology set.</div>
 
         <div class="form-label">Glossary Name</div>
@@ -609,6 +737,17 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Create Glossary
       </button>
+
+      <div style="display:flex;align-items:center;gap:12px;margin:20px 0 8px;">
+        <div style="flex:1;height:1px;background:var(--gray-100);"></div>
+        <span style="font-size:13px;color:var(--gray-500);font-weight:500;">or import existing</span>
+        <div style="flex:1;height:1px;background:var(--gray-100);"></div>
+      </div>
+
+      <button class="ghost-btn" id="cu-import-btn" style="display:flex;align-items:center;justify-content:center;gap:10px;height:52px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Import from CSV or JSON
+      </button>
     </div>
 
     <!-- ADD TERM -->
@@ -624,11 +763,34 @@
 
       <div class="form-label" id="add-source-label">English</div>
       <input class="form-input" id="add-source-input" placeholder="e.g., Knee replacement" maxlength="120">
+      <div class="tts-row">
+        <button type="button" class="tts-btn" id="tts-src-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg> Hear
+        </button>
+      </div>
       <div class="form-error-text" id="add-source-error"></div>
 
       <div class="form-label" id="add-target-label">Spanish (Target Language)</div>
       <input class="form-input" id="add-target-input" placeholder="e.g., Reemplazo de rodilla" maxlength="120">
+      <div class="tts-row">
+        <button type="button" class="tts-btn" id="tts-tgt-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg> Hear
+        </button>
+        <button type="button" class="record-btn" id="record-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          Record Pronunciation
+        </button>
+      </div>
       <div class="form-error-text" id="add-target-error"></div>
+
+      <div class="form-label">Photo (optional)</div>
+      <div class="img-upload-area" id="img-upload-area">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <p>Tap to add a photo</p>
+      </div>
+      <img id="img-preview" class="img-preview" style="display:none;" alt="Term photo">
+      <button type="button" class="img-remove-btn" id="img-remove-btn" style="display:none;">Remove photo</button>
+      <input type="file" accept="image/*" id="img-file-input" style="display:none;">
 
       <div class="form-label">Add to Glossary</div>
       <div class="glossary-picker" id="add-glossary-picker"></div>
@@ -677,9 +839,15 @@
         </div>
 
         <div class="study-flashcard" id="study-flashcard">
+          <img id="study-flashcard-img" class="flashcard-img" style="display:none;" alt="">
           <div class="flashcard-lang" id="study-flashcard-lang">—</div>
           <div class="flashcard-term" id="study-flashcard-term">—</div>
           <div class="flashcard-action" id="study-flashcard-action">Tap to reveal</div>
+          <div id="flashcard-tts-row" style="margin-top:12px;display:none;">
+            <button type="button" class="tts-btn" id="flashcard-tts-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg> Hear
+            </button>
+          </div>
         </div>
 
         <div class="rating-row" id="study-rating-row">
@@ -712,7 +880,9 @@
 
       <div id="study-complete" style="display:none;">
         <div class="study-complete">
-          <div class="study-complete-emoji">🎉</div>
+          <div class="study-complete-emoji" style="font-size:48px;margin-bottom:14px;">
+            <svg viewBox="0 0 48 48" fill="none" stroke="var(--blue-500)" stroke-width="2" width="56" height="56"><circle cx="24" cy="24" r="20" stroke="var(--blue-100)" fill="var(--blue-50)"/><polyline points="16 24 22 30 34 18" stroke="var(--green-500)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
           <div class="study-complete-title">Deck Complete!</div>
           <div style="color:var(--gray-500);font-size:14px;">Great work — you reviewed every card.</div>
           <div class="study-complete-stats">
@@ -743,36 +913,54 @@
         <div class="profile-avatar-lg">A</div>
         <div>
           <div class="profile-name-lg">Alex</div>
-          <div class="profile-meta">ES ↔ EN · Court Interpreter</div>
+          <div class="profile-meta" id="profile-lang-sub">English ↔ Spanish</div>
         </div>
       </div>
 
       <div class="section-header">Settings</div>
       <div class="settings-list">
-        <button class="setting-row">
+        <button class="setting-row" id="profile-lang-row">
           <div class="setting-row-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M2 20c0-4 4-7 10-7s10 3 10 7"/></svg>
           </div>
           <div class="setting-row-text">
             <div class="setting-row-title">Language Pair</div>
-            <div class="setting-row-sub">Spanish ↔ English</div>
+            <div class="setting-row-sub" id="profile-lang-pair-sub">English ↔ Spanish</div>
           </div>
-          <div class="setting-chevron">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
+          <div class="setting-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
         </button>
 
-        <button class="setting-row">
+        <button class="setting-row" id="profile-import-row">
           <div class="setting-row-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           </div>
           <div class="setting-row-text">
-            <div class="setting-row-title">Import / Export</div>
-            <div class="setting-row-sub">CSV, JSON, Anki decks</div>
+            <div class="setting-row-title">Import Glossary</div>
+            <div class="setting-row-sub">CSV or JSON file</div>
           </div>
-          <div class="setting-chevron">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          <div class="setting-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </button>
+
+        <button class="setting-row" id="profile-resources-row">
+          <div class="setting-row-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
           </div>
+          <div class="setting-row-text">
+            <div class="setting-row-title">Resources</div>
+            <div class="setting-row-sub">Multitran, Lingua, Wikipedia, MedLife</div>
+          </div>
+          <div class="setting-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </button>
+
+        <button class="setting-row" id="profile-affixes-row">
+          <div class="setting-row-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h8M4 18h6"/></svg>
+          </div>
+          <div class="setting-row-text">
+            <div class="setting-row-title">Medical Prefixes & Suffixes</div>
+            <div class="setting-row-sub">Reference guide for medical terminology</div>
+          </div>
+          <div class="setting-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
         </button>
 
         <button class="setting-row">
@@ -783,9 +971,7 @@
             <div class="setting-row-title">Statistics</div>
             <div class="setting-row-sub" id="profile-stats-sub">— terms · — reviews</div>
           </div>
-          <div class="setting-chevron">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </div>
+          <div class="setting-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
         </button>
 
         <button class="setting-row">
@@ -797,6 +983,114 @@
           </div>
         </button>
       </div>
+    </div>
+
+    <!-- SETTINGS SCREEN -->
+    <div id="screen-settings" class="screen">
+      <div class="sub-nav">
+        <button onclick="switchTab('profile')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+          Back
+        </button>
+      </div>
+      <div class="screen-title" style="font-size:26px;line-height:32px;">Language Settings</div>
+      <div style="font-size:15px;color:var(--gray-500);margin-bottom:4px;">Set the language pair you interpret for. This applies to all AI-generated glossaries and new terms.</div>
+
+      <div class="settings-section-title">Source Language</div>
+      <select class="lang-select" id="settings-source-lang"></select>
+
+      <div class="settings-section-title">Target Language</div>
+      <select class="lang-select" id="settings-target-lang"></select>
+
+      <button class="primary-btn" id="settings-save-btn" style="margin-top:28px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Save Settings
+      </button>
+    </div>
+
+    <!-- RESOURCES SCREEN -->
+    <div id="screen-resources" class="screen">
+      <div class="sub-nav">
+        <button onclick="switchTab('profile')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+          Back
+        </button>
+      </div>
+      <div class="screen-title" style="font-size:26px;line-height:32px;">Resources</div>
+      <div style="font-size:15px;color:var(--gray-500);margin-bottom:20px;">External reference tools used by professional interpreters.</div>
+
+      <a href="https://www.multitran.com" target="_blank" class="resource-link-row">
+        <div class="resource-link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 5h4l2 8 2-5h2l2 5 2-8h4"/></svg>
+        </div>
+        <div class="resource-link-text">
+          <div class="resource-link-title">Multitran</div>
+          <div class="resource-link-desc">Multi-language dictionary trusted by professional interpreters</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-500)" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+
+      <a href="https://www.linguee.com" target="_blank" class="resource-link-row">
+        <div class="resource-link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div class="resource-link-text">
+          <div class="resource-link-title">Linguee</div>
+          <div class="resource-link-desc">Bilingual sentence examples in context</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-500)" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+
+      <a href="https://en.wikipedia.org/wiki/Medical_terminology" target="_blank" class="resource-link-row">
+        <div class="resource-link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        </div>
+        <div class="resource-link-text">
+          <div class="resource-link-title">Wikipedia — Medical Terminology</div>
+          <div class="resource-link-desc">Free reference for medical concepts and etymology</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-500)" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+
+      <a href="https://www.medlineplus.gov" target="_blank" class="resource-link-row">
+        <div class="resource-link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="resource-link-text">
+          <div class="resource-link-title">MedlinePlus</div>
+          <div class="resource-link-desc">NIH health information in English and Spanish</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-500)" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+
+      <a href="https://www.imiaweb.org" target="_blank" class="resource-link-row">
+        <div class="resource-link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+        </div>
+        <div class="resource-link-text">
+          <div class="resource-link-title">IMIA</div>
+          <div class="resource-link-desc">International Medical Interpreters Association</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gray-500)" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a>
+    </div>
+
+    <!-- PREFIX / SUFFIX SCREEN -->
+    <div id="screen-prefix-suffix" class="screen">
+      <div class="sub-nav">
+        <button onclick="switchTab('profile')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+          Back
+        </button>
+      </div>
+      <div class="screen-title" style="font-size:26px;line-height:32px;">Prefixes & Suffixes</div>
+      <input class="form-input" id="affix-search" placeholder="Search (e.g. cardio, -itis)..." style="margin-bottom:12px;margin-top:4px;">
+      <div class="affix-tabs">
+        <button class="affix-tab active" id="affix-tab-all" onclick="setAffixTab('all')">All</button>
+        <button class="affix-tab" id="affix-tab-prefix" onclick="setAffixTab('prefix')">Prefixes</button>
+        <button class="affix-tab" id="affix-tab-suffix" onclick="setAffixTab('suffix')">Suffixes</button>
+      </div>
+      <div id="affix-list"></div>
     </div>
 
   </div>
@@ -816,14 +1110,98 @@
       <span class="tab-label">Profile</span>
     </button>
   </div>
+  <!-- Import Modal (inside phone-frame for correct clipping) -->
+  <div class="modal-overlay" id="import-modal">
+  <div class="modal-sheet">
+    <div class="modal-title">Import Terminology</div>
+    <div class="modal-sub">Import terms from a CSV or JSON file into a new glossary. You can also export from Excel as CSV first.</div>
+    <div class="import-btn-row">
+      <label class="import-file-btn">
+        <div class="ifb-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="ifb-text">
+          <div class="ifb-title">Import CSV</div>
+          <div class="ifb-sub">Two columns: source term, translation</div>
+        </div>
+        <input type="file" accept=".csv,text/csv" id="import-csv-input" style="display:none">
+      </label>
+      <label class="import-file-btn">
+        <div class="ifb-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M10 13h4M10 17h4"/></svg>
+        </div>
+        <div class="ifb-text">
+          <div class="ifb-title">Import JSON</div>
+          <div class="ifb-sub">Array of {source, target} objects</div>
+        </div>
+        <input type="file" accept=".json,application/json" id="import-json-input" style="display:none">
+      </label>
+    </div>
+    <button class="modal-cancel" onclick="closeImportModal()">Cancel</button>
+  </div>
 </div>
+</div><!-- /phone-frame -->
 
 <div class="toast-container" id="toast-container"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 'use strict';
 
 const STORAGE_KEY = 'interpretai_prototype_v1';
+
+// ── SUPABASE CONFIG ─────────────────────────────────────────────────
+// Paste your anon key from: Supabase Dashboard > Project Settings > API
+const SUPABASE_URL = 'https://clllqdwdphcrhjzcnots.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // replace this
+let supabase = null;
+try {
+  if (SUPABASE_ANON_KEY !== 'YOUR_SUPABASE_ANON_KEY' && window.supabase) {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+} catch (e) { console.warn('Supabase init failed:', e); }
+
+async function dbSaveGlossary(g) {
+  if (!supabase) return;
+  try {
+    await supabase.from('glossaries').upsert({
+      id: g.id, name: g.name, category: g.category,
+      source_lang: g.sourceLang, target_lang: g.targetLang,
+      icon: g.icon, source_type: g.source, created_at: g.createdAt,
+    });
+    if (g.terms?.length) {
+      await supabase.from('terms').upsert(g.terms.map(t => ({
+        id: t.id, glossary_id: g.id, source: t.source, target: t.target,
+        added_at: t.addedAt, image: t.image || null, audio: t.audio || null,
+      })));
+    }
+  } catch (e) { console.warn('DB save error:', e); }
+}
+
+async function dbLoadGlossaries() {
+  if (!supabase) return null;
+  try {
+    const { data: glossRows, error } = await supabase.from('glossaries').select('*');
+    if (error || !glossRows?.length) return null;
+    const { data: termRows } = await supabase.from('terms').select('*');
+    const termsByGlossary = {};
+    (termRows || []).forEach(t => {
+      if (!termsByGlossary[t.glossary_id]) termsByGlossary[t.glossary_id] = [];
+      termsByGlossary[t.glossary_id].push({
+        id: t.id, source: t.source, target: t.target,
+        addedAt: t.added_at || 0, reviews: [],
+        image: t.image || null, audio: t.audio || null,
+      });
+    });
+    return glossRows.map(g => ({
+      id: g.id, name: g.name, category: g.category,
+      sourceLang: g.source_lang, targetLang: g.target_lang,
+      icon: g.icon, source: g.source_type, createdAt: g.created_at || 0,
+      terms: termsByGlossary[g.id] || [],
+    }));
+  } catch (e) { console.warn('DB load error:', e); return null; }
+}
+// ───────────────────────────────────────────────────────────────────
 
 const ICON_LIBRARY = {
   med: { bg: 'var(--red-100)', color: 'var(--red-500)', svg: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
@@ -909,6 +1287,94 @@ const AI_PACKS = [
   { name: 'General Interpreting', category: 'General',
     keywords: [],
     terms: [['Interpreter','Intérprete'],['Translation','Traducción'],['Confidentiality','Confidencialidad'],['Clarification','Aclaración'],['Source language','Idioma de origen'],['Target language','Idioma de destino'],['Consecutive interpretation','Interpretación consecutiva'],['Simultaneous interpretation','Interpretación simultánea'],['Cultural context','Contexto cultural'],['Idiom','Modismo']]},
+  { name: 'CCHI Exam Prep', category: 'Certification',
+    keywords: ['cchi','certification','exam','test','credential','chc','chi','ccm'],
+    terms: [['Healthcare interpreter','Intérprete de salud'],['Code of ethics','Código de ética'],['Patient rights','Derechos del paciente'],['Informed consent','Consentimiento informado'],['Confidentiality','Confidencialidad'],['Impartiality','Imparcialidad'],['Accuracy','Precisión / Exactitud'],['Cultural competence','Competencia cultural'],['Consecutive interpreting','Interpretación consecutiva'],['Sight translation','Traducción a la vista'],['Advocacy','Abogacía'],['Transparent process','Proceso transparente']]},
+  { name: 'NBCMI Exam Prep', category: 'Certification',
+    keywords: ['nbcmi','national board','cmi','medical interpreter certification','board certified'],
+    terms: [['Standard of practice','Norma de práctica'],['Scope of practice','Alcance de la práctica'],['Role boundaries','Límites del rol'],['Pre-session','Pre-sesión'],['Debriefing','Revisión posterior'],['Active listening','Escucha activa'],['Note-taking','Toma de notas'],['Terminology management','Gestión de terminología'],['Ethics violation','Violación ética'],['Self-disclosure','Auto-divulgación'],['Memory technique','Técnica de memoria'],['Medical vocabulary','Vocabulario médico']]},
+  { name: 'Mental Health', category: 'Medical',
+    keywords: ['mental health','psychology','psychiatry','therapy','counseling','anxiety','depression','trauma','ptsd','behavioral'],
+    terms: [['Depression','Depresión'],['Anxiety','Ansiedad'],['Trauma','Trauma'],['Post-traumatic stress disorder','Trastorno de estrés postraumático'],['Hallucination','Alucinación'],['Delusion','Delirio'],['Suicidal ideation','Ideación suicida'],['Cognitive behavioral therapy','Terapia cognitivo-conductual'],['Medication compliance','Cumplimiento del medicamento'],['Inpatient','Paciente hospitalizado'],['Outpatient','Paciente ambulatorio'],['Crisis intervention','Intervención en crisis']]},
+];
+
+const MEDICAL_AFFIXES = [
+  {type:'prefix',form:'cardio-',meaning:'heart',examples:'cardiology, cardiovascular, cardiomyopathy'},
+  {type:'prefix',form:'neuro-',meaning:'nerve / nervous system',examples:'neurology, neurotransmitter, neuropathy'},
+  {type:'prefix',form:'osteo-',meaning:'bone',examples:'osteoporosis, osteotomy, osteoarthritis'},
+  {type:'prefix',form:'derma-',meaning:'skin',examples:'dermatology, dermatitis, dermabrasion'},
+  {type:'prefix',form:'gastro-',meaning:'stomach / digestive',examples:'gastroenterology, gastritis, gastroscopy'},
+  {type:'prefix',form:'hepato-',meaning:'liver',examples:'hepatology, hepatitis, hepatocyte'},
+  {type:'prefix',form:'nephro-',meaning:'kidney',examples:'nephrology, nephritis, nephropathy'},
+  {type:'prefix',form:'pulmo-',meaning:'lung',examples:'pulmonology, pulmonary, pulmologist'},
+  {type:'prefix',form:'hemo- / hemato-',meaning:'blood',examples:'hematology, hemoglobin, hemorrhage'},
+  {type:'prefix',form:'onco-',meaning:'tumor / cancer',examples:'oncology, oncologist, oncogenesis'},
+  {type:'prefix',form:'ortho-',meaning:'straight / correct / bone',examples:'orthopedics, orthodontics, orthosis'},
+  {type:'prefix',form:'ophthalmo-',meaning:'eye',examples:'ophthalmology, ophthalmoscope'},
+  {type:'prefix',form:'oto-',meaning:'ear',examples:'otolaryngology, otitis, otoscope'},
+  {type:'prefix',form:'rhino-',meaning:'nose',examples:'rhinitis, rhinoplasty, rhinoscopy'},
+  {type:'prefix',form:'brady-',meaning:'slow',examples:'bradycardia, bradypnea, bradykinesia'},
+  {type:'prefix',form:'tachy-',meaning:'fast / rapid',examples:'tachycardia, tachypnea'},
+  {type:'prefix',form:'hyper-',meaning:'above / excessive',examples:'hypertension, hyperglycemia, hyperthyroidism'},
+  {type:'prefix',form:'hypo-',meaning:'below / deficient',examples:'hypotension, hypoglycemia, hypothyroidism'},
+  {type:'prefix',form:'anti-',meaning:'against',examples:'antibiotic, anticoagulant, antidepressant'},
+  {type:'prefix',form:'peri-',meaning:'around',examples:'pericardium, peritoneum, perinatal'},
+  {type:'prefix',form:'endo-',meaning:'inside / within',examples:'endoscopy, endocrine, endotracheal'},
+  {type:'prefix',form:'exo- / extra-',meaning:'outside / beyond',examples:'exocrine, extravasation, extubation'},
+  {type:'prefix',form:'intra-',meaning:'within / inside',examples:'intravenous, intramuscular, intraocular'},
+  {type:'prefix',form:'sub-',meaning:'under / below',examples:'subcutaneous, subdural, sublingual'},
+  {type:'prefix',form:'supra-',meaning:'above / over',examples:'supraclavicular, supraventricular, supraspinatus'},
+  {type:'prefix',form:'pre-',meaning:'before',examples:'prenatal, preoperative, prediabetes'},
+  {type:'prefix',form:'post-',meaning:'after',examples:'postoperative, postpartum, post-traumatic'},
+  {type:'prefix',form:'bi-',meaning:'two',examples:'bilateral, binocular, bifurcation'},
+  {type:'prefix',form:'uni-',meaning:'one',examples:'unilateral, unicellular'},
+  {type:'prefix',form:'poly-',meaning:'many',examples:'polyuria, polydipsia, polyneuropathy'},
+  {type:'prefix',form:'macro-',meaning:'large',examples:'macrophage, macrocyte, macrosomia'},
+  {type:'prefix',form:'micro-',meaning:'small',examples:'microscopy, microorganism, microvascular'},
+  {type:'prefix',form:'mal-',meaning:'bad / abnormal',examples:'malignant, malnourishment, malabsorption'},
+  {type:'prefix',form:'dys-',meaning:'difficult / abnormal',examples:'dyspnea, dysphagia, dysuria'},
+  {type:'prefix',form:'a- / an-',meaning:'without / absence of',examples:'anemia, apnea, asymptomatic'},
+  {type:'prefix',form:'trans-',meaning:'across / through',examples:'transplant, transfusion, transdermal'},
+  {type:'prefix',form:'semi-',meaning:'half / partial',examples:'semiconscious, semisolid'},
+  {type:'prefix',form:'neo-',meaning:'new',examples:'neonatal, neoplasm, neovascularization'},
+  {type:'prefix',form:'auto-',meaning:'self',examples:'autoimmune, autopsy, autograft'},
+  {type:'prefix',form:'pan-',meaning:'all / entire',examples:'pandemic, pancreatitis, pancytopenia'},
+  {type:'prefix',form:'retro-',meaning:'backward / behind',examples:'retrograde, retroperitoneal, retrovirus'},
+  {type:'prefix',form:'para-',meaning:'beside / beyond / abnormal',examples:'paraplegia, parasite, paracardiac'},
+  {type:'prefix',form:'pseudo-',meaning:'false',examples:'pseudomonas, pseudocyst, pseudofracture'},
+  {type:'prefix',form:'cyto-',meaning:'cell',examples:'cytology, cytokine, cytoplasm'},
+  {type:'prefix',form:'bio-',meaning:'life',examples:'biopsy, biomarker, biology'},
+  {type:'suffix',form:'-itis',meaning:'inflammation',examples:'appendicitis, bronchitis, arthritis'},
+  {type:'suffix',form:'-ectomy',meaning:'surgical removal',examples:'appendectomy, tonsillectomy, hysterectomy'},
+  {type:'suffix',form:'-ostomy',meaning:'surgical opening',examples:'colostomy, ileostomy, tracheostomy'},
+  {type:'suffix',form:'-otomy',meaning:'surgical incision',examples:'tracheotomy, thoracotomy, laparotomy'},
+  {type:'suffix',form:'-plasty',meaning:'surgical repair',examples:'rhinoplasty, arthroplasty, angioplasty'},
+  {type:'suffix',form:'-scopy',meaning:'visual examination',examples:'endoscopy, laparoscopy, colonoscopy'},
+  {type:'suffix',form:'-graphy',meaning:'recording / imaging',examples:'radiography, mammography, angiography'},
+  {type:'suffix',form:'-gram',meaning:'record / image',examples:'electrocardiogram, mammogram, angiogram'},
+  {type:'suffix',form:'-logy',meaning:'study of',examples:'cardiology, neurology, hematology'},
+  {type:'suffix',form:'-ologist',meaning:'specialist in',examples:'cardiologist, neurologist, oncologist'},
+  {type:'suffix',form:'-oma',meaning:'tumor / mass',examples:'carcinoma, melanoma, adenoma'},
+  {type:'suffix',form:'-osis',meaning:'abnormal condition',examples:'fibrosis, necrosis, thrombosis'},
+  {type:'suffix',form:'-pathy',meaning:'disease / disorder',examples:'neuropathy, cardiopathy, myopathy'},
+  {type:'suffix',form:'-algia',meaning:'pain',examples:'neuralgia, myalgia, fibromyalgia'},
+  {type:'suffix',form:'-emia',meaning:'blood condition',examples:'anemia, leukemia, hyperglycemia'},
+  {type:'suffix',form:'-penia',meaning:'deficiency',examples:'leukopenia, thrombocytopenia, osteopenia'},
+  {type:'suffix',form:'-rrhea',meaning:'flow / discharge',examples:'diarrhea, rhinorrhea, amenorrhea'},
+  {type:'suffix',form:'-plegia',meaning:'paralysis',examples:'paraplegia, hemiplegia, quadriplegia'},
+  {type:'suffix',form:'-phobia',meaning:'fear',examples:'claustrophobia, hematophobia'},
+  {type:'suffix',form:'-megaly',meaning:'enlargement',examples:'hepatomegaly, splenomegaly, cardiomegaly'},
+  {type:'suffix',form:'-stenosis',meaning:'narrowing',examples:'aortic stenosis, pyloric stenosis'},
+  {type:'suffix',form:'-trophy',meaning:'nourishment / development',examples:'hypertrophy, atrophy, dystrophy'},
+];
+
+const LANGUAGES = [
+  'Arabic','Armenian','Bengali','Bosnian','Bulgarian','Burmese','Cantonese','Croatian','Czech',
+  'Dari','Dutch','English','Farsi','French','German','Greek','Gujarati','Haitian Creole',
+  'Hausa','Hebrew','Hindi','Hmong','Hungarian','Indonesian','Italian','Japanese','Khmer',
+  'Korean','Kurdish','Malay','Mandarin','Nepali','Pashto','Polish','Portuguese','Punjabi',
+  'Romanian','Russian','Serbian','Sinhalese','Somali','Spanish','Swahili','Tagalog','Tamil',
+  'Thai','Tigrinya','Turkish','Ukrainian','Urdu','Vietnamese','Yoruba',
 ];
 
 const $  = (s, p = document) => p.querySelector(s);
@@ -928,11 +1394,15 @@ let pendingAddTermGlossaryId = null;
 
 function initialState() {
   return {
+    userPrefs: { sourceLang: 'English', targetLang: 'Spanish' },
     glossaries: DEFAULT_GLOSSARIES.map(g => ({
       ...g, createdAt: 0,
       terms: g.terms.map(([s, t]) => ({ id: uid('t'), source: s, target: t, addedAt: 0, reviews: [] })),
     })),
   };
+}
+function getPrefs() {
+  return state?.userPrefs || { sourceLang: 'English', targetLang: 'Spanish' };
 }
 function loadState() {
   try {
@@ -943,7 +1413,10 @@ function loadState() {
     return p;
   } catch (e) { return null; }
 }
-function persist() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { showToast('Could not save.', 'error'); } }
+function persist() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { showToast('Could not save.', 'error'); }
+  if (supabase) state.glossaries.forEach(g => dbSaveGlossary(g).catch(() => {}));
+}
 
 function showToast(msg, type = 'info', ms = 2400) {
   try {
@@ -973,7 +1446,9 @@ function showSubScreen(name) {
   if (name === 'create-ai') prepAIScreen();
   if (name === 'create-custom') prepCustomScreen();
   if (name === 'study') renderStudyPicker();
-  if (name === 'profile') renderProfileStats();
+  if (name === 'profile') { renderProfileStats(); updateProfileLangDisplay(); }
+  if (name === 'settings') populateAllLangSelects();
+  if (name === 'prefix-suffix') { affixFilter = 'all'; setAffixTab('all'); }
   if (name === 'glossary-detail' && currentDetailGlossaryId) renderGlossaryDetail(currentDetailGlossaryId);
 }
 
@@ -1058,6 +1533,22 @@ function renderProfileStats() {
   let total = 0, reviews = 0;
   state.glossaries.forEach(g => { total += g.terms.length; g.terms.forEach(t => { reviews += (t.reviews?.length || 0); }); });
   $('#profile-stats-sub').textContent = `${total} terms · ${reviews} review${reviews === 1 ? '' : 's'}`;
+}
+
+function populateLangSelect(el, current) {
+  if (!el) return;
+  el.innerHTML = LANGUAGES.map(l => `<option value="${esc(l)}"${l === current ? ' selected' : ''}>${esc(l)}</option>`).join('');
+}
+function populateAllLangSelects() {
+  const p = getPrefs();
+  populateLangSelect($('#settings-source-lang'), p.sourceLang);
+  populateLangSelect($('#settings-target-lang'), p.targetLang);
+  updateProfileLangDisplay();
+}
+function updateProfileLangDisplay() {
+  const p = getPrefs();
+  const el = $('#profile-lang-sub');
+  if (el) el.textContent = `${p.sourceLang} ↔ ${p.targetLang}`;
 }
 
 // AI generate
@@ -1167,9 +1658,13 @@ function prepAddTermScreen() {
   $('#add-glossary-error').textContent = '';
   $('#add-source-input').classList.remove('error');
   $('#add-target-input').classList.remove('error');
-  const first = state.glossaries[0];
-  $('#add-source-label').textContent = first?.sourceLang || 'English';
-  $('#add-target-label').textContent = `${first?.targetLang || 'Spanish'} (Target Language)`;
+  const prefs = getPrefs();
+  $('#add-source-label').textContent = prefs.sourceLang;
+  $('#add-target-label').textContent = `${prefs.targetLang} (Target Language)`;
+  clearPendingImage();
+  pendingAudio = null;
+  const recBtn = $('#record-btn');
+  if (recBtn) { recBtn.classList.remove('recording'); recBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Record Pronunciation`; }
   const picker = $('#add-glossary-picker');
   picker.innerHTML = '';
   state.glossaries.forEach((g, i) => {
@@ -1210,7 +1705,7 @@ function submitAddTerm(addAnother) {
   const gid = sel.dataset.glossaryId;
   const g = state.glossaries.find(x => x.id === gid);
   if (!g) { showToast('Selected glossary not found.', 'error'); return; }
-  const newTerm = { id: uid('t'), source: src, target: tgt, addedAt: Date.now(), reviews: [] };
+  const newTerm = { id: uid('t'), source: src, target: tgt, addedAt: Date.now(), reviews: [], image: pendingImage || null, audio: pendingAudio || null };
   g.terms.push(newTerm);
   persist();
   showToast('Term added to "' + g.name + '"', 'success');
@@ -1288,22 +1783,33 @@ function renderStudyCard() {
   $('#study-flashcard-action').style.color = 'var(--blue-500)';
   $('#study-deck-remaining').textContent = (studySession.deck.length - studySession.index) + ' left';
   $$('#study-rating-row .rating-btn').forEach(b => b.disabled = true);
+  const imgEl = $('#study-flashcard-img');
+  if (imgEl) { imgEl.src = term.image || ''; imgEl.style.display = term.image ? 'block' : 'none'; }
+  const ttsRow = $('#flashcard-tts-row');
+  if (ttsRow) ttsRow.style.display = 'none';
 }
 function revealStudyCard() {
   if (!studySession) return;
   const term = currentStudyTerm();
   if (!term) return;
+  const g = state.glossaries.find(x => x.id === studySession.glossaryId);
   if (studySession.revealed) {
     studySession.revealed = false;
     $('#study-flashcard-term').textContent = term.source;
     $('#study-flashcard-action').textContent = 'Tap to reveal';
     $('#study-flashcard-action').style.color = 'var(--blue-500)';
+    const ttsRow = $('#flashcard-tts-row');
+    if (ttsRow) ttsRow.style.display = 'none';
   } else {
     studySession.revealed = true;
     $('#study-flashcard-term').textContent = term.target;
     $('#study-flashcard-action').textContent = 'Rate how you did →';
     $('#study-flashcard-action').style.color = 'var(--gray-500)';
     $$('#study-rating-row .rating-btn').forEach(b => b.disabled = false);
+    const ttsRow = $('#flashcard-tts-row');
+    if (ttsRow) ttsRow.style.display = 'block';
+    const ttsBtn = $('#flashcard-tts-btn');
+    if (ttsBtn) ttsBtn.onclick = () => speakText(term.target, g?.targetLang || getPrefs().targetLang);
   }
 }
 function rateStudyCard(rating) {
@@ -1350,6 +1856,205 @@ function exitStudy(showPicker = true) {
   }
 }
 
+// TTS
+const LANG_BCP47 = {
+  'English':'en-US','Spanish':'es-ES','French':'fr-FR','German':'de-DE','Italian':'it-IT',
+  'Portuguese':'pt-PT','Russian':'ru-RU','Chinese':'zh-CN','Mandarin':'zh-CN','Cantonese':'zh-HK',
+  'Japanese':'ja-JP','Korean':'ko-KR','Arabic':'ar-SA','Hebrew':'he-IL','Hindi':'hi-IN',
+  'Vietnamese':'vi-VN','Tagalog':'tl-PH','Polish':'pl-PL','Dutch':'nl-NL','Turkish':'tr-TR',
+  'Ukrainian':'uk-UA','Romanian':'ro-RO','Armenian':'hy-AM',
+};
+function speakText(text, lang) {
+  if (!text) return;
+  if (!window.speechSynthesis) { showToast('TTS not supported in this browser.', 'warn'); return; }
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = LANG_BCP47[lang] || 'en-US';
+  window.speechSynthesis.speak(utt);
+}
+
+// Audio recording
+let mediaRecorder = null, audioChunks = [], pendingAudio = null;
+function toggleRecording() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+  } else {
+    startRecording();
+  }
+}
+async function startRecording() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(audioChunks, { type: 'audio/webm' });
+      if (blob.size > 512000) { showToast('Recording too long (max ~10s)', 'warn'); return; }
+      const reader = new FileReader();
+      reader.onload = (e) => { pendingAudio = e.target.result; showToast('Recording saved', 'success'); };
+      reader.readAsDataURL(blob);
+      const btn = $('#record-btn');
+      if (btn) { btn.classList.remove('recording'); btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg> Recording saved`; }
+    };
+    const btn = $('#record-btn');
+    if (btn) { btn.classList.add('recording'); btn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg> Stop`; }
+    setTimeout(() => { if (mediaRecorder?.state === 'recording') mediaRecorder.stop(); }, 10000);
+    mediaRecorder.start();
+  } catch (e) {
+    showToast('Microphone access denied.', 'error');
+  }
+}
+
+// Image upload
+let pendingImage = null;
+function initImageUpload() {
+  const area = $('#img-upload-area');
+  const inp = $('#img-file-input');
+  const preview = $('#img-preview');
+  const removeBtn = $('#img-remove-btn');
+  if (!area || !inp) return;
+  area.addEventListener('click', () => inp.click());
+  inp.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxW = 600, maxH = 400;
+        let w = img.width, h = img.height;
+        if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+        if (h > maxH) { w = Math.round(w * maxH / h); h = maxH; }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        pendingImage = canvas.toDataURL('image/jpeg', 0.75);
+        if (preview) { preview.src = pendingImage; preview.style.display = 'block'; }
+        if (area) area.style.display = 'none';
+        if (removeBtn) removeBtn.style.display = 'block';
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  if (removeBtn) removeBtn.addEventListener('click', clearPendingImage);
+}
+function clearPendingImage() {
+  pendingImage = null;
+  const preview = $('#img-preview');
+  const removeBtn = $('#img-remove-btn');
+  const area = $('#img-upload-area');
+  const inp = $('#img-file-input');
+  if (preview) { preview.src = ''; preview.style.display = 'none'; }
+  if (removeBtn) removeBtn.style.display = 'none';
+  if (area) area.style.display = 'block';
+  if (inp) inp.value = '';
+}
+
+// Settings
+function saveSettings() {
+  const src = $('#settings-source-lang')?.value;
+  const tgt = $('#settings-target-lang')?.value;
+  if (!src || !tgt) return;
+  if (src === tgt) { showToast('Source and target language must differ.', 'warn'); return; }
+  state.userPrefs = { sourceLang: src, targetLang: tgt };
+  persist();
+  updateProfileLangDisplay();
+  const sub = $('#profile-lang-pair-sub');
+  if (sub) sub.textContent = `${src} ↔ ${tgt}`;
+  showToast('Language settings saved', 'success');
+  switchTab('profile');
+}
+
+// Prefix / Suffix
+let affixFilter = 'all';
+function setAffixTab(type) {
+  affixFilter = type;
+  $$('.affix-tab').forEach(t => t.classList.remove('active'));
+  const el = $('#affix-tab-' + type);
+  if (el) el.classList.add('active');
+  renderAffixList();
+}
+function renderAffixList() {
+  const query = ($('#affix-search')?.value || '').toLowerCase();
+  let items = MEDICAL_AFFIXES;
+  if (affixFilter !== 'all') items = items.filter(a => a.type === affixFilter);
+  if (query) items = items.filter(a => a.form.toLowerCase().includes(query) || a.meaning.toLowerCase().includes(query) || a.examples.toLowerCase().includes(query));
+  const list = $('#affix-list');
+  if (!list) return;
+  if (!items.length) { list.innerHTML = '<div class="empty-state" style="margin-top:8px;"><div class="empty-state-title">No results</div><div class="empty-state-desc">Try a different search term.</div></div>'; return; }
+  list.innerHTML = items.map(a => `
+    <div class="affix-entry">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:${a.type==='prefix'?'var(--blue-100)':'var(--green-50)'};color:${a.type==='prefix'?'var(--blue-500)':'var(--green-500)'};padding:2px 7px;border-radius:99px;">${esc(a.type)}</span>
+        <span class="affix-form">${esc(a.form)}</span>
+      </div>
+      <div class="affix-meaning">${esc(a.meaning)}</div>
+      <div class="affix-examples">${esc(a.examples)}</div>
+    </div>`).join('');
+}
+
+// Import modal
+function openImportModal() {
+  $('#import-modal').classList.add('open');
+}
+function closeImportModal() {
+  $('#import-modal').classList.remove('open');
+  $('#import-csv-input').value = '';
+  $('#import-json-input').value = '';
+}
+function importTermsFromPairs(pairs, filename) {
+  if (!pairs.length) { showToast('No terms found in file.', 'warn'); return; }
+  const prefs = getPrefs();
+  const name = filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') || 'Imported Glossary';
+  const newGloss = {
+    id: uid('g'), name: name.slice(0, 80),
+    category: 'Imported', sourceLang: prefs.sourceLang, targetLang: prefs.targetLang,
+    icon: 'custom', source: 'custom', createdAt: Date.now(),
+    terms: pairs.map(([s, t]) => ({ id: uid('t'), source: s.trim(), target: (t || '').trim(), addedAt: Date.now(), reviews: [] })),
+  };
+  state.glossaries.push(newGloss);
+  persist();
+  closeImportModal();
+  showToast(`Imported ${newGloss.terms.length} terms into "${newGloss.name}"`, 'success', 3000);
+  openGlossaryDetail(newGloss.id, { successMessage: `Imported ${newGloss.terms.length} terms from file` });
+}
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  const pairs = [];
+  for (const line of lines) {
+    const cols = line.split(',');
+    if (cols.length >= 2) {
+      const src = cols[0].replace(/^["']|["']$/g, '').trim();
+      const tgt = cols.slice(1).join(',').replace(/^["']|["']$/g, '').trim();
+      if (src) pairs.push([src, tgt]);
+    }
+  }
+  return pairs;
+}
+function parseJSON(text) {
+  const data = JSON.parse(text);
+  if (Array.isArray(data)) {
+    if (data.length && Array.isArray(data[0])) return data.map(r => [String(r[0] || ''), String(r[1] || '')]);
+    return data.filter(r => r && typeof r === 'object')
+               .map(r => [String(r.source || r.src || r.term || r.word || r.en || ''), String(r.target || r.tgt || r.translation || r.es || '')]);
+  }
+  if (data && Array.isArray(data.terms)) return data.terms.map(r => [String(r.source || r[0] || ''), String(r.target || r[1] || '')]);
+  return [];
+}
+function handleImportFile(file, type) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => safe(() => {
+    const text = e.target.result;
+    const pairs = type === 'csv' ? parseCSV(text) : parseJSON(text);
+    importTermsFromPairs(pairs, file.name);
+  }, 'importFile');
+  reader.readAsText(file);
+}
+
 // Error handlers
 window.addEventListener('error', (e) => { console.error(e); showToast('A minor error occurred.', 'error'); });
 window.addEventListener('unhandledrejection', (e) => { console.error(e); });
@@ -1370,12 +2075,36 @@ function bindUI() {
       openGlossaryDetail(lastStudiedGlossaryId, { successMessage: g ? `You just reviewed cards from "${g.name}"` : 'Cards reviewed' });
     } else { showSubScreen('study'); renderStudyPicker(); }
   }, 'sc-view-glossary'));
+  $('#import-csv-input').addEventListener('change', (e) => safe(() => handleImportFile(e.target.files[0], 'csv'), 'csv-import'));
+  $('#import-json-input').addEventListener('change', (e) => safe(() => handleImportFile(e.target.files[0], 'json'), 'json-import'));
+  $('#import-modal').addEventListener('click', (e) => { if (e.target === $('#import-modal')) closeImportModal(); });
+  $('#settings-save-btn').addEventListener('click', () => safe(saveSettings, 'saveSettings'));
+  $('#profile-lang-row').addEventListener('click', () => safe(() => showSubScreen('settings'), 'settings'));
+  $('#profile-import-row').addEventListener('click', () => safe(openImportModal, 'import'));
+  $('#cu-import-btn').addEventListener('click', () => safe(openImportModal, 'cu-import'));
+  $('#profile-resources-row').addEventListener('click', () => safe(() => showSubScreen('resources'), 'resources'));
+  $('#profile-affixes-row').addEventListener('click', () => safe(() => showSubScreen('prefix-suffix'), 'affixes'));
+  $('#affix-search')?.addEventListener('input', () => safe(renderAffixList, 'affixSearch'));
+  $('#tts-src-btn').addEventListener('click', () => safe(() => speakText($('#add-source-input').value, getPrefs().sourceLang), 'tts-src'));
+  $('#tts-tgt-btn').addEventListener('click', () => safe(() => speakText($('#add-target-input').value, getPrefs().targetLang), 'tts-tgt'));
+  $('#record-btn').addEventListener('click', () => safe(toggleRecording, 'record'));
+  initImageUpload();
 }
 
-function init() {
+async function init() {
   state = loadState() || initialState();
+  if (!state.userPrefs) state.userPrefs = { sourceLang: 'English', targetLang: 'Spanish' };
+  populateAllLangSelects();
   bindUI();
   renderGlossaryList();
+  if (supabase) {
+    const dbGloss = await dbLoadGlossaries();
+    if (dbGloss && dbGloss.length > 0) {
+      state.glossaries = dbGloss;
+      persist();
+      renderGlossaryList();
+    }
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => safe(init, 'init'));
