@@ -5,13 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>InterpretAI</title>
 <style>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>InterpretAI — User Testing Platform</title>
-<style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -44,17 +37,6 @@
     overflow-x: hidden;
   }
 
-  button { font-family: inherit; }
-
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-    background: #f0f0f0;
-    color: var(--gray-900);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  }
   button { font-family: inherit; }
 
   /* ========== PHONE FRAME (CENTER) — ORIGINAL ========== */
@@ -459,7 +441,6 @@
     margin-bottom: 12px; border-left: 3px solid var(--gold-500);
   }
 
-
   /* ========== TOAST ========== */
   .toast-container {
     position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
@@ -709,22 +690,88 @@
   .affix-meaning { font-size: 14px; color: var(--gray-900); }
   .affix-examples { font-size: 12px; color: var(--gray-500); font-style: italic; }
 
-  /* ========== TASK CARD I'M DONE BUTTON ========== */
-  .task-card-done-btn {
-    width: 100%; height: 46px; border-radius: 12px;
-    background: var(--blue-500); color: var(--white);
-    font-size: 14px; font-weight: 700; border: none; cursor: pointer;
-    font-family: inherit; margin-top: 14px; transition: all .2s;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
+
+  /* ========== IMPORT MODAL ========== */
+  .import-modal-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,.45);
+    display: flex; align-items: flex-end; z-index: 200;
+    border-radius: 44px;
+    animation: fadeIn .15s ease;
   }
-  .task-card-done-btn:active { background: var(--blue-600); transform: scale(.98); }
-  .task-card-stuck-btn {
-    width: 100%; height: 40px; border-radius: 12px;
+  .import-modal-overlay.hidden { display: none; }
+  .import-modal-sheet {
+    width: 100%; background: var(--white);
+    border-radius: 24px 24px 0 0;
+    padding: 20px 20px 32px;
+    max-height: 85%;
+    overflow-y: auto;
+  }
+  .import-modal-title {
+    font-size: 18px; font-weight: 700; color: var(--gray-900);
+    margin-bottom: 4px;
+  }
+  .import-modal-sub {
+    font-size: 13px; color: var(--gray-500); margin-bottom: 20px;
+  }
+  .import-file-zone {
+    border: 2px dashed var(--gray-200); border-radius: 14px;
+    padding: 28px 16px; text-align: center;
+    cursor: pointer; margin-bottom: 16px;
+    transition: border-color .2s, background .2s;
+  }
+  .import-file-zone:hover, .import-file-zone.dragover {
+    border-color: var(--blue-500); background: #f0f5ff;
+  }
+  .import-file-zone input { display: none; }
+  .import-file-icon { font-size: 28px; margin-bottom: 8px; }
+  .import-file-label { font-size: 14px; font-weight: 600; color: var(--gray-700); }
+  .import-file-hint { font-size: 12px; color: var(--gray-400); margin-top: 4px; }
+  .import-preview {
+    background: var(--gray-50); border-radius: 12px;
+    padding: 12px; margin-bottom: 16px; display: none;
+    font-size: 13px; color: var(--gray-700);
+  }
+  .import-preview.visible { display: block; }
+  .import-btn-row { display: flex; gap: 10px; }
+  .import-cancel-btn {
+    flex: 1; height: 46px; border-radius: 12px;
     background: var(--gray-100); color: var(--gray-900);
-    font-size: 13px; font-weight: 600; border: none; cursor: pointer;
-    font-family: inherit; margin-top: 6px; transition: all .2s;
+    font-size: 14px; font-weight: 600; border: none; cursor: pointer; font-family: inherit;
   }
-  .task-card-stuck-btn:active { background: var(--gray-200); }
+  .import-confirm-btn {
+    flex: 2; height: 46px; border-radius: 12px;
+    background: var(--blue-500); color: var(--white);
+    font-size: 14px; font-weight: 700; border: none; cursor: pointer; font-family: inherit;
+  }
+  .import-confirm-btn:disabled { opacity: .45; cursor: not-allowed; }
+
+
+  /* ========== MOBILE RESPONSIVE ========== */
+  @media (max-width: 430px) {
+    body {
+      background: var(--white);
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+    .phone-frame {
+      width: 100vw;
+      height: 100dvh;
+      min-height: 100vh;
+      border-radius: 0;
+      box-shadow: none;
+      margin: 0;
+    }
+  }
+
+
+  /* ========== SEARCH INPUT ========== */
+  .search-bar input {
+    flex: 1; background: transparent; border: none; outline: none;
+    font-size: 15px; color: var(--gray-900); font-family: inherit;
+    min-width: 0;
+  }
+  .search-bar input::placeholder { color: var(--gray-400); }
+
 </style>
 </head>
 <body>
@@ -747,7 +794,7 @@
           <div style="display:flex;gap:8px;margin-bottom:24px;">
             <div class="search-bar" style="flex:1;margin-bottom:0;">
               <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8.5" cy="8.5" r="5.5"/><line x1="13" y1="13" x2="18" y2="18"/></svg>
-              <span>Search glossaries...</span>
+              <input type="text" id="glossary-search" placeholder="Search glossaries..." autocomplete="off">
             </div>
             <button style="width:48px;height:48px;border-radius:12px;background:var(--gray-50);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;" data-log="filter-button">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0066FF" stroke-width="2" stroke-linecap="round"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
@@ -906,6 +953,10 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Create Glossary
           </button>
+      <button class="ghost-btn" id="cu-import-btn" data-log="import-terms" style="margin-top:10px;width:100%;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:16px;height:16px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Import CSV / JSON
+      </button>
         </div>
 
         <!-- SUB-SCREEN: Add a Term -->
@@ -1116,7 +1167,20 @@
               </div>
             </button>
 
-            <button class="setting-row" data-log="settings-import-export" id="settings-export-btn">
+            <button class="setting-row" id="settings-affixes-btn" data-log="settings-affixes">
+            <div class="setting-row-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+            </div>
+            <div class="setting-row-text">
+              <div class="setting-row-title">Prefixes &amp; Suffixes</div>
+              <div class="setting-row-sub">45 prefixes · 20 suffixes with examples</div>
+            </div>
+            <div class="setting-chevron">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </button>
+
+          <button class="setting-row" data-log="settings-import-export" id="settings-export-btn">
               <div class="setting-row-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
               </div>
@@ -1129,7 +1193,7 @@
               </div>
             </button>
 
-            <button class="setting-row" data-log="settings-statistics">
+            <button class="setting-row" id="settings-statistics-btn" data-log="settings-statistics">
               <div class="setting-row-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="20" x2="6" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="14"/></svg>
               </div>
@@ -1142,7 +1206,7 @@
               </div>
             </button>
 
-            <button class="setting-row" data-log="settings-signout">
+            <button class="setting-row" id="settings-signout-btn" data-log="settings-signout">
               <div class="setting-row-icon danger">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
               </div>
@@ -1286,8 +1350,28 @@
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 5-2.3 5-5s-2.3-5-5-5-5 2.3-5 5 2.3 5 5 5zm0 2c-3.3 0-10 1.7-10 5v2h20v-2c0-3.3-6.7-5-10-5z"/></svg>
           <span class="tab-label">Profile</span>
         </button>
+      </div><!-- /tab-bar -->
+
+    <!-- IMPORT MODAL -->
+    <div class="import-modal-overlay hidden" id="import-modal-overlay">
+      <div class="import-modal-sheet">
+        <div class="import-modal-title">Import Terms</div>
+        <div class="import-modal-sub">Upload a CSV (two columns: source, target) or a JSON file ([{source,target}] or {terms:[...]})</div>
+        <label class="import-file-zone" id="import-file-zone">
+          <input type="file" id="import-file-input" accept=".csv,.json,text/csv,application/json">
+          <div class="import-file-icon">📂</div>
+          <div class="import-file-label">Tap to choose a file</div>
+          <div class="import-file-hint">Supports .csv and .json</div>
+        </label>
+        <div class="import-preview" id="import-preview"></div>
+        <div class="import-btn-row">
+          <button class="import-cancel-btn" id="import-cancel-btn">Cancel</button>
+          <button class="import-confirm-btn" id="import-confirm-btn" disabled>Import</button>
+        </div>
       </div>
     </div>
+
+    </div><!-- /phone-frame -->
 
 <div class="toast-container" id="toast-container"></div>
 
@@ -1295,11 +1379,12 @@
 <script>
 'use strict';
 
+'use strict';
 
 // ============================================================
 // CONSTANTS
 // ============================================================
-const STORAGE_KEY = 'interpretai_test_v2';
+const STORAGE_KEY = 'interpretai_prototype_v1';
 const APP_VERSION = '2.0.0';
 
 const LANGUAGES = [
@@ -1699,7 +1784,7 @@ function safe(fn, ctx = 'unknown') {
   catch (e) {
     console.error('[' + ctx + ']', e);
     logEvent('error', { context: ctx, message: String(e && e.message || e) });
-    showToast('Something went wrong. The test will continue.', 'error');
+    showToast('Something went wrong.', 'error');
     return null;
   }
 }
@@ -1772,7 +1857,7 @@ function logEvent(type, data = {}) {
       ts: Date.now(),
       iso: nowISO(),
       type,
-      taskId: state.session?.currentTaskIdx != null ? (state.session.currentTaskIdx + 1) : null,
+      taskId: null,
       data,
     };
     state.events.push(ev);
@@ -2068,11 +2153,18 @@ function renderGlossaryList() {
   const list = $('#glossary-list');
   if (!list) return;
   list.innerHTML = '';
-  if (!state.glossaries.length) {
-    list.innerHTML = `<div class="empty-state"><span class="empty-state-emoji">📚</span><div class="empty-state-title">No glossaries yet</div><div class="empty-state-desc">Tap "Create New Glossary" above to get started.</div></div>`;
+  const filtered = _searchQuery
+    ? state.glossaries.filter(g =>
+        g.name.toLowerCase().includes(_searchQuery) ||
+        (g.category || '').toLowerCase().includes(_searchQuery))
+    : state.glossaries;
+  if (!filtered.length) {
+    list.innerHTML = _searchQuery
+      ? `<div class="empty-state"><div class="empty-state-title">No results for "${esc(_searchQuery)}"</div></div>`
+      : `<div class="empty-state"><span class="empty-state-emoji">📚</span><div class="empty-state-title">No glossaries yet</div><div class="empty-state-desc">Tap "Create New Glossary" above to get started.</div></div>`;
     return;
   }
-  state.glossaries.forEach(g => {
+  filtered.forEach(g => {
     const ic = ICON_LIBRARY[g.icon] || ICON_LIBRARY.custom;
     const row = document.createElement('div');
     row.className = 'list-row';
@@ -3110,71 +3202,233 @@ window.addEventListener('unhandledrejection', (e) => {
 // INIT / BOOT
 // ============================================================
 
+
+// ============================================================
+// SEARCH FILTER
+// ============================================================
+let _searchQuery = '';
+
+function filterGlossaries(query) {
+  _searchQuery = (query || '').toLowerCase().trim();
+  renderGlossaryList();
+}
+
+// ============================================================
+// SIGN OUT
+// ============================================================
+function signOut() {
+  if (!confirm('Sign out and clear all saved data?')) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  state = initialState();
+  _searchQuery = '';
+  const si = $('#glossary-search');
+  if (si) si.value = '';
+  renderAll();
+  switchTab('glossary');
+  showToast('Signed out. Data cleared.', 'info');
+}
+
+// ============================================================
+// IMPORT CSV / JSON
+// ============================================================
+let _importPairs = null;
+
+function openImportModal() {
+  _importPairs = null;
+  const overlay = $('#import-modal-overlay');
+  const preview = $('#import-preview');
+  const confirm = $('#import-confirm-btn');
+  const fileInput = $('#import-file-input');
+  if (fileInput) fileInput.value = '';
+  if (preview) { preview.textContent = ''; preview.classList.remove('visible'); }
+  if (confirm) confirm.disabled = true;
+  if (overlay) overlay.classList.remove('hidden');
+}
+
+function closeImportModal() {
+  const overlay = $('#import-modal-overlay');
+  if (overlay) overlay.classList.add('hidden');
+  _importPairs = null;
+}
+
+function parseCSV(text) {
+  return text.split(/\r?\n/)
+    .map(r => r.split(',').map(c => c.trim().replace(/^["']|["']$/g, '')))
+    .filter(r => r.length >= 2 && (r[0] || r[1]))
+    .map(r => ({ source: r[0] || '', target: r[1] || '' }));
+}
+
+function parseJSONImport(text) {
+  const obj = JSON.parse(text);
+  const arr = Array.isArray(obj) ? obj : (obj.terms || obj.glossary || []);
+  return arr.filter(x => x && (x.source || x.term || x.word || x.en))
+            .map(x => ({
+              source: x.source || x.term || x.word || x.en || '',
+              target: x.target || x.translation || x.es || x.tr || ''
+            }));
+}
+
+function handleImportFile(file) {
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const text = e.target.result;
+      _importPairs = ext === 'json' ? parseJSONImport(text) : parseCSV(text);
+      if (!_importPairs || _importPairs.length === 0) {
+        showToast('No valid pairs found in file.', 'warn');
+        _importPairs = null;
+        return;
+      }
+      const preview = $('#import-preview');
+      const confirmBtn = $('#import-confirm-btn');
+      if (preview) {
+        const sample = _importPairs.slice(0, 3).map(p => `${esc(p.source)} → ${esc(p.target)}`).join('<br>');
+        const more = _importPairs.length > 3 ? `<br><em>…and ${_importPairs.length - 3} more terms</em>` : '';
+        preview.innerHTML = `<strong>${_importPairs.length} term${_importPairs.length !== 1 ? 's' : ''} found:</strong><br>${sample}${more}`;
+        preview.classList.add('visible');
+      }
+      if (confirmBtn) confirmBtn.disabled = false;
+    } catch(err) {
+      showToast('Could not parse file: ' + (err.message || 'check format'), 'error');
+      _importPairs = null;
+    }
+  };
+  reader.readAsText(file);
+}
+
+function confirmImport() {
+  if (!_importPairs || _importPairs.length === 0) return;
+  const gloss = {
+    id: uid('g'),
+    name: 'Imported Glossary',
+    category: 'Imported',
+    sourceLang: getPrefs().sourceLang,
+    targetLang: getPrefs().targetLang,
+    icon: 'default',
+    source: 'custom',
+    createdAt: Date.now(),
+    terms: _importPairs.map(p => ({
+      id: uid('t'), source: p.source, target: p.target,
+      addedAt: Date.now(), reviews: []
+    }))
+  };
+  state.glossaries.unshift(gloss);
+  persistNow();
+  closeImportModal();
+  renderGlossaryList();
+  showToast(`Imported ${gloss.terms.length} term${gloss.terms.length !== 1 ? 's' : ''} into "${gloss.name}"`, 'success', 3000);
+}
+
+
+
 function bindUI() {
-  $$('.tab-item').forEach(t => t.addEventListener('click', () => safe(() => switchTab(t.dataset.tab), 'switchTab')));
+  // Tab bar
+  $$('.tab-item').forEach(t => {
+    t.addEventListener('click', () => safe(() => switchTab(t.dataset.tab), 'switchTab'));
+  });
+
+  // Glossary search
+  const searchInput = $('#glossary-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', () => safe(() => filterGlossaries(searchInput.value), 'search'));
+  }
+
+  // Forms
   $('#ai-generate-btn').addEventListener('click', () => safe(submitAIGenerate, 'submitAIGenerate'));
   $('#cu-create-btn').addEventListener('click', () => safe(submitCustomCreate, 'submitCustomCreate'));
-  $('#cu-import-btn')?.addEventListener('click', () => safe(openImportModal, 'cu-import'));
+  const cuImportBtn = $('#cu-import-btn');
+  if (cuImportBtn) cuImportBtn.addEventListener('click', () => safe(openImportModal, 'openImportModal'));
+
   $('#add-save-btn').addEventListener('click', () => safe(() => submitAddTerm(false), 'submitAddTerm'));
   $('#add-save-another-btn').addEventListener('click', () => safe(() => submitAddTerm(true), 'submitAddTerm'));
-  $('#tts-source-btn')?.addEventListener('click', () => safe(() => {
+
+  // TTS in add-term
+  $('#tts-source-btn').addEventListener('click', () => safe(() => {
     const text = $('#add-source-input').value.trim();
     if (!text) { showToast('Enter a term first.', 'warn'); return; }
     speakText(text, getPrefs().sourceLang);
   }, 'tts-source'));
-  $('#tts-target-btn')?.addEventListener('click', () => safe(() => {
+  $('#tts-target-btn').addEventListener('click', () => safe(() => {
     const text = $('#add-target-input').value.trim();
     if (!text) { showToast('Enter a translation first.', 'warn'); return; }
     speakText(text, getPrefs().targetLang);
   }, 'tts-target'));
-  $('#record-btn')?.addEventListener('click', () => safe(toggleRecording, 'toggleRecording'));
+
+  // Audio recording
+  $('#record-btn').addEventListener('click', () => safe(toggleRecording, 'toggleRecording'));
+
+  // Image upload
   initImageUpload();
-  $('#settings-language-btn')?.addEventListener('click', () => safe(() => showSubScreen('settings'), 'nav-settings'));
-  $('#settings-resources-btn')?.addEventListener('click', () => safe(() => showSubScreen('resources'), 'nav-resources'));
-  $('#settings-affixes-btn')?.addEventListener('click', () => safe(() => showSubScreen('prefix-suffix'), 'nav-affixes'));
-  $('#settings-import-btn')?.addEventListener('click', () => safe(openImportModal, 'nav-import'));
-  $('#save-settings-btn')?.addEventListener('click', () => safe(saveSettings, 'saveSettings'));
-  $('#affix-search')?.addEventListener('input', () => safe(renderAffixList, 'affixSearch'));
-  $('#import-csv-input')?.addEventListener('change', (e) => safe(() => handleImportFile(e.target.files[0], 'csv'), 'csv-import'));
-  $('#import-json-input')?.addEventListener('change', (e) => safe(() => handleImportFile(e.target.files[0], 'json'), 'json-import'));
-  $('#import-modal')?.addEventListener('click', (e) => { if (e.target === $('#import-modal')) closeImportModal(); });
+
+  // Affix search
+  const affixSearch = $('#affix-search-input');
+  if (affixSearch) affixSearch.addEventListener('input', () => safe(renderAffixList, 'affixSearch'));
+
+  // Profile buttons
+  const langBtn = $('#settings-language-btn');
+  if (langBtn) langBtn.addEventListener('click', () => safe(() => showSubScreen('settings'), 'nav-settings'));
+
+  const resBtn = $('#settings-resources-btn');
+  if (resBtn) resBtn.addEventListener('click', () => safe(() => showSubScreen('resources'), 'nav-resources'));
+
+  const affixesBtn = $('#settings-affixes-btn');
+  if (affixesBtn) affixesBtn.addEventListener('click', () => safe(() => { showSubScreen('prefix-suffix'); prepPrefixSuffixScreen(); }, 'nav-affixes'));
+
+  const exportBtn = $('#settings-export-btn');
+  if (exportBtn) exportBtn.addEventListener('click', () => safe(openImportModal, 'nav-import'));
+
+  const signOutBtn = $('#settings-signout-btn');
+  if (signOutBtn) signOutBtn.addEventListener('click', () => safe(signOut, 'signOut'));
+
+  // Settings save
+  const saveSettingsBtn = $('#save-settings-btn');
+  if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', () => safe(saveSettings, 'saveSettings'));
+
+  // Import modal
+  const fileInput = $('#import-file-input');
+  if (fileInput) fileInput.addEventListener('change', () => safe(() => handleImportFile(fileInput.files[0]), 'importFile'));
+  const cancelImportBtn = $('#import-cancel-btn');
+  if (cancelImportBtn) cancelImportBtn.addEventListener('click', () => safe(closeImportModal, 'closeImport'));
+  const confirmImportBtn = $('#import-confirm-btn');
+  if (confirmImportBtn) confirmImportBtn.addEventListener('click', () => safe(confirmImport, 'confirmImport'));
+
+  // Study
   $('#study-flashcard').addEventListener('click', () => safe(revealStudyCard, 'revealStudyCard'));
-  $$('#study-rating-row .rating-btn').forEach(b => b.addEventListener('click', () => safe(() => rateStudyCard(b.dataset.rating), 'rateStudyCard')));
+  $$('#study-rating-row .rating-btn').forEach(b => {
+    b.addEventListener('click', () => safe(() => rateStudyCard(b.dataset.rating), 'rateStudyCard'));
+  });
   $('#study-exit-btn').addEventListener('click', () => safe(() => { exitStudy(true); showSubScreen('study'); }, 'exitStudy'));
   $('#sc-back-btn').addEventListener('click', () => safe(() => { showSubScreen('study'); renderStudyPicker(); }, 'sc-back'));
   $('#sc-view-glossary-btn').addEventListener('click', () => safe(() => {
     if (lastStudiedGlossaryId) {
-      const g = state.glossaries.find(x => x.id === lastStudiedGlossaryId);
-      openGlossaryDetail(lastStudiedGlossaryId, { successMessage: g ? `You just reviewed cards from "${g.name}"` : 'Cards reviewed' });
-    } else { showSubScreen('study'); renderStudyPicker(); }
+      openGlossaryDetail(lastStudiedGlossaryId);
+    } else {
+      showSubScreen('study');
+      renderStudyPicker();
+    }
   }, 'sc-view-glossary'));
-  $('#gd-study-btn')?.addEventListener('click', () => {});
-  $('#gd-add-term-btn')?.addEventListener('click', () => {});
 }
 
-async function init() {
+
+
+function init() {
+  bindUI();
   const loaded = loadState();
-  if (loaded) {
+  if (loaded && Array.isArray(loaded.glossaries)) {
     state = loaded;
     if (!state.userPrefs) state.userPrefs = { sourceLang: 'English', targetLang: 'Spanish', extraLangs: [] };
   } else {
     state = initialState();
   }
   populateAllLangSelects();
-  bindUI();
-  renderGlossaryList();
-  if (supabase) {
-    const dbGloss = await dbLoadGlossaries();
-    if (dbGloss && dbGloss.length > 0) {
-      state.glossaries = dbGloss;
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch {}
-      renderGlossaryList();
-    }
-  }
+  renderAll();
+  switchTab('glossary');
 }
 
 document.addEventListener('DOMContentLoaded', () => safe(init, 'init'));
-</script>
 
+</script>
 </body>
 </html>
