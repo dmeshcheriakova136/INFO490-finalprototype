@@ -4,7 +4,7 @@
 
 A terminology management app for professional medical interpreters. Helps interpreters build, study, and maintain multilingual glossaries before and between live assignments.
 
-**Live demo:** [interpretai.vercel.app](https://interpretai.vercel.app) *(Vercel deployment — routes to user-testing.html)*
+**Live demo:** [interpretai.vercel.app](https://interpretai-finalprototype.vercel.app/)
 
 ---
 
